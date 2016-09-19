@@ -1,0 +1,56 @@
+<extend name="Layouts:home" />
+<block name="title"><title>搜索页-家装设计-{:C('site_name')}</title></block>
+<block name="head_css">
+<link href="__CSS__/homedesign.css" rel="stylesheet" type="text/css">
+</block>
+
+<block name="content">
+    <div class="blist-banner mb50">
+        <span class="s1">{$city_name}</span><br>
+        <span class="fs16">装修公司 {$count}</span>
+    </div>
+    <div class="wrapper">
+		<h2 class="main-tit">
+			<span>装修公司</span>
+       		<span class="letter">DECORATION COMPANY</span>
+		</h2> 
+        <ul class="company-logo cf">
+            <?php foreach ($com_list as $key => $value) { ?>
+                <li><a href="{:U('/shop/THomedesign/storedetail', array('id'=>$value['store_id'], 'type'=>'1'));}"><img src="<?php echo C('host').$value['store_label']; ?>"></a></li>    
+            <?php } ?>
+        </ul>
+    </div>
+  <!--   <div class="wrapper floor-template thome-design">
+        <h2 class="main-tit">
+        	<span>效果图</span>
+        	<span class="letter">RENDERINGS</span>
+        </h2> 
+        <ul class="pro-list cf">
+             <?php foreach ($effect_list as $key => $value) { ?>
+                <li>
+                    <div class="goods-pic">
+                        <a href="{:U('/shop/THomedesign/plandetail', array('id'=>$value['store_id'], 'type'=>'1'));}">
+                            <img src="<?php echo C('host').$value['s_pic']; ?>" title="" alt="">
+                        </a> 
+                    </div>
+                    <div class="goods-info">
+                        <a href="<?php echo urlShop('t_homedesign', 'com_info', array('id'=>$value['store_id'], 'type'=>'1')); ?>"><?php echo $value['title']; ?></a>
+                    </div>
+                </li>    
+            <?php } ?>
+        </ul>
+    </div> -->
+</block>
+
+
+
+
+
+
+
+
+
+
+
+
+

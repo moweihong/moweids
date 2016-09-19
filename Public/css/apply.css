@@ -1,0 +1,84 @@
+/*
+************ author: zhouquan
+*************申请授信
+*/
+.ic{display:inline-block;width:20px;height:20px;font-size:0;line-height:0;text-indent:-999px;background:url(../images/ic_member.png) no-repeat;vertical-align:middle;overflow:hidden;}
+/*分期购介绍*/
+.easypay-box{min-height:400px;padding-bottom:20px;background-color:#fff;}
+.easypay-box .tit{line-height:30px;padding:5px 30px;color:#fff;font-size:20px;font-weight:bold;background-color:#ffaa00;}
+.easypay-box .explain{line-height:40px;margin:0 100px;padding:20px 0 10px;font-size:16px;text-align:center;border-bottom:dashed 1px #dedede;}
+.easypay-intro-tit{margin-top:50px;border-top:solid 2px #ffaa00;}
+.easypay-intro-tit h3{width:250px;line-height:40px;margin:-24px auto 0;font-size:22px;color:#ffaa00;text-align:center;background-color:#fff;}
+.easypay-intro-tit .circle{width:10px;height:10px;line-height:0;font-size:0;margin-top:18px;border-radius:50%;background-color:#ffaa00;vertical-align:middle;}
+.easypay-flow{margin-top:60px;padding-top:200px;padding-left:45px;background:url(../images/apply/easypay_flow.png) center top no-repeat;}
+.easypay-flow b{display:inline;float:left;width:240px;line-height:40px;padding-left:120px;text-align:center;color:#804040;font-size:22px;}
+.easypay-flow .m{padding-left:115px;}
+.to-open{margin:70px 100px 0;padding:50px 0;text-align:center;border-top:dashed 1px #dedede;}
+.to-open .btn{min-width:390px;height:50px;line-height:48px;font-size:20px;}
+
+/*提交申请资料*/
+.easypay-info-tit{line-height:30px;padding:15px 30px;font-size:20px;color:#333;}
+.easypay-info{margin:0 25px;}
+.easypay-info .list .laydate-icon{width:305px;}
+.easypay-resource-case{padding:15px 0px;}
+.easypay-resource-case .line{padding-left:170px;}
+.easypay-resource-case .line cite{display:inline;float:left;width:160px;line-height:30px;margin-left:-170px;text-align:right;font-size:14px;color:#333;}
+.easypay-resource-case .line .text{width:60px;}
+.easypay-contact{padding:20px;}
+.easypay-contact h4{margin-bottom:20px;font-size:14px;}
+.easypay-contact .line{padding:10px 20px 10px 92px;font-size:14px;}
+.easypay-contact .short{display:inline-block;width:220px;}
+.easypay-contact .short .text{width:100px;}
+.easypay-info-dl{margin:0 25px;padding:30px 10px 30px 168px;font-size:14px;border-bottom:dashed 1px #dedede;}
+.easypay-info-dl dt{display:inline;float:left;width:130px;margin-left:-137px;text-align:right;}
+.easypay-info-dl .file-item{width:180px;height:115px;margin:15px 15px 0 0;}
+.easypay-info-dl .card-upload{width:450px;height:360px;}
+.easypay-info-dl .card-demo{width:312px;line-height:25px;}
+.easypay-info-dl .card-demo .pic{border:solid 1px #dedede;}
+.upload-guide-pop{padding:20px;color:#999;font-size:14px;}
+.h135{height:135px;}
+
+/*信息认证*/
+.approve-bar{padding:20px 30px;background-color:#fff;}
+.approve-bar h3{line-height:30px;margin-bottom:10px;font-size:20px;color:#333;}
+.approve-bar .exp{width:580px;margin-top:30px;padding-top:20px;font-size:14px;border-top:solid 1px #dedede;}
+.approve-bar .exp p{margin:5px 0;}
+.approve-treaty{margin-top:15px;padding:15px 30px;background-color:#fff;}
+.easypay-list li{position:relative;margin:20px 0;}
+.easypay-list li .text{padding:11px 10px 11px 60px;font-size:14px;}
+.easypay-list li .error-msg{top:40px;}
+.ic-phonenum, .ic-phonepwd, .ic-captcha, .ic-usename{position:absolute;top:8px;left:15px;width:25px;height:25px;}
+.ic-phonenum{background-position:0 -360px;}
+.ic-phonepwd{background-position:-25px -360px;}
+.ic-captcha{background-position:0 -385px;}
+.ic-usename{background-position:-25px -385px;}
+
+/*额度申请资料提交成功，资料审批中*/
+.easypay-waiting{line-height:25px;padding:50px 30px;background-color:#fff;}
+.easypay-waiting h2{line-height:40px;margin-bottom:10px;font-size:22px;color:#333;}
+.easypay-waiting h3{line-height:40px;font-size:20px;color:#333;border-bottom:solid 1px #dedede;}
+.easypay-waiting h4{padding:30px 0 10px;font-size:16px;color:#333;}
+
+/*分期激活*/
+.activate-instruction-bar{line-height:25px;padding:50px 30px;background-color:#fff;}
+.activate-instruction-bar h2{line-height:40px;margin-bottom:20px;padding-bottom:20px;color:#333;font-size:20px;border-bottom:solid 1px #dedede;}
+.activate-instruction-bar .step{padding-top:180px;background:url(../images/apply/easypay_step.png) center 20px no-repeat;}
+.activate-instruction-bar li{float:left;width:405px;text-align:center;}
+.activate-instruction-bar dl{padding:15px 0;}
+.activate-instruction-bar dt{padding-bottom:10px;color:#333;}
+.activate-instruction-exp h2{line-height:40px;padding-bottom:10px;font-size:20px;color:#f52121;}
+.activate-instruction-exp li{display:inline;float:left;width:595px;text-align:center;}
+.ic-warning{width:40px;height:40px;background-position:0 -420px;}
+
+/*激活成功*/
+.activate-success{padding:100px 0;text-align:center;background-color:#fff;}
+.activate-success h2{line-height:50px;margin-bottom:20px;font-size:20px;color:#333;}
+.ic-succeed-green{width:48px;height:48px;vertical-align:middle;background:url(../images/m_ok.png) 0 0 no-repeat;}
+
+/*资料提交成功*/
+.easypay-finish{line-height:25px;padding:70px 20px 20px 370px;}
+.easypay-finish .ic-succeed{float:left;display:inline;margin-top:-5px;margin-left:-100px;}
+.easypay-finish .ic-prompt{float:left;display:inline;margin-top:10px;margin-left:-60px;}
+.easypay-finish h2{line-height:50px;font-size:28px;color:#333;}
+.ic-prompt{width:32px;height:32px;background-position:-20px -50px;}
+.ic-succeed{width:63px;height:63px;background-position:0 -250px;}

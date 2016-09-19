@@ -1,0 +1,178 @@
+<extend name="Layouts:pop" />
+<block name="head_css">
+<link href="__CSS__/seller.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+.layui-layer-tips .layui-layer-content{top:-10px;}
+</style>
+</block>
+
+<block name="content">
+<div class="send-pop">
+	<!-- <div class="send-table">
+        <table width="100%" class="table">
+            <colgroup>
+                <col width="35%">
+                <col width="10%">
+                <col width="27%">
+                <col width="">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>商品</th>
+                    <th>数量</th>
+                    <th>物流公司</th>
+                    <th>快递单号</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($output['order_info']['extend_order_goods'] as $key => $value) { ?>
+                <tr data-id="<?php  echo $value['rec_id']; ?>">
+                    <td class="n1"><label class="name"><input type="checkbox" class="v-2 mr5 js-check" /><?php echo $value['goods_name']; ?></label></td>
+                    <td><?php echo $value['goods_num']; ?></td>
+                    <td>
+                        <select class="js-expressID">
+                            <option value="0">请选择一个物流公司</option>
+                            <?php foreach ($output['express_list'] as $key => $value) { ?>
+                                <option value="<?php echo $key; ?>"><?php echo $value['e_name'] ?></option>
+                            <?php } ?>
+                        </select>
+                    </td>
+                    <td><input type="text" class="text js-expressCode" placehoder="请填写快递单号" style="width:150px" maxlength="40" /></td>
+                </tr>
+            <?php } ?>
+            </tbody>
+        </table>
+    </div> -->
+    <div class="ml50">
+    	<p class="mt20">收货地址：<span class="cor-9"><?php echo $order_info['extend_order_common']['reciver_info']['address']; ?></span></p>
+        <p class="mt5">收货人：<span class="cor-9"><?php echo $order_info['extend_order_common']['reciver_name'].$order_info['extend_order_common']['reciver_info']['phone']; ?></span></p>
+        <p class="mt5"><label><input type="checkbox" class="v-2 mr5 js-allCheck"  checked="true"/></label></p>
+        <p class="mt10 js-batch ">
+        	<span>
+            	物流公司：
+                <select class="js-expressID">
+                    <option value="0">请选择一个物流公司</option>
+                    <?php foreach ($express_list as $key => $value) { ?>
+						<option value="<?php echo $key;?>" <?php if ($key == $order_info['extend_order_common']['shipping_express_id']){echo 'selected';}?>><?php echo $value['e_name'] ?></option>
+                    <?php } ?>
+                </select>
+            </span>
+            <span class="ml30">
+            	快递单号：
+                <input type="text" class="text js-expressCode" placehoder="请填写快递单号" maxlength="40" value="<?php echo $output['order_info']['shipping_code'];?>"/>
+            </span>
+        </p>
+    </div>
+    <p class="pop-btn-control tr mt20">
+		<a href="javascript:void(0);" class="btn btn-blue js-submitBtn">提交</a>
+	</p>
+</div>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+(function($){
+    $(".js-allCheck").hide();
+	define("s/orderSend",function(require, exports, module){
+		require("jquery/layer");
+		require("com/global");
+		var manage = require("com/manage");
+		var param = manage.getParam();
+		var Module = {
+			init: function(){
+				var index = parent.layer.getFrameIndex(window.name);
+				parent.layer.iframeAuto(index);
+				/*
+				 *批量-多选框
+				 */
+				$(".send-pop").on("change", ".js-allCheck", function(){
+					if($(this).is(":checked")){
+						$(".js-batch").show();
+					}else{
+						$(".js-batch").hide();
+					}
+					parent.layer.iframeAuto(index);
+				});
+				/*
+				 *确认
+				 */
+				$(".send-pop").on("click", ".js-submitBtn", function(){
+					var order_id = param.order_id || "",
+						isPass = true;
+					if($(".js-allCheck").is(":checked")){
+						if($(".js-batch .js-expressID").val() == 0){
+							$.wrongTip($(".js-submitBtn"), "请选择快递公司");
+							isPass = false;
+							return false;
+						}
+						if(!$.trim($(".js-batch .js-expressCode").val())){
+							$.wrongTip($(".js-submitBtn"), "请填写快递单号");
+							isPass = false;
+							return false;
+						}
+						var batch_exprss_id = $(".js-batch .js-expressID").val(),
+							batch_shippingcode = $.trim($(".js-batch .js-expressCode").val()),
+							data = {
+								batch: 1,
+								order_id			: order_id,
+								batch_exprss_id		: batch_exprss_id,
+								batch_shippingcode	: batch_shippingcode
+							};
+					}else{
+						var $inpCheck = $(".js-check:checked"),
+							express_obj = {};
+						if($inpCheck.length < 1){
+							$.wrongTip($(".js-submitBtn"), "请选择商品");
+							return;
+						}
+						$inpCheck.closest("tr").each(function(){
+							if($(".js-expressID", this).val() == 0){
+								$.wrongTip($(".js-submitBtn"), "请选择快递公司");
+								isPass = false;
+								return false;
+							}
+							if(!$.trim($(".js-expressCode", this).val())){
+								$.wrongTip($(".js-submitBtn"), "请填写快递单号");
+								isPass = false;
+								return false;
+							}
+							express_obj[$(this).data("id")] = $(".js-expressID", this).val() + "," + $.trim($(".js-expressCode", this).val());
+						});
+						var data = {
+							isbatch	: 0,
+							order_id: order_id,
+							express	: express_obj
+						};
+					}
+					if(!isPass) return;
+					var pid = layer.load(360);
+					manage.ajax({
+						url: gConfig.apiurl + "/shop/factory/save_express_info",
+						data: data,
+						success: function(result){
+							layer.close(pid);
+							var resultText = result.resultText || {};
+							if(result.code == 1){
+								$.wrongMsg(resultText.message || "操作成功", 1);
+								setTimeout(function(){
+									parent.location.reload();
+								},1000);
+							}else{
+								$.wrongTip($(".js-submitBtn"), resultText.message || "操作失败");
+							}
+						},
+						error: function(){
+							layer.close(pid);
+						}
+					});
+				});
+			}
+		};
+		module.exports = Module;
+	});
+	seajs.use("s/orderSend", function(module){
+		module.init();
+	});
+})($);
+</script>
+</block>

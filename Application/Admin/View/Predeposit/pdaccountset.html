@@ -1,0 +1,182 @@
+<include file="Application/Common/Layout/head.html" /> 
+<div class="am-cf admin-main">
+<include file="Application/Common/Layout/left.html" /> 
+  <!-- content start -->
+  <div class="admin-content">
+    <div class="admin-content-body">
+      <div class="am-cf am-padding am-padding-bottom-0">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">会员</strong> / <small>预存款</small></div>
+      </div>
+
+      <hr>
+
+      <div class="am-g">
+        <div class="am-u-sm-12 am-u-md-6">
+          <div class="am-btn-toolbar">
+            <div class="am-btn-group am-btn-group-xs">
+              <button type="button" class="am-btn am-btn-default" onclick="location.href='/Admin/Predeposit/predeposit.html'"><span class="am-icon-plus"></span> 充值管理</button>
+              <button type="button" class="am-btn am-btn-default" onclick="location.href='/Admin/Predeposit/pdcashlist.html'"><span class="am-icon-save"></span> 提现管理</button>
+              <button type="button" class="am-btn am-btn-default" onclick="location.href='/Admin/Predeposit/pdloglist.html'"><span class="am-icon-archive"></span> 预存款明细</button>
+              <button type="button" class="am-btn am-btn-default" onclick="location.href='/Admin/Predeposit/pdaccountset.html'"><span class="am-icon-trash-o"></span> 汇出账号设置</button>
+            </div>
+          </div>
+        </div>
+        <br>
+        <br>
+        <div class="am-u-sm-12 am-u-md-6">
+          <div class="am-btn-toolbar">
+            <div class="am-btn-group am-btn-group-xs">
+              <button type="button" class="am-btn am-btn-default" id="clickadd"><span class="am-icon-plus"></span> 新增银行账户</button>
+            </div>
+          </div>
+        </div>
+      <div class="am-g">
+        <div class="am-u-sm-12" id="showband">
+            <table class="am-table am-table-striped am-table-hover table-main">
+              <thead>
+              <tr>
+                <th class="table-id">序号</th>
+                <th class="table-title">账户名称</th>
+                <th class="table-title">开户银行</th>
+                <th class="table-title">银行卡号</th>
+                <th class="table-title">开卡人</th>
+                <th class="table-set">操作</th>
+              </tr>
+              </thead>
+              <tbody>
+              <volist name="accountlist" id="vo">
+              <tr>
+                <td>{$vo.id}</td>
+                <td>{$vo.account}</td>
+                <td>{$vo.bank_name}</td>
+                <td>{:substr_replace($vo['bank_num'], '************', 3,-4)}</td>
+                <td>{$vo.user_name}</td>
+                <td>
+                  <div class="am-btn-toolbar">
+                    <div class="am-btn-group am-btn-group-xs">
+                      <button class="am-btn am-btn-default am-btn-xs am-hide-sm-only changeA" data-id='{$vo.id}' data-account='{$vo.account}' data-bank_name='{$vo.bank_name}' data-bank_num='{$vo.bank_num}'data-user_name='{$vo.user_name}'><span class="am-icon-copy"></span> 编辑</button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              </volist>
+              </tbody>
+            </table>
+            <div class="am-cf">
+              <div class="am-fr">
+              {$page}
+              </div>
+            </div>
+        </div>
+
+        <div id ="add" style="display:none;margin-top:60px" class="am-tabs am-margin" data-am-tabs>
+          <form id="store_form" class="am-form" method="post"  onsubmit="return checkval()">
+            <input type="hidden" name="issubmits" value="ok" />
+            <input id='accountid' type="hidden" name='accountid' value="0">
+            <div>
+              <div class="am-tab-panel am-fade am-in am-active">
+                <div class="am-g am-margin-top">
+                  <div class="am-u-sm-4 am-u-md-2 am-text-right">
+                    账户名称：
+                  </div>
+                  <div class="am-u-sm-8 am-u-md-4">
+                    <input id='account' type="text" name="account" class="am-input-sm" value="">
+                  </div>
+                  <div class="am-hide-sm-only am-u-md-6"></div>
+                </div>
+                <div class="am-g am-margin-top">
+                  <div class="am-u-sm-4 am-u-md-2 am-text-right">
+                    开户银行：
+                  </div>
+                  <div class="am-u-sm-8 am-u-md-4">
+                    <input id='bank_name' type="text" name="bank_name" class="am-input-sm" value="">
+                  </div>
+                  <div class="am-hide-sm-only am-u-md-6"></div>
+                </div>
+                <div class="am-g am-margin-top">
+                  <div class="am-u-sm-4 am-u-md-2 am-text-right">
+                    银行卡号：
+                  </div>
+                  <div class="am-u-sm-8 am-u-md-4">
+                    <input id='bank_num' type="text" name="bank_num" class="am-input-sm" value="">
+                  </div>
+                  <div class="am-hide-sm-only am-u-md-6"></div>
+                </div>
+                <div class="am-g am-margin-top">
+                  <div class="am-u-sm-4 am-u-md-2 am-text-right">
+                    开卡人名：
+                  </div>
+                  <div class="am-u-sm-8 am-u-md-4">
+                    <input id='user_name' type="text" name="user_name" class="am-input-sm" value="">
+                  </div>
+                  <div class="am-hide-sm-only am-u-md-6"></div>
+                </div>
+              </div>
+            </div>  
+            <div class="am-margin">
+              <button type="submit" id="submitBtn" class="am-btn am-btn-primary am-btn-xs">提交保存</button>
+            </div>
+          </form>
+        </div>
+
+    
+  </div>
+      </div>
+    </div>
+
+    <footer class="admin-content-footer">
+      <hr>
+      <p class="am-padding-left">© 2014 AllMobilize, Inc. Licensed under MIT license.</p>
+    </footer>
+
+  </div>
+  <!-- content end -->
+
+</div>
+<include file="Application/Common/Layout/foot.html" /> 
+<script>
+$(function(){
+  $("#clickadd").click(function(){
+    $('#showband').hide();
+    $('#add').show();
+  })
+
+});
+
+$(".changeA").click(function(){
+    var accountid=$(this).data('id');
+    var account=$(this).data('account');
+    var bank_name=$(this).data('bank_name');
+    var bank_num=$(this).data('bank_num');
+    var user_name=$(this).data('user_name');
+    
+    $("#accountid").val(accountid);
+    $('#account').val(account);
+    $('#bank_name').val(bank_name);
+    $('#bank_num').val(bank_num);
+    $('#user_name').val(user_name);
+    
+    $('#showband').hide();
+    $('#add').show();
+  })
+function checkval()
+{
+  if($('#account').val()=='')
+  {
+    alert('账号不能为空');
+    return false;
+  }
+  if($('#bank_num').val()=='')
+  {
+    alert('卡号不能为空');
+    return false;
+  }
+  if($('#user_name').val()=='')
+  {
+    alert('开卡人名不能为空');
+    return false;
+  }
+  
+  
+}
+</script>

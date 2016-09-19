@@ -1,0 +1,269 @@
+<extend name="Layouts:login" />
+<block name="title"><title>登录页-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="login-bg">
+    <div class="wrapper login-banner">
+        <form action="javascript:void(0);" id="loginForm" class="login-from" method="post" autocomplete="off">
+            <input type="hidden" name="form_submit" value="ok" />
+            <input type="hidden" name="nchash" value="" />
+            <input type="hidden" name="login_type" class="js-loginType" value="password" />
+            <input type="hidden" name="ref_url" value="<?php echo $_GET['ref_url']?:'/';?>" />
+            <h2>欢迎登录</h2>
+            <div class="inp-box">
+                <p class="line">
+                    <label class="long-inp ic-username"><input type="text" name="user_name" class="text js-userName" placeholder="全木行/特速一块购/链金所账号" maxlength="11" /></label>
+                </p>
+                <p class="line js-passwordLine">
+                    <label class="long-inp ic-password"><input type="password" name="password" class="text js-password" placeholder="密码" maxlength="16" /></label>
+                </p>
+                <p class="line cf js-vcodeLine dis-none">
+                    <label class="short-inp ic-vcode fl"><input type="text" name="verify_code" class="text js-vcode js-number" placeholder="手机验证码" maxlength="6" /></label>
+                    <a href="javascript:void(0);" class="red-btn disable-btn fr js-sendCode">免费发送</a>
+                </p>
+                <p class="line cf">
+                     <label class="cor-9 fl"><input type="checkbox" class="v-2" /> 自动登录</label>
+                     <a href="javascript:void(0);" class="js-yzmLogin fr">验证码登录</a>
+                     <a href="javascript:void(0);" class="js-psdLogin fr dis-none">密码登录</a>
+                </p>
+                <input type="submit" name="Submit" class="orange-btn disable-btn mt5 js-submitBtn" value="登   录" />
+                <p class="line cf">
+                    <a href="__ROOT__/shop/login/register" class="cor-orange fl">免费注册&gt;</a>
+                    <a href="__ROOT__/shop/login/findPassword" class="cor-9 fr">忘记密码？</a>
+                </p>
+            </div>
+            <?php if ($GLOBALS['setting_config']['qq_isuse'] == 1 || $GLOBALS['setting_config']['sina_isuse'] == 1){?>
+                <div class="net-cooperation">
+                    <p class="show-text">
+                        <span><?php echo $lang['nc_otherlogintip'];?></span>
+                    </p>
+                    <p class="account-list tc">
+                        <?php if ($GLOBALS['setting_config']['qq_isuse'] == 1){?>
+                            <a href="<?php echo SHOP_SITE_URL;?>/api.php?act=toqq" title="QQ" class="ic-qq"></a>
+                        <?php } ?>
+                        <?php if ($GLOBALS['setting_config']['weixin_isuse'] == 1){?>
+                            <a href="<?php echo SHOP_SITE_URL;?>/index.php?act=connect_wx" title="微信" class="ic-wx"></a>
+                        <?php } ?>
+                        <?php if ($GLOBALS['setting_config']['sina_isuse'] == 1){?>
+                            <a href="<?php echo SHOP_SITE_URL;?>/api.php?act=tosina" title="新浪" class="ic-sina"></a>
+                        <?php } ?>
+                      </p>
+                </div>
+            <?php } ?>
+        </form>
+    </div>
+</div>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+(function($){
+	define("web/login",function(require, exports, module){
+		require("jquery/layer");
+		var isSendCode = false, //手机验证码是否发送
+			isUsername = false, //账号是否存在
+			click_num =  1; //提交次数
+			countnum = 120, //时间 
+			timeInterval = null;
+		var manage = require("com/manage");
+		var Module = {
+			init: function(){
+				/*
+				*初始化
+				**/
+				if($.trim($(".js-userName").val()).length){
+					Module.checkUsername();
+				}
+				/*
+				*切换验证码登录
+				**/
+				$(".js-yzmLogin").click(function(){
+					$(".js-passwordLine").hide();
+					$(".js-vcodeLine").show();
+					$(".js-yzmLogin").hide();
+					$(".js-psdLogin").show();
+					$(".js-userName").attr({
+						"placeholder"	: "请输入手机号码",
+						"maxlength"		: "11"
+					});
+					$(".js-loginType").val("verify_code");
+				});
+				/*
+				*切换密码登录
+				**/
+				$(".js-psdLogin").click(function(){
+					$(".js-passwordLine").show();
+					$(".js-vcodeLine").hide();
+					$(".js-yzmLogin").show();
+					$(".js-psdLogin").hide();
+					$(".js-userName").attr({
+						"placeholder"	: "全木行/特速一块购/链金所账号",
+						"maxlength"		: "30"
+					});
+					$(".js-loginType").val("password");
+				});
+				/*
+				*用户名验证
+				**/
+				$("body").on("focus", ".js-userName", function(){
+					layer.closeAll("tips");
+				}).on("blur", ".js-userName", function(){
+					var me = $(this),
+						val = me.val();
+					if(!val){
+						isUsername = false;
+						$(".js-submitBtn").addClass("disable-btn");
+						$(".js-sendCode").addClass("disable-btn");
+						$.wrongTip(".ic-username", "请输入账号", 4);
+						return;
+					}
+					Module.checkUsername();
+				});
+				/*
+				*发送验证码
+				**/
+				$(".js-sendCode").click(function(){
+					var me = $(this),
+						userName = $.trim($(".js-userName").val());
+					if(me.hasClass("disable-btn")) return false;
+					if(!userName || !$.isTelephone(userName)){
+						$.wrongTip(".ic-username", "请输入正确的手机号码", 4);
+						return false;
+					}
+					//账号校验通过,执行发送验证码操作
+					$.post(gConfig.apiurl + "/index.php?c=login&a=verify_code",{
+						mobile: userName
+					}, function (result) {
+						var result = result || {},
+							resultText = result.resultText || {};
+						if(result.code == 1){
+							isSendCode = true;
+							Module.countdown();
+						}else{
+							$.wrongTip(me, resultText.message || "发送失败");
+						}
+					},"json");
+				});
+				/*
+				*登录按钮
+				**/
+				$(".js-submitBtn").click(function(){
+					click_num ++;
+					var me = $(this),
+						isPass = true,
+						userName = $.trim($(".js-userName").val()),
+						password = $.trim($(".js-password").val()),
+						vcode = $.trim($(".js-vcode").val());
+					if(me.hasClass("disable-btn")) return false;           
+					if($(".js-loginType").val() == "password"){ //密码登录
+						if(!userName){
+							$.wrongTip(".ic-username", "请输入账号", 4);
+							isPass = false;
+							return false;
+						}
+						if(password.length < 6 || password.length > 16){
+							$.wrongTip(".ic-password", "请输入正确的密码", 4);
+							isPass = false;
+							return;
+						}
+					}else{
+						if(!userName || !$.isTelephone(userName)){
+							$.wrongTip(".ic-username", "请输入正确的手机号码", 4);
+							isPass = false;
+							return false;
+						}
+						if(!vcode){
+							$.wrongTip(".ic-vcode", "请输入验证码", 4);
+							isPass = false;
+							return false;
+						}
+					}
+					var data = $("#loginForm").serialize();
+					data = manage.serializeJson(data);
+					me.addClass("disable-btn");
+					manage.ajax({
+						url: gConfig.apiurl + "/index.php?c=login&a=index",
+						data: data,
+						success: function(result) {
+							me.removeClass("disable-btn");
+							var result = result || {},
+								resultText = result.resultText || {};
+							if(result.code == 1){
+								window.location = $("input[name=ref_url]").val();
+							}else if(result.code == 0){
+								$.wrongTip(".js-submitBtn", resultText.message || "登录失败");
+							}else{
+								$.wrongTip(".js-submitBtn", resultText.message || "登录失败");
+							}
+						},
+						error: function(){
+							me.removeClass("disable-btn");
+						}
+					});
+				});
+			},
+			/*
+			*验证用户名
+			**/
+			checkUsername: function(callback){
+				//$(".js-submitBtn").val("验证中...");
+				var userName = $.trim($(".js-userName").val());
+				$.ajax({
+					url: gConfig.apiurl + "/index.php?c=login&a=check_and_exist&column=ok",
+					type: "GET",
+					dataType: "json",
+					async: false,
+					data: {
+						mobile		: userName,
+						key			: userName,
+						member_name	: userName
+					},
+					success: function (result) {
+						$(".js-submitBtn").val("登   录");
+						var result = result || {},
+							resultText = result.resultText || {};
+						if(result.code > 0) {
+							isUsername = true;
+							$(".js-submitBtn").removeClass("disable-btn");
+							if(!isSendCode){
+								$(".js-sendCode").removeClass("disable-btn");
+							}
+						}else{
+							isUsername = false;
+							$(".js-submitBtn").addClass("disable-btn");
+							$(".js-sendCode").addClass("disable-btn");
+							$.wrongTip(".ic-username", resultText.message || "账号不存在", 4, 99999999);
+						}
+					},
+					error: function(){
+						$(".js-submitBtn").val("登   录");
+						$.wrongMsg("网络异常")
+					}
+				});
+			},
+			countdown: function(){
+				clearInterval(timeInterval);
+				timedown();
+				timeInterval = setInterval(timedown, 1000);
+				function timedown(){
+					if(countnum == 0){
+						$(".js-sendCode").text("重新发送");
+						if(isUsername) $(".js-sendCode").removeClass("disable-btn");
+						countnum = 120;
+						isSendCode = false;
+						clearInterval(timeInterval);
+					}else{
+						$(".js-sendCode").text("重新发送(" + countnum + 's' + ")").addClass("disable-btn");
+						countnum--;
+					}
+				}
+			}
+		};
+		module.exports = Module;
+	});
+	seajs.use("web/login", function(module){
+		module.init();
+	});
+})($);
+</script>
+</block>

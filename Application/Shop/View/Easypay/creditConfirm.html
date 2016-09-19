@@ -1,0 +1,127 @@
+<extend name="Layouts:home"/>
+<block name="title"><title>上传征信资料-{:C('site_name')}</title></block>
+<block name="head_css">
+<link rel="stylesheet" type="text/css" href="__CSS__/apply.css">
+</block>
+
+<block name="content">
+<div class="wrapper mt140">
+    <h2 class="easypay-info-tit">征信报告</h2>
+    <form action="javascript:void(0);" id="form" class="easypay-box" method="post" autocomplete="off">
+        <div class="approve-bar">
+            <h3>征信报告说明</h3>
+            <div class="h40 cf">
+                <label class="cor-black mt5 fl">
+                    <input type="radio" name="credit_type" class="v-2 " value="1" />
+                    已有征信报告直接上传：
+                </label>
+                <a href="javascript:void(0);" id="imgFileBtn" class="btn btn-small ml10 fl">点击上传征信报告</a>
+            </div>
+            <div id="fileList" class="cf">  
+            </div>
+            <p class="mt10 cor-black">
+                <label>
+                    <input type="radio" name="credit_type" class="v-2 " value="2" />
+                    无征信报告，获取征信报告方式：
+                </label>
+            </p>
+            <p class="mt10">第一步：登录人民银行征信系统（<a href="https://ipcrs.pbccrc.org.cn/" class="cor-blue" target="_blank">https://ipcrs.pbccrc.org.cn/</a>）完成征信报告的获取</p>
+            <p class="mt5">第二步：将获取的征信报告PDF格式文档下载至本地电脑，邮件发送至service@allwood.com.cn</p>
+            <p class="mt5">第三步：通知客服400-6626-985</p>
+            <p class="mt20">
+                <input type="checkbox" id="isAffirm" class="v-2 js-isAffirm" />
+                <label for="isAffirm" class="cor-black">本人已阅读并同意</label>
+                <a href="javascript:void(0);" class="cor-blue ml30 js-treaty">《个人征信授权书》</a>
+            </p>
+        </div>
+        <p class="mt30 ml30">
+            <a href="javascript:history.back();" class="fs16">上一步</a>
+            <button class="btn btn-info btn-disable ml50 js-nextBtn">下一步</button>
+        </p>
+    </form>
+</div>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+(function($){
+    define("m/upload_credit_info",function(require, exports, module){
+        require("jquery/layer");
+        var manage = require("com/manage");
+		var upload = require("jquery/upload");
+        var Module = {
+            init: function(){
+				 /*
+                 * 点击上传征信报告
+                 * */
+                upload.base({
+                    isSingle: true,
+					storage: "credit",
+					fileSingleSizeLimit: 1000,
+					accept: {
+						title: 'intoTypes',
+						extensions: 'pdf',
+						mimeTypes: '.pdf'
+					}
+                });
+				/*
+                 * 弹窗-个人征信授权书
+                 * */
+				$("body").on("click", ".js-treaty", function(){
+                    layer.open({
+						type: 2,
+						title:false,
+						closeBtn: 1,
+						area: ['700px', '500px'],
+						content: "__APP__/contract/grxxsysqs"
+					});
+                });
+				/*
+                 * 勾选确认所填资料
+                 * */
+                $("body").on("click", ".js-isAffirm", function(){
+                    if($(this).is(":checked")){
+                        $(".js-nextBtn").removeClass("btn-disable").addClass("btn-info");
+                    }else{
+                        $(".js-nextBtn").removeClass("btn-info").addClass("btn-disable");
+                    }
+                });
+				/*
+                 * 下一步
+                 * */
+                $("body").on("click", ".js-nextBtn", function(){
+                    var me = $(this),
+						credit_type = $("input[name=credit_type]:checked").val();
+					if(!$(".js-isAffirm").is(":checked")){
+						$.wrongMsg("请勾选本人已阅读并同意");
+						return;
+					}
+					if(!$("input[name=credit_type]:checked").length){
+						$.wrongMsg("请选择是否有征信报告");
+						return;
+					}
+					if(credit_type == "1" && !$("#fileList .file-item").length){
+						$.wrongMsg("请上传征信报告");
+						return;
+					}
+                    var data = $("#form").serialize();
+                    data = manage.serializeJson(data);
+					data.credit_src = $("#fileList .js-download").attr("href") || "";
+                    manage.getApi("{:U('easypay/creditConfirm')}", data, function(relust){
+                        var relust = relust || {},
+                            url = relust.url || gConfig.apiurl;
+                        setTimeout(function(){
+                            location.href = url;
+                        },5000);
+                    });
+				});
+			}
+		};
+        module.exports = Module;
+    });
+    seajs.use("m/upload_credit_info", function(module){
+        module.init();
+    });
+})($);
+</script>
+</block>

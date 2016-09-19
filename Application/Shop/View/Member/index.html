@@ -1,0 +1,91 @@
+<extend name="Layouts:member" />
+<block name="title"><title>首页-买家中心-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="index-balance fs14 cf">
+	<div class="l fl">
+    	<h2>乐购分期</h2>
+        <p class="mt20">
+            总额度： <span class="cor-red">{:ncPriceFormat($_SESSION['easypay_credit_total'])}</span> 元
+        </p>
+        <p class="mt20">
+            可用余额： <span class="cor-red">{:ncPriceFormat($_SESSION['easypay_credit_available'])}</span> 元
+        </p>
+        <div class="state">
+        	<p class="mb10">状态：{:$_SESSION['easypay_status_zh']}</p>
+            <if condition="$_SESSION['is_activate']">
+                <p class="mb10">激活状态：已激活</p>
+                <else/>
+                <p class="mb10">激活状态：未激活</p>
+            </if>
+            <if condition="$_SESSION['easypay_credit_status'] eq APPLYSTATUS_NONE">
+                <if condition="$_SESSION['is_activate'] eq 1">
+                    <a href="{:U('easypay/easypayafterlezhuang')}" class="yellow-bor ml20" target="_blank">立即开通</a>
+                    <else/>
+                    <a href="{:U('Shop/easypay')}" class="yellow-bor ml20" target="_blank">立即开通</a>
+                </if>
+            </if>
+            <if condition="$_SESSION['easypay_credit_status'] eq APPLYSTATUS_PROCESSING_2_FAIL OR $_SESSION['easypay_credit_status'] eq APPLYSTATUS_PROCESSING_1_FAIL">
+                <a href="{:U('Shop/easypay')}" class="yellow-bor ml20" target="_blank">再次申请开通</a>
+            </if>
+        </div>
+    </div>
+    <div class="r fr">
+    	<h2>乐装分期</h2>
+        <p class="mt20">装修账户</p>
+        <p class="mt20">
+        	可用余额： <span class="cor-red"><?php echo $member_info['decorate_fund'];?></span> 元
+        </p>
+        <div class="state">
+        	<a href="{:U('/shop/TSFinance/tsFinance')}" class="btn btn-info btn-small">转账</a>
+        </div>
+    </div>
+</div>
+<ul class="index-order-menu mt10 cf">
+    <li>
+        <a href="{:U('member/myorder/order_state/1')}">
+            <i class="ic-refund"></i>
+            <p>定价中<?php echo $member_info['order_dinjia'];?></p>
+        </a>
+    </li>
+    <li class="nobor">
+        <a href="{:U('member/myorder/order_state/10')}">
+            <i class="ic-pay"></i>
+            <p>待付款 <?php echo $member_info['order_nopay'];?></p>
+        </a>
+    </li>
+    <!--<li>
+        <a href="/index.php?c=member&a=myorder&order_state=20">
+            <i class="ic-deliver"></i>
+            <p>待发货 <?php echo $member_info['order_nosend'];?></p>
+        </a>
+    </li>
+    <li>
+        <a href="/index.php?c=member&a=myorder&order_state=30">
+            <i class="ic-receiver"></i>
+            <p>已收货 <?php echo $member_info['order_noreceiving'];?></p>
+        </a>
+    </li>-->
+    <!--
+    <li class="nobor">
+        <a href="<?php echo urlShop('member','orders', array('safeguard_state'=>1));?>">
+            <i class="ic-refund"></i>
+            <p>退款中 <?php echo $member_info['order_refunding'];?></p>
+        </a>
+    </li>
+    -->
+</ul>
+<div class="tit-bar mt10"><h2>猜你喜欢</h2></div>
+<ul class="guess-like cf">
+    <if condition="!empty($guess_you_like) AND is_array($guess_you_like)">
+        <volist name="guess_you_like" id="vo">
+            <li>
+                <a href="{:U('shop/goods/index/goods_id/'.$vo['goods_id'])}" >
+                    <img src="{:thumb($vo,210)}" width="210px" height="210px" alt="{$vo.goods_name}" />
+                    <p class="h40 mt10">{$vo.goods_name}</p>
+                </a>
+            </li>
+        </volist>
+    </if>
+</ul>
+</block>

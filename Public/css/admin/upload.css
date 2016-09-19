@@ -1,0 +1,15 @@
+    /*upload file*/
+.upload_file { position : relative; }
+
+.upload_file img { width : 100%; height : 150px; }
+
+.upload_file p { position : absolute; top : 0; left : 0; display : block; background : #333; width : 100%; color : #FFF; opacity : 0.8; }
+
+.upload_file i { position : absolute; bottom : 5px; right : 5px; font-size : 40px; }
+
+.upload_file input { opacity : 0; filter : alpha(opacity=0); position : absolute; display : block; left : 0; top : 0; cursor : pointer; height : 100% !important; width : 100% !important; }
+
+.search { padding-bottom : 15px; border-bottom : 1px #EEE solid; }
+.border-left{border-left: 1px #ccc solid;}
+.slide_menu{margin:30px 50px;}
+.menuBg { background: #3bb4f2; color: #fff; padding: 5px 8px; font-size: 12px;}

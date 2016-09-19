@@ -1,0 +1,141 @@
+/*
+************ author: linsiting
+************ 工厂店铺页
+*/
+.wrapper{width:1280px;}
+/* --- 头部店铺介绍与搜索 --- */
+.factory-header{position:relative;height:50px;padding:30px 0;border-bottom: solid 2px #3da3ea;box-shadow:0 3px 2px rgba(0,0,0,0.13);background-color:#fff;}
+.factory-header .site-logo{margin-right:10px;padding-right:10px;border-right:solid 2px #333;}
+.factory-header .form-search{height:36px;margin:2px 0; position: relative; z-index: 1;padding-top:10px;}
+.factory-header .keyword{float:left;width:384px;height:24px;line-height:24px;padding:4px 10px;font-size:14px;color:#333;border-radius:3px 0 0 3px;border:2px solid #3da3ea;}
+.factory-header .search-btn{float:left;width:100px;height:36px;line-height:35px;font-size:18px;color:#fff;text-align:center;border-radius:0 3px 3px 0;background-color:#3da3ea;cursor:pointer;}
+
+/* ---- 店铺形象图 ---- */
+.factory-banner{width:1280px;height:240px;margin-left:auto;margin-right:auto;}
+.factory-banner img{width:100%;height:100%;}
+
+/* ---- 店长推荐 ---- */ 
+.factory-list .title{position:relative;height:42px;margin-top:20px;border-bottom:2px solid #dedede;}
+.factory-list .title h2{width:120px;line-height:40px;padding-left:10px;font-size:20px;color:#333;}
+.factory-list .title .line{position:absolute;left:0;top:42px;width:120px;height:2px;background-color:#3da3ea;overflow:hidden;}
+.factory-list .title .more{float:right;margin-right:12px;color:#666;line-height:40px;}
+
+.factory-goods-list{margin:20px 0;}
+.factory-goods-list li{float:left;width:280px;height:380px;margin:0 0 14px 14px;padding:10px;font-size:14px;border:1px solid #dedede;background-color:#fff;}
+.factory-goods-list .thumb{width:280px;height:280px;line-height:280px;text-align:center;}
+.factory-goods-list .thumb img{vertical-align:middle;}
+.factory-goods-list .name{height:40px;width:100%;margin:10px 0;overflow:hidden;}
+.factory-goods-list .name a{font-weight:bold;color:#333;}
+.factory-goods-list .name a:hover{color:#2697e5;}
+.factory-goods-list li:hover{border-color:#2697e5;}
+
+/* ----
+=====================
+    工厂店铺产品详情 
+=====================
+ ---- */
+.factory-goods-info{position:relative;z-index:2;min-height:510px;margin-top:20px;}
+/*商品图片*/
+.ncs-goods-picture{z-index:99;position:absolute;top:0;left:0px;}
+.ncs-goods-picture .levelB, .ncs-goods-picture .levelC{cursor:url(../images/zoom.cur), pointer;}
+.ncs-goods-picture .levelD {cursor:url(../images/hand.cur), move \9;}
+.ncs-goods-picture .gallery_wrap{width:100%;min-height:418px; border: solid 1px #eee; background:#fff;} 
+.ncs-goods-picture .gallery {width:100%;height:100%;position:absolute;top:0;left:0;}
+.ncs-goods-picture .place_gallery{top:4%;left:50%;margin-left:-180px;}
+.ncs-goods-picture img{display:block;-ms-interpolation-mode:bicubic;}
+.ncs-goods-picture .levelB, .ncs-goods-picture .levelC{cursor: url(../images/zoom.png), -moz-zoom-in; }
+.ncs-goods-picture .levelD {cursor:url(../images/hand.png), -moz-grab; }
+.ncs-goods-picture .controller_wrap{background:rgba(255,255,255,1); padding: 0;margin-top:15px;}
+.ncs-goods-picture .controller {position: relative;width:420px;height:74px;overflow: hidden;}
+.ncs-goods-picture .controller ul{position:absolute;top:0;left:0;width:1000%;height:74px; }
+.ncs-goods-picture .controller li{float:left;width:86px;}
+.ncs-goods-picture .controller a{display:table-cell;*display:block;padding:1px;text-align:center;border:1px solid #eee;vertical-align:middle;overflow:hidden;}
+.ncs-goods-picture .controller a img{max-width:70px;max-height:70px;margin-top:expression(70-this.height/2);*margin-top:expression(35-this.height/2);}
+.ncs-goods-picture .controller a:hover, .ncs-goods-picture .controller .current{padding:0;border-width:2px;border-color:#d93600;}
+.ncs-goods-picture .prev, .ncs-goods-picture .next{display:none;position: absolute;top:180px;left:1px;width:28px;height:56px;border-radius:0 56px 56px 0;background:rgba(255,255,255,0.4);}
+.ncs-goods-picture:hover .prev, .ncs-goods-picture:hover .next{display:block;}
+.ncs-goods-picture .prev:hover, .ncs-goods-picture .next:hover{filter:progid:DXImageTransform.Microsoft.gradient(enabled='true',startColorstr='#CCFFFFFF', endColorstr='#CCFFFFFF');background:rgba(255,255,255,0.8);}
+.ncs-goods-picture .prev span, .ncs-goods-picture .next span{display:block;width:10px;height:20px;margin:18px 0 0 4px;text-indent:-99px;background:url(../images/2014_ncs_public_img.png) no-repeat -12px 0;overflow:hidden;cursor:pointer;}
+.ncs-goods-picture .hide, .ncs-goods-picture:hover .hide{display:none;}
+.ncs-goods-picture .next{border-radius:56px 0 0 56px;left:auto;right:1px;}
+.ncs-goods-picture .next span{background-position:-22px 0;margin-left:11px;}
+.ncs-goods-picture .close_wrap{position:absolute;top:-10px;right:-10px;}
+.ncs-goods-picture .close_wrap a{display:none;width:22px;height:22px;font:lighter 20px/20px Verdana;color:#ccc;text-align: center;border:solid 1px #ccc;border-radius:24px;background-color:#fff;overflow:hidden;}
+.ncs-goods-picture .close_wrap a:hover{text-decoration:none;color:#333;border-color:#333;}
+
+/*商品基本信息*/
+.ncs-goods-summary{width:830px;height:100%;float:right;}
+.ncs-goods-summary .name{line-height:30px;font-size:20px;margin-bottom:5px;color:#333;}
+.ncs-goods-summary .jingle{display:inline;color:#c40000;font-size:14px;}
+hr{}
+.store-contact{margin-top:10px;padding-top:10px;border-top:dashed 1px #999;}
+.store-contact li, .ncs-key dl{padding:8px 0 8px 70px;}
+.store-contact li cite, .ncs-key dt{display:inline;float:left;width:70px;margin-left:-55px;}
+.qq-btn, .ww-btn{width:80px;height:30px;text-indent:-999px;background-image:url(../images/ic_qq.png);vertical-align:middle;overflow:hidden;}
+.ww-btn{margin-left:10px;background-image:url(../images/ic_alww.png);}
+
+/*出厂价*/
+.ncs-price{line-height:35px;background-color:#fff2e8}
+.ncs-price b{font-size:20px;color:#ff0000;vertical-align:middle;}
+
+/*物流运费*/
+
+.ncs-freight .freight, .ncs-freight .transport-price{display:inline-block;position:relative;}
+.ncs-freight .ncrecive i{width:10px;height:6px;margin-left:5px;background:url(../images/ic_member.png) no-repeat -28px -20px;vertical-align:middle;}
+.freight:hover .transport-pannel{display:block;}
+.transport-pannel{display:none;z-index:9;position:absolute;top:20px;left:0px;width:420px;padding:6px;border-radius:4px;border:solid 2px #ff9900;box-shadow:3px 3px 3px rgba(0,0,0,.3);background-color:#fff;}
+.transport-pannel a{float:left;width:60px;height:24px;line-height:24px;text-align:center;background:none;}
+
+/*规格值的选择*/
+.ncs-key .sp-txt{position:relative;line-height:25px;margin-right:5px;margin-bottom:5px;padding:1px 20px;border:solid 1px #dedede;}
+.ncs-key .sp-txt:hover{color:#ffa800;text-decoration:none;}
+.ncs-key .spec .hovered, .ncs-key .spec .hovered:hover{padding:0px 19px;color:#333;border:solid 2px #ff0000;}
+.ncs-key .spec .hovered i{position:absolute;bottom:0px;right:0px;width:15px;height:15px;background:url(../images/ic_web.png) 0 -289px no-repeat;}
+
+/*购买数量和库存*/
+.ncs-figure-input{position:relative;z-index:1;}
+.ncs-figure-input a{width:30px;height:28px;line-height:22px;font-size:22px;text-align:center;border:solid 1px #dedede;}
+.ncs-figure-input a:hover{color:#d93600;text-decoration:none;}
+.ncs-figure-input .text{z-index:2;position:relative;width:50px;margin:0 -1px;text-align:center;border-radius:0;border:solid 1px #dedede;}
+
+/* 立即购买和加入购物车按钮 */
+.ncs-btn{margin-top:5px;padding:40px 85px;border-top:1px dashed #999;}
+.ncs-btn .added, .ncs-btn .buynow{width:150px;height:50px;line-height:50px;margin-right:10px;font-size:16px;font-weight:bold;color:#fff;text-align:center;text-decoration:none;border-radius:5px;border:solid 1px #3da3ea;background-color:#3da3ea;}
+.ncs-btn .buynow{background-color:#fff;color:#3da3ea;}
+.ncs-btn .added:hover{border-color:#248bd3;background-color:#248bd3;}
+.ncs-btn .buynow:hover{color:#248bd3;border-color:#248bd3;}
+.ncs-btn .no-buynow, .ncs-btn .no-buynow:hover{background-color:#666;border-color:#666;color:#fff;cursor:not-allowed;}
+
+/* ---- 推荐商品 ----*/
+.recommend{float:left;width:215px;padding:15px 8px 50px;border:solid 1px #dedede;background:#fff;}
+.recommend h2{line-height:30px;padding:3px 8px;font-size:16px;color:#333;border-bottom:dashed 1px #dedede;}
+.recommend li{padding:20px 0;font-size:14px;text-align:center;border-bottom:dashed 1px #dedede;}
+.recommend li img{width:180px;height:180px;}
+
+/* ---- 商品详情 ----*/
+.detail-info{float:right;width:1020px;border:solid 1px #dedede;}
+.detail-info .title{height:40px;border-bottom:1px solid #D7D7D7; position:relative;}
+.detail-info .title span{position:absolute;left:0px;top:-1px;line-height:37px;padding:0 20px;color:#333;font-size:16px;border-top:4px solid #3da3ea;border-right:1px solid #dedede;border-bottom:1px solid #fff;}
+.goods-attr{margin:20px;padding:10px;background-color:#f3f3f3;}
+.goods-attr span{float:left;width:23%;line-height:20px;margin:5px 1%;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;vertical-align:middle;}
+.goods-text{margin:20px;}
+.goods-text img{max-width:100%;}
+/* ----
+=====================
+    工厂店铺搜索页 
+=====================
+ ---- */
+/*搜索页商品信息*/
+.pro-info-table caption{height:36px;line-height:36px;font-size:14px;color:#333;} 
+.pro-info-table td, .pro-info-table th{padding:10px;border:1px solid #dedede;background-color:#fff;}
+.pro-info-table th{width:128px;text-align:center;vertical-align:top;font-weight:normal;background-color:#fafafa;}
+.pro-info-table a{min-width:115px;margin-left:20px;text-decoration:none;}
+
+.factory-sort-bar{height:40px;border:1px solid #dedede;background-color:#fff;}
+.nch-sortbar-array li{float:left;width:84px;font-size:14px;text-align:center;border-right:1px #dedede solid;}
+.nch-sortbar-array li a{display:block;height:26px;line-height:26px;padding:7px 13px 7px 12px;text-decoration:none;}
+.nch-sortbar-array li a i{width:7px;height:9px;margin-left:4px;background: url(../images/2014shop_background_img.png) no-repeat -35px -11px;vertical-align:middle;}
+.nch-sortbar-array li.selected a i{background-position: -28px -11px;}
+.nch-sortbar-array li.up a i{background-position: -28px -11px;}
+.nch-sortbar-array li.down a i{background-position: -21px -11px;}
+.nch-sortbar-array li.selected a, .nch-sortbar-array li.up a, .nch-sortbar-array li.down a, .nch-sortbar-array li a:hover{color:#3da3ea;background-color:#f2f2f2;}

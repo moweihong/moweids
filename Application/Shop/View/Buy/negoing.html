@@ -1,0 +1,31 @@
+<extend name="Layouts:home" />
+<block name="title"><title>等待定价-{:C('site_name')}</title></block>
+<block name="head_css">
+<link href="__CSS__/buy.css" rel="stylesheet" type="text/css">
+</block>
+
+<block name="content">
+<div class="wrapper mt140">
+	<dl class="dingjia">
+		<dt class="fs24 cor-black mt50 mb50">请勿离开，商家正在定价中...</dt>
+		<dd>如长时间未响应，请联系商家进行确认定价情况：</dd>
+		<dd>联系电话：{$store_tel}</dd>
+		<dd><span class="dj-kefu">在线客服：</span><a href="#" class="ic-qq"></a><a href="#" class="ic-alww"></a></dd>
+	</dl>
+</div>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+var order_interval = setInterval(function(){
+	$.post("{:U('Shop/Buy/isGivePrice')}", {
+		pay_sn: "{$pay_sn}"
+	}, function(res){
+		if(res.code == 1) {
+			clearInterval(order_interval);
+			location.href = '{:U("Shop/Buy/checkPrice", array("pay_sn" => "$pay_sn"))}';
+		}
+	},'json')
+},3000);
+</script>
+</block>

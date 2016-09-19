@@ -1,0 +1,200 @@
+<extend name="Layouts:store" />
+<block name="title"><title>商品详情页-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="wrapper mt50 js-goodsIntro">
+	<div class="ncs-detail cf">
+   		<!-- 商品图片 -->
+    	<div class="ncs-goods-picture fl js-imageZoom"></div>
+        
+		<!-- S 商品基本信息 -->
+		<div class="ncs-goods-summary fr">
+        	<h1 class="name"><?php echo $goods['goods_name']; ?></h1>
+            <strong class="jingle"><?php echo $goods['goods_jingle']; ?></strong>
+            <ul class="store-contact">
+                <li class="cf">
+                	<cite>价格：</cite>
+                	<span class="cor-pink">与商家联系洽谈</span>
+                </li>
+                <li class="cf">
+                    <cite>联系电话：</cite>
+                    <?php if(empty($store_info['company_phone'])){ ?>
+                        <?php echo $store_info['store_tel'];?>
+                    <?php }else{ ?>
+                        <?php echo $store_info['company_phone'];?>
+                    <?php } ?>
+                </li>
+                <li class="cf">
+                    <cite>在线客服：</cite>
+                    <?php if(!empty($store_info['store_qq'])){?>
+                        <a href="http://wpa.qq.com/msgrd?v=3&uin=<?php echo $store_info['store_qq'];?>&site=qq&menu=yes" class="ic qq-btn" title="QQ: <?php echo $store_info['store_qq'];?>" target="_blank">QQ交谈</a>
+                    <?php }?>
+                    <?php if(!empty($store_info['store_ww'])){?>
+                        <a href="http://amos.im.alisoft.com/msg.aw?v=2&amp;uid=<?php echo $store_info['store_ww'];?>&site=cntaobao&s=1&charset=<?php echo CHARSET;?>" class="ic ww-btn" target="_blank">和我联系</a>
+                    <?php }?>
+                </li>
+            </ul>
+			<?php if ($goods['goods_state'] == 1 && $goods['goods_verify'] == 1) { ?>
+                <div class="ncs-key mt30"> 
+                    <!-- S 商品规格值-->
+                    <?php if (is_array($goods['spec_name'])) { ?>
+                        <?php foreach ($goods['spec_name'] as $key => $val) { ?>
+                            <dl class="spec cf mb10">
+                                <dt><?php echo $val; ?>：</dt>
+                                <dd>
+                                    <?php if (is_array($goods['spec_value'][$key]) and !empty($goods['spec_value'][$key])) { ?>
+                                        <?php foreach ($goods['spec_value'][$key] as $k => $v) {
+												$spec_arr = json_decode($spec_list, true);
+												if(!empty($spec_arr)){
+													foreach ($spec_arr as $value){
+														if($value['sign'] == $k){
+															$url = $value['url'];
+															break;
+														}
+													}
+												}
+											 ?>
+                                            <!-- 文字类型规格-->
+                                            <a href="<?php echo $url;?>" class="sp-txt <?php if (isset($goods['goods_spec'][$k])) { echo 'hovered'; } ?>"><?php echo $v; ?><i></i></a>
+                                        <?php } ?>
+                                    <?php } ?>
+                                </dd>
+                            </dl>
+                        <?php } ?>
+                    <?php } ?>
+                    <!-- E 商品规格值--> 
+                    <!-- S 购买数量及库存 -->
+                    <dl class="cf">
+                        <dt>购买数量：</dt>
+                        <dd class="ncs-figure-input">
+                            <a href="javascript:void(0)" class="decrease fl js-decrease disable">-</a>
+                            <input type="text" class="text fl js-number js-quantity" size="3" maxlength="6" value="1" autocomplete="off">
+                            <a href="javascript:void(0)" class="increase fl js-increase">+</a>
+                            <span class="cor-9 mt5 ml10 fl">(当前库存 <b class="cor-black js-goodsStock"><?php echo $goods['goods_storage']; ?></b> 件)</span>
+                        </dd>
+                    </dl>
+                    <!-- E 购买数量及库存 --> 
+                    <!-- S 购买按钮 -->
+                    <div class="ncs-btn mt30 cf">
+                        <?php if($store_self == true):?>
+                            <a href="javascript:void(0);" class="buynow no-buynow">立即下单</a>
+                            <a href="javascript:void(0);" class="addcart no-addcart"><i class="ic icon-shopping-cart mr5"></i></a>
+                        <?php else:?>
+                         <a href="javascript:void(0);" class="buynow  <?php if ($goods['goods_storage'] <= 0) { ?>no-buynow<?php }else{?> js-buynow <?php }?>" >立即下单</a>
+						<?php if ($goods['promotion_type'] != 'groupbuy') { ?>
+                            <!-- 加入购物车--> 
+                            <a href="javascript:void(0);" class="addcart js-addcart <?php if ($goods['goods_storage'] <= 0) { ?>no-addcart<?php } ?>"><i class="ic icon-shopping-cart mr5"></i></a>
+                        <?php } ?>
+                        <?php endif;?>
+                    </div>
+                    <!-- E 购买按钮 --> 
+                </div>
+            <?php } else { ?>
+                <div class="ncs-saleout">
+                    <dl>
+                        <dt>商品已下架</dt>
+                        <dd class="ml20 mt10">1.&nbsp;请联系卖家咨询</dd>
+                        <dd class="ml20 mt5">
+                            2.&nbsp;逛逛
+                            <a href="{:U('ShowVendor/index',array('store_id' => $store_info['store_id']))}" class="cor-blue">商家店铺</a>
+							选择其他商品
+                        </dd>
+                    </dl>
+                </div>
+            <?php } ?>
+            <!--E 商品基本信息 --> 
+            <!-- S 下单流程 -->
+            <dl class="order-process mt30 cf">
+                <dt class="fl">线上下单流程</dt>
+                <dd class="cf fl">
+                	<span class="n1">1.选择商品</span>
+                    <span class="n2">2.提交订单</span>
+                    <span class="n3">3.商家定价</span>
+                    <span class="n4">4.支付完成</span>
+                </dd>
+            </dl>
+            <!-- E 下单流程 --> 
+        </div>
+        <div class="ncs-share cf">
+        	<a href="javascript:void(0)" class="icon-favorite fl js-favorite">
+                收藏商品
+            	(<em class="js-collectNum"><?php echo $goods['goods_collect'] ?></em>)
+            </a>
+
+            <a href="javascript:void(0);" class="icon-share bdsharebuttonbox bds_more fr" data-cmd="more">
+				分享
+			</a>
+        </div>
+    </div>
+</div>
+<div class="wrapper goods-main mt10 cf">
+	<div class="goods-sidebar fl">
+		<?php if (!empty($goods_commend) && is_array($goods_commend) && count($goods_commend) > 1) { ?>
+            <!--S 推荐排行-->
+            <div class="goods-commend">
+                <h3>推荐商品</h3>
+                <ul>
+                    <?php foreach ($goods_commend as $goods_commend) { ?>
+                        <?php if ($goods['goods_id'] != $goods_commend['goods_id']) { ?>
+                            <li>
+                                <a href="/goods/index?goods_id={$goods_commend.goods_id}" title="<?php echo $goods_commend['goods_jingle']; ?>" target="_blank">
+                                    <img src="<?php echo thumb($goods_commend, 240); ?>" alt="<?php echo $goods_commend['goods_name']; ?>" />
+                                    <p><?php echo $goods_commend['goods_name']; ?></p>
+                                </a>
+                            </li>
+                        <?php } ?>
+                    <?php } ?>
+                </ul>
+            </div>
+            <!--E 推荐排行-->
+        <?php } ?>
+     </div>
+         
+    <div class="goods-detail fr">
+    	<h3 class="tit">商品详情</h3>
+		<?php if (is_array($goods['goods_attr']) || isset($goods['brand_name'])) { ?>
+            <p class="goods-attr cf">
+                <span>商家货号：<?php echo $goods['goods_serial']; ?></span>
+                <?php if (isset($goods['brand_name'])) {
+                    echo '<span>' . '品牌:' .$goods['brand_name']. '</span>';
+                } ?>
+                <?php if (is_array($goods['goods_attr']) && !empty($goods['goods_attr'])) { ?>
+                    <?php foreach ($goods['goods_attr'] as $val) {
+                        $val = array_values($val);
+                        echo '<span>' . $val[0] . ':' . $val[1] . '</span>';
+                    } ?>
+                <?php } ?>
+            </p>
+        <?php } ?>
+        <div class="goods-text mt20"><?php echo $goods['goods_body']; ?></div>
+    </div>
+</div>
+<!-- S 加入购物车弹出提示框 -->
+<div class="ncs-cart-popup js-cartPop">
+    <a href="javascript:void(0);" class="close js-close" title="关闭">X</a>
+    <h3><i></i>成功添加到购物车</h3>
+    <p class="mt20">
+        购物车共有
+        <strong id="js-boldNum"></strong>
+         种商品
+    </p>
+    <p class="mt30">
+        <a href="{:U('/shop/member/myshopcart')}" class="btn1">查看购物车</a>
+        <a href="javascript:void(0);" class="btn2 ml20 js-close">继续购物</a>
+    </p>
+</div>
+<!-- E 加入购物车弹出提示框 --> 
+<form id="buynowForm" method="post" action="{:U('shop/buy/buystep1nego')}">
+    <input type="hidden" id="cartID" name="cart_id[]" />
+</form>
+<input type="hidden" id="imagesID" value="<?php echo $image_share;?>" />
+<input type="hidden" id="islogin" value="<?php echo $_SESSION['is_login'] ;?>" />
+<input type="hidden" id="goodsImage" value="[<?php if (!empty($goods_image)) { echo implode(',', $goods_image); }?>]" />
+<input type="hidden" id="goods_id" value="{$goods_id}" />
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+	seajs.use("web/goods")
+</script>
+</block>

@@ -1,0 +1,34 @@
+<div class="e-banner js-banner">
+    <ul class="slides cf">
+<!--        <foreach name="bannerImage" item="val" >
+            <li style="background:url({$val.img}) center bottom no-repeat"><a href="{$val.url}" target="_blank"></a></li>
+        </foreach>-->
+       <if condition="($Think.CONTROLLER_NAME==TBrand)&&($Think.ACTION_NAME==search)"> 
+            <li style="background:url('/data/upload/shop/brand/{$brandInfo.brand_zhaopinpic}') center bottom no-repeat"></li>
+        <else />
+            <volist name="TopSlide" id="v">
+                <li style="background:url({$v.img}) center bottom no-repeat"><a href="http://{$v.link}" target="_blank"></a></li>
+            </volist>            
+        </if>
+    </ul>
+</div>
+<script type="text/javascript">
+(function($){
+    define("home/banner",function(require, exports, module){
+        require("jquery/flexslider");
+        var manage = require("com/manage");
+        var Module = {
+            init: function(){
+                /*
+                **焦点图轮播
+                */ 
+                $(".js-banner").flexslider();
+            }
+        };
+        module.exports = Module;
+    });
+    seajs.use("home/banner", function(module){
+        module.init();
+    });
+})($);
+</script>

@@ -1,0 +1,64 @@
+<extend name="Layouts:home" />
+<block name="title"><title>品牌专区-{:C('site_name')}</title></block>
+<block name="head_css">
+	<link href="__CSS__/brand.css" rel="stylesheet" type="text/css">
+</block>
+
+<block name="content">
+<include file="Layouts:top_banner"/>
+<div class="wrapper brand-list mt60">
+    <dl class="b-style cf" style="margin-bottom:30px; padding: 8px 30px 0;">
+        <dt style="margin-left:0;width: 50px;margin-top:6px;">风格：</dt>
+        <dd style="">
+        	<div class="custom_select">
+	            <select name="style_id" class="text js-selAttr">
+	                <option value="0">全部风格</option>
+	                <volist name='style_list' id='v'>
+	                <option value="{$v.id}">{$v.style_name}</option>
+	                </volist>
+	            </select>
+            </div>
+        </dd>   
+    </dl>
+    <div class="brand-style-list cf" id="container">
+        <div class="item"></div>
+    </div>
+</div>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+seajs.use("jquery/masonry", function(Masonry){
+	 ajaxGetData(0);
+	 
+	 $(".js-selAttr").change(function(){
+		 $("#container").masonry("destroy").empty();
+		 var style_id = $(this).val();
+		 ajaxGetData(style_id);
+	 });
+	function ajaxGetData(style_id){
+		$.get("index.php?c=t_brand&a=index&type=getStyle",{
+			 style_id:style_id
+		},function(result){
+	        $("#container").html(result).imagesLoaded(function(){
+	             $("#container").masonry({
+	                itemSelector : ".item",
+	                columnWidth : 258
+	             });
+	        });   
+            /*
+            **鼠标移上去时显示商品
+            */
+	        var original_src = "";
+			$('.style-pic').hover(function(){
+			    original_src = $(this).find('img').attr('src');
+			 	var new_src = $(this).closest('.item').data('src');
+			 	$(this).find('img').attr('src', new_src);
+			},function(){
+			 	$(this).find('img').attr('src', original_src);
+			}); 
+	    });
+	}
+});	 
+</script>
+</block>

@@ -1,0 +1,193 @@
+<extend name="Layouts:seller" />
+<block name="title"><title>添加银行卡-<?php if($_SESSION['com_type'] == 3){?>供货中心<?php } else{?>卖家中心<?php } ?>-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="content-wrap">
+	<h2 class="query-tit">设置提现账号</h2>
+	<div class="withdraw-bank bg-gray mt10">
+        <form action="javascript:void(0);" id="form" class= "mt10" method="post">
+            <?php if(isset($_GET['pc_id'])):?>
+                <input type="hidden" id="type" name="type" value="4">
+                <input type="hidden" id="pc_id" name="pc_id" value="<?php echo $_GET['pc_id'];?>">
+            <?php else:?>
+                <input type="hidden" id="type" name="type" value="<?php echo  !empty($bank)?1:0;?>">
+            <?php endif;?>
+            <?php if(!empty($bank)){?>
+                <input type="hidden" name="bank_id" value="<?php echo $bank['id'];?>">
+            <?php }?>
+        	<p class="w-notice">
+	    		 1. 请仔细填写账户信息，如果由于您填写错误导致资金流失，全木行概不负责；<br>
+	   			 2. 只支持提现到的公司银行卡账户，不支持<em class="cor-red">信用卡和存折</em>，提现审核周期为1个工作日；<br>
+	   			 3. 请使用当前企业的<em class="cor-red">对公账户</em>申请提现，否则无法提现；<br>
+    		</p>
+            <ul class="list">
+                <li class="cf">
+                    <label class="handle"><em class="cor-red">*</em>开户银行：</label>
+                    <div class="rel">
+                        <select name="card_name" class="text js-select">
+                        	<option value="0">请选择银行</option>
+                            <foreach name="bank_list" item="val" >
+                                <option value="{$val.bank_id}" <?php echo !empty($bank)&&$bank['bank_type']==$val['bank_id']?'selected':'';?>>{$val.bankname}</option>
+                            </foreach>
+                        </select>
+                        <span show="card_name.check" class="error-msg">
+                            <em class="errow-arrow"></em>
+                            请选择开户行
+                        </span>
+                    </div>
+                </li>
+                <li class="cf">
+                    <label class="handle"><em class="cor-red">*</em>姓名：</label>
+                    <div class="rel">
+                        <input type="text"  name="card_username" class="text" value="<?php echo !empty($bank)?$bank['username']:'';?>" placeholder="请准确填写开卡姓名，否则无法提现" maxlength="30"  required /> 
+                        <span show="card_username.check" class="error-msg">
+                            <em class="errow-arrow"></em>
+                            请填写姓名
+                        </span>
+                    </div>
+                </li>
+                <li class="cf">
+                    <label class="handle"><em class="cor-red">*</em>银行卡卡号：</label>
+                    <div class="rel">
+                        <input type="text" id="card_num" name="card_num" class="text" value="<?php echo !empty($bank)?$bank['banknum']:'';?>" placeholder="只支持提现至借记卡，不支持信用卡和存折" maxlength="19" onkeyup="this.value=this.value.replace(/\D/g,'')"  required /> 
+                        <span show="card_num.check" class="error-msg">
+                            <em class="errow-arrow"></em>
+                            请填写银行卡卡号
+                        </span>
+                    </div>
+                </li>
+                <li class="cf">
+                    <label class="handle"><em class="cor-red">*</em>公司名称：</label>
+                    <div class="rel">
+                        <input type="text"  name="card_companyname" class="text" value="<?php echo !empty($bank)?$bank['company']:'';?>" placeholder="请准确填写开卡公司名称，否则无法提现" maxlength="50" required /> 
+                        <span show="card_companyname.check" class="error-msg">
+                            <em class="errow-arrow"></em>
+                            请填写公司名称
+                        </span>
+                    </div>
+                </li>
+                <li class="cf">
+                    <label class="handle"><em class="cor-red">*</em>短信验证码：</label>
+                    <div class="rel">
+                        <input type="hidden" id="phone" name="phone" value="<?php echo $mobile;?>">                        
+                        <input type="text" id="code_num"  name="code_num" class="text" style="width:218px;" maxlength="6" onkeyup="this.value=this.value.replace(/\D/g,'')" required /> 
+                        <a id="sendCode" class="btn ml10 js-get-code">获取验证码</a><br>
+                        <span class="cor-9">验证短信将发送到您绑定的手机：<?php echo $mobile;?>，请注意查收。 <!--<a class="cor-blue js-mobile-change" href="javascript:void(0);">修改绑定手机</a>--></span>
+                        <span show="code_num.check" class="error-msg">
+                            <em class="errow-arrow"></em>
+                            请填写短信验证码
+                        </span>
+                    </div>
+                </li>
+                <li class="cf mt10">
+                    <label class="handle"></label>                    
+                    <button class="btn btn-blue btn-middle js-confirmBtn">保存</button>
+                </li>
+            </ul>
+        </form>
+    </div>
+</div>
+</block>
+<block name="my_js">
+<script type="text/javascript">
+(function($){
+	define("s/add_card",function(require, exports, module){
+		require("jquery/layer");
+        require("jquery/form");
+	//	require("jquery/cookie");
+		var countdown = 60;
+		var timeInterval = null;
+        var manage = require("com/manage");
+		var Module = {
+			init: function(){
+				var form = $("#form").form();
+                /*
+                *修改绑定手机
+                */
+				$("body").on("click", ".js-mobile-change", function(){
+					layer.open({
+						type: 2,
+						title:"修改绑定手机",
+						area: ["450px", "230px"],
+						content: gConfig.apiurl + "/index.php?act=seller_center&op=withdraw_mobile_change"
+					});
+				});
+                /*
+                *获取验证码
+                */
+                $("body").on('click', ".js-get-code", function(){
+					var me = $(this);
+                    if(me.hasClass("adisabled")) return;
+					$.post(gConfig.apiurl + "/StoreCommon/sendCode", {
+						to_mobile	: $.trim($("#phone").val()),
+						tag			: "withdraw"
+					}, function (result){
+                        if(result.code == 1){
+                            $.wrongMsg(result.resultText.message,1)
+                            clearInterval(timeInterval);
+                            timeInterval = setInterval(function () {
+                                if(countdown == 0) {
+                                    me.text("重新发送").removeClass("adisabled");
+                                    countdown = 60;
+                                    clearInterval(timeInterval);
+                                }else{
+                                    me.text("重新发送(" + countdown + "s)").addClass("adisabled");
+                                    countdown--;
+                                }
+                            }, 1000);
+                        }else{
+                            $.wrongMsg(result.resultText.message);
+                        }
+					});
+                });
+                /*
+                *保存提现账号
+                */
+				$("#form").on("click", ".js-confirmBtn", function(){
+					if(!form.valid()) return false;
+                    if($('.js-select').val() == 0){
+                        $.wrongMsg("请选择开户银行");
+                        return;
+                    }
+                    if($("#code_num").val().length != 6){
+                        $.wrongMsg("请输入完整的验证码");
+                        return false;
+                    }
+                    var card_num = $("#card_num").val().length;
+                    if(card_num < 16 || card_num > 19){
+                        $.wrongMsg("请输入正确的卡号");
+                        return false;
+                    }
+                    var data = $("#form").serialize();
+                    data = manage.serializeJson(data);
+                    data.bank_name = $(".js-select option:selected").text();
+					var pid = parent.layer.load(360);
+                    manage.ajax({
+                        url: gConfig.apiurl + "/StoreCommon/saveBank",
+                        data: data,
+                        success: function(result){
+							parent.layer.close(pid);
+                            var resultText = result.resultText || {},
+                                message = resultText.message || "操作失败";
+                            if(result.code == 1){
+                                if(data.type == 4){
+                                    window.location.href = gConfig.apiurl + "/StoreCommon/withdrawHistory";
+                                }else{
+                                    window.location.href = gConfig.apiurl + "/StoreCommon/withdraw";
+                                }
+                            }else{
+                                $.wrongMsg(resultText.message || "操作失败");
+                            }
+                        }
+                    });
+				});
+			}
+		};
+		module.exports = Module;
+	});
+	seajs.use("s/add_card", function(module){
+		module.init();
+	});
+})($);
+</script>
+</block>

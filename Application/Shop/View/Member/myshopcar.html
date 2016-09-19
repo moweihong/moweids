@@ -1,0 +1,232 @@
+<extend name="Layouts:home" />
+<block name="title"><title>购物车-{:C('site_name')}</title></block>
+<block name="head_css">
+<link href="__CSS__/buy.css" rel="stylesheet" type="text/css">
+</block>
+
+<block name="content">
+<div class="wrapper mt120">
+	<!-- 空购物车 start-->
+	<?php if(empty($store_cart_list)){?>
+        <div class="cart-head">
+            <img src="__IMG__/buy_cart.png" class=" v-mid" alt="购物车" />
+            <span class="fs18 ml30">购物车还是空空的呢。</span>
+        </div>
+	<?php }else{?>
+        <!-- 空购物车 end-->
+        <h3 id="my-cart">我的购物车</h3>
+        <form action="<?php echo urlShop('buy','buystep1nego');?>" method="POST" id="form_buy" name="form_buy">
+        
+            <input type="hidden" name="ifcart" value="1" />
+            <input type="hidden" id='cart_id' name="cart_id[]" value="" />
+            <table class="cart-table" width="100%">
+                <colgroup>
+                    <col width="20px" />
+                    <col width="40%" />
+                    <col width="29%" />
+                    <col width="29%" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th colspan="2" class="tc">商品名称</th>
+                        <th class="tc">数量</th>
+                        <th class="tc">操作</th>
+                    </tr>
+                </thead>
+                <?php foreach($store_cart_list as $store_id => $cart_list) {?>
+                    <tbody>
+                        <tr>
+                            <th colspan="4">
+                                <p class="mt20">
+                                    <span class="btn-label ml15 mr10 js-first-btn-label"></span>
+                                    <a href="<?php echo '/index.php?m=shop&c=ShowVendor&a=index&store_id='.$cart_list[0]['store_id']; ?>" class="cor-black fs14"><?php echo $cart_list[0]['store_name']; ?></a>
+                                </p>
+                            </th>
+                        </tr>
+                        <?php foreach($cart_list as $cart_info) {
+                            if ($cart_info['state']) {?>
+                                <tr class="shop-list2" data-did="<?php echo $cart_info['cart_id']; ?>" data-fid="<?php echo $cart_info['goods_id']; ?>">
+                            <?php } else {?>
+                                <tr class="shop-list2 item-disabled" data-did="<?php echo $cart_info['cart_id']; ?>" data-fid="<?php echo $cart_info['goods_id']; ?>">
+                            <?php }?>
+                                <td>&nbsp;</td>
+                                <td>
+                                    <a href="{:U('/shop/goods/index', array('goods_id'=>$cart_info['goods_id']))}" class="ncc-goods-thumb" target="_blank"><img src="<?php echo thumb($cart_info,60);?>" alt="<?php echo $cart_info['goods_name']; ?>"></a>
+                                    <dl class="ncc-goods-info tl pl20 w400">
+                                        <dt><a href="{:U('/shop/goods/index', array('goods_id'=>$cart_info['goods_id']))}" class="ml30" target="_blank"><?php echo $cart_info['goods_name']; ?></a></dt>
+                                        <dd><span class="ml30">规格：</span><?php echo empty($cart_info['goods_spec'])?'无':$cart_info['goods_spec'];?></dd>
+                                    </dl>
+                                </td> 
+                                <?php if ($cart_info['state']) {?>
+                                    <td data-maxnum="<?php  echo $cart_info['goods_storage']; ?>" >
+                                        <p class="ncc-goods-info num">
+                                            <input type="text" class="text ncc-num js-number js-quantity" value="<?php echo $cart_info['goods_num']; ?>">
+                                            <a class="ncc-num-increase js-num-increase" href="javaScript:void(0);">-</a>
+                                            <a class="ncc-num-decrease js-num-decrease" href="javaScript:void(0);">+</a>
+                                        </p>
+                                    </td>
+                                <?php } else {?>
+                                    <td>
+                                        <dl class="ncc-goods-info num">
+                                            无效
+                                        </dl>
+                                    </td>
+                                <?php }?>
+                                <td>
+                                    <p class="tc"><a href="javascript:void(0);" class="js-delCart">删除</a></p>
+                                    <p class="tc mt10"><a href="javascript:void(0);" class="js-collection">移入收藏夹</a></p>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                    </tbody>
+                <?php }?>
+                <tfoot>
+                    <tr>
+                        <td style="border:none;background:#fafafa;" colspan="4"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <div class="ncc-all-account">
+                                <span class="mr20 fs14">已选<label class="cor-red ml5 mr5 js-goods-num">0</label>款商品</span>
+                                <a href="javascript:void(0)" class="ncc-btn ncc-btn-acidblue js-cart-submit">结算</a>
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </form>
+	<?php }?>
+</div>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+(function($){
+    define("m/myshopcart",function(require, exports, module){
+    	require("jquery/layer");
+    	var manage = require("com/manage");
+        var Module = {
+            init: function(){
+            	/**
+				 * 多选框
+				 */
+            	$(".js-first-btn-label").click(function(){
+            		var goodsnum=$(this).closest("tbody").children("tr").length-1;
+            		$(".js-first-btn-label").removeClass("btn-label-select");
+            		$(this).addClass("btn-label-select");
+            		$(".js-goods-num").text(goodsnum);
+            	});
+            	/**
+				 * 购物车增加商品数量
+				 */
+            	$(".js-num-decrease").click(function(){
+            		var me = $(this),
+            			$td = me.closest("td"),
+            			maxnum = $td.data("maxnum") || "9999",
+            			$quantity = $(".js-quantity", $td),
+						num = parseInt($quantity.val());
+					if(num == maxnum){
+						$.wrongMsg("不能大于当前库存数" + maxnum + "件");
+						reutrn;
+					}
+					num++;
+					$quantity.val(num);
+            	});
+            	/**
+				 * 购物车减少商品数量
+				 */
+            	$(".js-num-increase").click(function(){
+            		var me = $(this),
+            			$quantity = me.siblings(".js-quantity"),
+						num = parseInt($quantity.val());
+            		if(num == 1) return;
+					num--;
+					$quantity.val(num);
+            	});
+            	/*
+				**商品购买数量输入
+				*/
+				$('.js-quantity').blur(function () {
+					var me = $(this),
+						$td = me.closest("td"),
+						maxnum = $td.data("maxnum") || "9999",
+						num = parseInt(me.val());
+					if(!num || num < 1) $(this).val(1);
+					if(num > maxnum) $(this).val(maxnum);
+				});
+				/**
+				 * 收藏商品
+				 */
+				$(".js-collection").click(function(){
+
+					var fid = $(this).closest("tr").data("fid");
+					manage.getApi("{:U('/shop/member/favoritesgoods')}", {
+						fid: fid
+					},function(result){
+				}
+				)});
+				/**
+				 * 删除购物车
+				 */
+				$(".js-delCart").click(function(){
+					var $tr = $(this).closest("tr"),
+						$tbody = $(this).closest("tbody"),
+						did = $tr.data("did");
+				    layer.confirm('你确定要删除吗', function(){
+				    	manage.getApi("{:U('/shop/cart/del')}", {
+							cart_id: did
+						},function(result){
+							var quantity = result.quantity || 0;
+							if(result.quantity == 0){ //判断购物车是否为空
+								window.location.reload();
+							}else if($("tr", $tbody).length == 2) { //只剩下店铺名头和店铺合计尾，则全部移除
+								$tbody.remove();
+							}else{
+								$tr.remove();
+							}
+						});
+				    });
+				});
+				/**
+				 * 提交
+				 */
+				$('.js-cart-submit').click(function(){
+					var $tbodySel = $(".btn-label-select").closest("tbody"),
+						isPass = true,
+						cart_list = [];
+					if(!$tbodySel.length){
+						$.wrongMsg("请选择商品");
+						return;
+					}
+					$("tr", $tbodySel).each(function(){
+						var	cart_id = $(this).data("did"),
+							quantity = parseInt($(".js-quantity", this).val()) || "";
+						if(!cart_id || !quantity || quantity < 1){
+							return;	
+						}
+						var cart_obj = cart_id + "|" + quantity;
+						$('input[name="cart_id[]"]').val(cart_obj);
+						cart_list.push(cart_obj);
+					});
+					if(!cart_list.length){
+						$.wrongMsg("选择的商品无效");
+						return;
+					}
+					if(!isPass) return;
+                    console.log(cart_list);
+					var data = {
+						cart_list: cart_list
+					};
+					$('#cart_id').val(cart_list.toString());
+					$("#form_buy").submit();
+				});
+            }
+        }
+        module.exports = Module;
+    });
+    seajs.use("m/myshopcart", function(module){
+        module.init();
+    });
+})($);
+</script>
+ </block>

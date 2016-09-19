@@ -1,0 +1,37 @@
+<extend name="Layouts:home"/>
+<block name="title"><title>分期购介绍页-{:C('site_name')}</title></block>
+<block name="head_css">
+<link rel="stylesheet" type="text/css" href="__CSS__/apply.css">
+</block>
+
+<block name="content">
+<div class="wrapper mt140">
+    <div class="easypay-box">
+        <if condition="$_GET['credit_type']">
+            <h2 class="tit">乐装分期介绍</h2>
+            <p class="explain">
+            乐装分期是特速集团旗下品牌公司全木行（www.allwood.com.cn）、链金所（www.ccfax.cn）联合打造的一种"先消费，后付款"的全新支付方式及服务，可享受最长12期的免息分期。</p>
+        <else/>
+            <h2 class="tit">乐购分期介绍</h2>
+            <p class="explain">
+            乐购分期是特速集团旗下品牌公司全木行（www.allwood.com.cn）、链金所（www.ccfax.cn）联合打造的一种"先消费，后付款"的全新支付方式及服务，可享受最长12期的免息分期。</p>
+        </if>
+       
+        <div class="easypay-intro-tit">
+            <h3 class="cf">
+                <i class="circle fl"></i>
+                <b>开通流程</b>
+                <i class="circle fr"></i>
+            </h3>
+        </div>
+        <p class="easypay-flow cf">
+            <b>1.填写个人信息</b>
+            <b class="m">2.绑定还款银行卡</b>
+            <b>3.审核完成</b>
+        </p>
+        <p class="to-open">
+            <a href="{:U('Shop/easypay/submitData')}" class="btn btn-info">去开通</a>
+        </p>
+    </div>
+</div>
+</block>

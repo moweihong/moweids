@@ -1,0 +1,12 @@
+<extend name="Layouts:home" />
+<block name="title"><title>发标协议-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="wrapper mt120">
+    <div class="contract-main">
+        <h1>{$info['doc_title']}</h1>
+        <p class="tc cor-9 mt10">{$info['doc_time']|date='Y-m-d',###}</p>
+        <div class="bd">{$info['doc_content']}</div>
+    </div>
+</div>
+</block>

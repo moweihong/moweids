@@ -1,0 +1,41 @@
+<include file="Application/Common/Layout/head.html" /> 
+<div class="am-cf admin-main">
+<include file="Application/Common/Layout/left.html" /> 
+<!-- content start -->
+<div class="admin-content">
+<style>
+.btn{
+color:red;
+}
+</style>
+<p><?php echo date('Y-m-d H:i:s',$last_update['time']); ?></p>
+    <table border="1">
+        <tr style="color:red;background:green">
+            <th style="width:20%">goods_id</th>
+            <th style="width:20%">goods_name</th>
+            <th style="width:20%">goods_state</th>
+            <th style="width:20%">goods_verify</th>
+            <th style="width:20%">goods_storage</th>
+            <th style="width:20%">gc_name</th>
+            <th style="width:20%">tesu_deleted</th>
+        </tr>
+    <?php foreach ($list as $key => $value) { ?>
+        <tr>
+            <td><?php echo $value['goods_id']; ?></td>
+            <td><?php echo $value['goods_name']; ?></td>
+            <td><?php echo $value['goods_state']; ?></td>
+            <td><?php echo $value['goods_verify']; ?></td>
+            <td><?php echo $value['goods_storage']; ?></td>
+            <td><?php echo $value['gc_name']?$value['gc_name']:"null"; ?></td>
+            <td><?php echo $value['tesu_deleted']?$value['tesu_deleted']:"null"; ?></td>
+        </tr>        
+    <?php } ?>
+    </table>
+    <form method="POST">
+    <input type="hidden" name='form_submit' value="ok">
+    <input type="submit" name='submit' class="btn" value="change">
+    </form>
+</div>
+<!-- content end -->
+</div>
+<include file="Application/Common/Layout/foot.html" /> 

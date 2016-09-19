@@ -1,0 +1,90 @@
+<extend name="Layouts:member" />
+<block name="title"><title>特速分期-买家中心-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="tit-bar"><h2>特速分期</h2></div>
+<p class="finance-money mt10">待还款金额：<span class="cor-red">¥&nbsp;{$totalrepay}</span></p>
+<div class="finance-box mt10">
+	<table class="order-table" width="100%">
+    	<colgroup>
+            <col width="20%">
+            <col width="10%">
+            <col width="12%">
+            <col width="10%">
+            <col width="12%">
+            <col width="10%">
+            <col width="">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>订单号</th>
+                <th>类型</th>
+                <th>下单时间</th>
+                <th>状态</th>
+                <th>分期总额（元）</th>
+                <th>期数</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="gap">
+                <td colspan="5"></td>
+            </tr>
+            <volist name="orderlist" id="vo">
+                <tr data-id="{$vo.order_sn}">
+                    <td>{$vo.order_sn}</td>
+                    <td>{:$vo['order_type']==2 ? '乐购分期':'乐装分期'}</td>
+                    <td>{$vo.add_time|date="Y-m-d",###}</td>
+                    <td><if condition="$vo.order-state eq 50">平台处理中<else/>待还款</if></td>
+                    <td>{$vo.order_amount_delta}</td>
+                    <td>{$vo.period}</td>
+                    <td>
+                        <if condition="$vo.order_type eq 2">
+                            <a href="javascript:void(0);" class="btn btn-info btn-small js-view">还款记录</a>
+                            <else/>
+                            <a href="javascript:void(0);" class="btn btn-info btn-small js-view">还款记录</a>
+                            <a href="__CONTROLLER__/decoratefundtransfer?order_sn={$vo['order_sn']}" class="btn btn-info btn-small ml10">转账给商家</a>
+                        </if>
+                    </td>
+                </tr>
+            </volist>
+		</tbody>
+    </table>
+    <div id="jspage" class="jspage">
+        {$show_page}
+    </div>
+</div>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+(function($){
+	define("m/testFinance",function(require, exports, module){
+		require("jquery/layer");
+		var Module = {
+			init: function(){
+				$("#container").on("click", ".js-view", function(){
+					var order_id = $(this).closest("tr").data("id") || "";
+					// var linking = {
+					// 	act		: "tesu_finance",
+					// 	op		: "tpl_repayment_history",
+					// 	order_id: order_id
+					// }
+					layer.open({
+						type: 2,
+						title:false,
+                        closeBtn: 0,
+						area: ['540px', '400px'],
+						content: "__CONTROLLER__/tplrepaymenthistory?order_id="+order_id//gConfig.apiurl + "/index.php?" + $.param(linking)
+					});
+				});
+			}
+		};
+		module.exports = Module;
+	});
+	seajs.use("m/testFinance", function(module){
+		module.init();
+	});
+})($);
+</script>
+</block>

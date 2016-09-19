@@ -1,0 +1,103 @@
+<include file="Application/Common/Layout/head.html" />
+<style>
+  table td{font-size: 14px}
+  .servise-input{width:100px; margin-right: 5px}
+</style>
+<div class="am-cf admin-main">
+<include file="Application/Common/Layout/left.html" /> 
+<!-- content start -->
+<div class="admin-content">
+  <div class="admin-content-body">
+    <div class="am-cf am-padding am-padding-bottom-0">
+      <div class="am-fl am-cf">
+        <strong class="am-text-primary am-text-lg">预存款</strong> /
+        <small>充值管理</small>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="am-tabs am-margin" data-am-tabs>
+    <form id="store_form" class="am-form" method="post">
+      <input type="hidden" name="form_submit" value="ok" />
+      <input type="hidden" name="store_id" value="{$store_array['store_id']}" />
+      <div>
+        <div class="am-tab-panel am-fade am-in am-active">
+          <div class="am-g am-margin-top">
+            <div class="am-u-sm-4 am-u-md-2 am-text-right">充值单号：</div>
+            <div class="am-u-sm-8 am-u-md-10">
+              {$info.pdr_sn}
+            </div>
+          </div>
+          <div class="am-g am-margin-top">
+            <div class="am-u-sm-4 am-u-md-2 am-text-right">充值金额（元）：</div>
+            <div class="am-u-sm-8 am-u-md-10">
+              {$info.pdr_amount}
+            </div>
+          </div>
+          <div class="am-g am-margin-top">
+            <div class="am-u-sm-4 am-u-md-2 am-text-right">会员名称：</div>
+            <div class="am-u-sm-8 am-u-md-10">
+              {$info.pdr_member_name}
+            </div>
+          </div>
+          <div class="am-g am-margin-top">
+            <div class="am-u-sm-4 am-u-md-2 am-text-right">
+              支付时间：
+            </div>
+            <div class="am-u-sm-8 am-u-md-2" style="float:left">
+              <div class="am-form-group am-form-icon">
+                <i class="am-icon-calendar"></i>
+                <input type="date" class="am-form-field am-input-sm" name="payment_time" value="" placeholder="日期">
+              </div>
+            </div>
+          </div>
+          <div class="am-g am-margin-top">
+            <div class="am-u-sm-4 am-u-md-2 am-text-right">付款方式：</div>
+            <div class="am-u-sm-8 am-u-md-10">
+              <select data-am-selected="{btnSize: 'sm'}" name="payment_code">
+                <option value="-1" selected="selected">请选择</option>
+                <volist name="payment_list" id="vo">
+                  <option value="{$vo.payment_code}">{$vo.payment_name}</option>
+                </volist>
+              </select>
+            </div>
+          </div>
+          <div class="am-g am-margin-top">
+            <div class="am-u-sm-4 am-u-md-2 am-text-right">
+              第三方平台交易号：
+            </div>
+            <div class="am-u-sm-8 am-u-md-4">
+              <input type="text" name="trade_no" class="am-input-sm" value="">
+            </div>
+            <div class="am-hide-sm-only am-u-md-6"></div>
+          </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="am-margin">
+      <button type="button" id="submitBtn" class="am-btn am-btn-primary am-btn-xs">提交保存</button>
+    </div>
+  </div>
+
+  <footer class="admin-content-footer">
+    <hr>
+    <p class="am-padding-left">© 2014 AllMobilize, Inc. Licensed under MIT license.</p>
+  </footer>
+</div>
+<!-- content end -->
+
+</div>
+
+<include file="Application/Common/Layout/foot.html" />
+<script>
+  $(document).ready(function() {
+  $("#submitBtn").click(function(){
+    $("#store_form").submit();
+  });
+
+});
+</script>

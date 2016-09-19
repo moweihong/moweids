@@ -1,0 +1,146 @@
+<extend name="Layouts:store" />
+<block name="title"><title>本店搜索页--{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="wrapper search-wrapper floor-template mt50">
+	<dl class="b-style cf">
+        <dt>适用空间：</dt>
+        <dd class="fname js-fname" ismultiple="no">
+            <?php foreach ($vendor_class['class2'] as $val):?>
+            <a href="{:U('ShowVendor/goodsSearch',array('store_id'=>$_GET['store_id'],'keyword'=>$_GET['keyword'],'gc_id'=>$val['gc_id']))}"><i></i><?php echo $val['gc_name'];?></a>
+            <?php endforeach;?>
+        </dd>
+    </dl>
+	<dl class="b-style cf">
+        <dt>商品类别：</dt>
+        <dd class="fname js-fname" ismultiple="no">
+            <?php foreach ($vendor_class['class3'] as $val):?>
+            <a href="{:U('ShowVendor/goodsSearch',array('store_id'=>$_GET['store_id'],'keyword'=>$_GET['keyword'],'gc_id'=>$val['gc_id']))}"><i></i><?php echo $val['gc_name'];?></a>
+            <?php endforeach;?>
+        </dd>
+    </dl>
+      
+    <dl class="b-style mt30 cf">
+        <dt>综合排序：</dd>
+        <dd class="b-sort">
+            <a href="{:U('ShowVendor/goodssearch',array('store_id'=>$_GET['store_id']))}" title="默认排序" class="js-salenum">默认</a>
+            <?php if($_GET['key'] == 3):?>
+                <?php if(isset($_GET['order'])&&$_GET['order']==1):?>
+                    <a href="{:U('ShowVendor/goodssearch',array('store_id'=>$_GET['store_id'],'keyword'=>$_GET['keyword'],'gc_id'=>$_GET['gc_id'],'key'=>3))}" title="点击按销量从高到低排序" >销量<i class="desc"></i></a>
+                <?php else:?>                    
+                    <a href="{:U('ShowVendor/goodssearch',array('store_id'=>$_GET['store_id'],'order'=>1,'keyword'=>$_GET['keyword'],'gc_id'=>$_GET['gc_id'],'key'=>3))}" title="点击按销量从低到高排序" >销量<i class="asc"></i></a>
+                <?php endif;?>                    
+            <?php else:?>
+                    <a href="{:U('ShowVendor/goodssearch',array('store_id'=>$_GET['store_id'],'order'=>1,'keyword'=>$_GET['keyword'],'gc_id'=>$_GET['gc_id'],'key'=>3))}" title="点击按销量从低到高排序" >销量<i class="asc"></i></a>
+            <?php endif;?>
+
+            <?php if($_GET['key'] == 5):?>
+                <?php if(isset($_GET['order'])&&$_GET['order']==1):?>
+                    <a href="{:U('ShowVendor/goodssearch',array('store_id'=>$_GET['store_id'],'keyword'=>$_GET['keyword'],'gc_id'=>$_GET['gc_id'],'key'=>5))}" title="点击按人气从高到低排序">人气<i class="desc"></i></a>
+                <?php else:?>
+                    <a href="{:U('ShowVendor/goodssearch',array('store_id'=>$_GET['store_id'],'order'=>1,'keyword'=>$_GET['keyword'],'gc_id'=>$_GET['gc_id'],'key'=>5))}" title="点击按人气从低到高排序">人气<i class="asc"></i></a>
+                <?php endif;?>                    
+            <?php else:?>
+                  <a href="{:U('ShowVendor/goodssearch',array('store_id'=>$_GET['store_id'],'order'=>1,'keyword'=>$_GET['keyword'],'gc_id'=>$_GET['gc_id'],'key'=>5))}" title="点击按人气从低到高排序">人气<i class="asc"></i></a>
+            <?php endif;?>
+
+        </dd>
+    </dl> 
+
+
+
+    <ul class="pro-list mt30 cf">
+        <?php foreach ($list as $val):?>
+        <li>
+        	<a href="/goods/index?store_id={$val.store_id}&goods_id={$val.goods_id}" title="<?php echo $val['goods_name'];?>">
+                <div class="goods-pic">				
+                    <img src="<?php echo thumb($val, 260)?>" alt="<?php echo $val['goods_name'];?>" />
+                </div>
+                <div class="goods-info">
+                    <p class="name"><?php echo $val['goods_name'];?></p>
+                    <p class="cor-9">免息分期</p>
+                </div>
+            </a>
+        </li>
+        <?php endforeach;?>
+    </ul>
+	<div id="jspage" class="jspage">
+        <?php echo $page ?>
+    </div>
+</div>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+(function($){
+	define("search/goodslist",function(require, exports, module){
+		var Module = {
+			init: function(){
+				 /*
+                **更多
+                */
+                $(".js-mores").click(function(){
+					var me = $(this),
+						$dl = me.closest("dl"),
+						$fname = $(".js-fname", $dl);
+					if(me.hasClass("pack")){
+						me.removeClass("pack").html("更多<i></i>");
+						$fname.css("height", "30px");
+					}else{
+						me.addClass("pack").html("收起<i></i>");
+						$fname.css("height", "auto");
+					}
+				});
+                /*
+                **多选
+                */
+                $(".js-choose-more").click(function(){
+					var me = $(this),
+						$dl = me.closest("dl"),
+						$fname = $(".js-fname", $dl);
+                    me.addClass("choose-more-active");
+					$fname.css("height", "auto").attr("ismultiple", "yes").find("i").addClass("iactive1");
+					$(".js-mores", $dl).addClass("pack").html("收起<i></i>");
+                    $(".js-sBtn", $dl).show();
+                });
+                $(".js-fname a").click(function(){
+					var me = $(this),
+						$dd = me.closest("dd");
+                    if($dd.attr("ismultiple") == "yes"){
+						if($("i", this).hasClass("iactive2")){
+							$("i", this).removeClass("iactive2");
+						}else{
+							$("i", this).addClass("iactive2");
+						}
+                    }else{
+                        window.location = $(this).attr("href");
+                    }
+                });
+                /*
+                **确定
+                */
+                $('.js-choose-ok').click(function(){
+
+                });
+				/*
+                **取消
+                */
+                $(".js-choose-cancel").click(function(){
+					var me = $(this),
+						$dl = me.closest("dl"),
+						$fname = $(".js-fname", $dl);
+					$fname.css("height", "30px").attr("ismultiple", "no").find("i").removeClass("iactive1 iactive2");
+					$(".js-mores", $dl).removeClass("pack").html("更多<i></i>");
+					$(".js-sBtn", $dl).hide();
+					$(".js-choose-more", $dl).removeClass('choose-more-active');
+                });
+            }
+        }
+        module.exports = Module;
+    });
+    seajs.use("search/goodslist", function(module){
+        module.init();
+    });
+})($);
+</script>
+</block>

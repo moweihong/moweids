@@ -1,0 +1,27 @@
+<extend name="Layouts:member" />
+<block name="title"><title>特速分期-买家中心-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="tansfer-success">
+    <h1>成功转账￥{$money}给商家！</h1>
+    <p class="p-text2"><em class="cor-blue js-time">5s</em>后自动跳转到<em class="cor-blue">特速金融</em>，可查看转账记录。</p>
+    <p class="p-btnbox">
+        <a href="{:U('/shop/TSFinance/tsFinance')}" class="btn-info">特速金融</a>
+        <a href="/" class="btn-red">首页</a>
+    </p>    
+</div>
+
+<script type="text/javascript">
+    $(function(){
+        var index = 5;
+        var time = setInterval(function(){
+            index --;
+            $('.js-time').text(index + 's');
+            if(index == 0){
+                clearInterval(time);
+                window.location.href="{:U('/shop/TSFinance/tsFinance')}";
+            }
+        },1000);
+    })
+</script>
+</block>

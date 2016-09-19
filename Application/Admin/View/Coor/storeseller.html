@@ -1,0 +1,37 @@
+<include file="Application/Common/Layout/head.html" /> 
+<div class="am-cf admin-main">
+<include file="Application/Common/Layout/left.html" /> 
+<!-- content start -->
+<div class="admin-content">
+    <style>
+    .btn{
+    color:red;
+    }
+    </style>
+    <p><?php echo date('Y-m-d H:i:s',$last_update['time']); ?></p>
+        <table border="1">
+            <tr style="color:red;background:green">
+                <th style="width:20%">member_id_t</th>
+                <th style="width:20%">member_id_s</th>
+                <th style="width:20%">seller_name</th>
+                <th style="width:20%">store_name</th>
+                <th style="width:20%">store_tesu_deleted</th>
+            </tr>
+        <?php foreach ($list as $key => $value) { ?>
+            <tr>
+                <td><?php echo $value['member_id_t']; ?></td>
+                <td><?php echo $value['member_id_s']?$value['member_id_s']:'-1'; ?></td>
+                <td><?php echo $value['seller_name']?$value['seller_name']:'null'; ?></td>
+                <td><?php echo $value['store_name']; ?></td>
+                <td><?php echo $value['tesu_deleted']; ?></td>
+            </tr>        
+        <?php } ?>
+        </table>
+    <form method="POST">
+    <input type="hidden" name='form_submit' value="ok">
+    <input type="submit" name='submit' class='btn' value="change">
+    </form>
+</div>
+<!-- content end -->
+</div>
+<include file="Application/Common/Layout/foot.html" /> 

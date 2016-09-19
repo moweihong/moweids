@@ -1,0 +1,79 @@
+<extend name="Layouts:seller" />
+<block name="title"><title>我的方案-卖家中心-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="content-wrap">
+	<h2 class="query-tit">方案列表</h2>
+	<div class="query-box mt10">
+        <form action="{:U('Decorate/solutionList')}" class="query-bar ml20" id="queryform" autocomplete="off" method="post">
+            <p class="unit-line">
+                <span class="unit">
+                    <label class="label" for="title">方案名称：</label>
+                    <input type="text" id="title" name="title" class="text" value="<?php echo $search_title;?>" placeholder="请填写方案名称" />
+                </span>
+                <span class="unit">
+                    <label class="label" for="houseType">户型：</label>
+                    <input type="text" id="houseType" name="house_type" class="text" value="<?php echo $search_house_type;?>" placeholder="请填写户型" />
+                </span>
+                <button href="javascript:void(0);" class="btn btn-blue ml20 js-queryBtn">搜索</button>
+            </p>
+        </form>
+    </div>
+    <div class="tab-cont">
+    	<p class="table-top fs14 cf js-tableTop">
+        	<span style="width:332px;text-align:left;">
+            	<label class="ml10"><input type="checkbox" class="v-2 mr5 js-allCheck" />全选</label>
+                <a href="javascript:void(0);" class="cor-blue ml20 js-batchDel">删除</a>
+            </span>
+            <span style="width:15%">户型</span>
+            <span style="width:25%">户型地址</span>
+            <span style="width:15%">总造价</span>
+            <span style="width:102px">操作</span>
+        </p>
+        <table class="table" width="100%">
+            <colgroup>
+                <col width="23px" />
+                <col width="32%" />
+                <col width="15%" />
+                <col width="25%" />
+                <col width="15%" />
+                <col width="" />
+            </colgroup>
+        	<tbody>
+                <?php
+                if (!empty($decorate_list)){
+                    foreach ($decorate_list as $decorate){
+                        $coverpage = unserialize($decorate['coverpage']);
+                        ?>
+                        <tr data-id="<?php echo $decorate['de_plan_id'];?>">
+                            <td style="text-align:right;border-right:none 0;"><input type="checkbox" class="v-mid js-check" /></td>
+                            <td style="border-left:none 0;">
+                                <div class="goods-td cf">
+                                    <a  href="<?php echo U('Decorate/decorateOperate', array("id" => $decorate['de_plan_id'])); ?>" class="pic"><img width="60px" height="60px" alt="" src="<?php echo $coverpage['s_pic'];?>"></a>
+                                    <p class="h60"><a class="cor-blue"  href="<?php echo U('Decorate/decorateOperate', array("id" => $decorate['de_plan_id'])); ?>"><?php echo $decorate['title'];?></a></p>
+                                </div>
+                            </td>
+                            <td><?php echo $decorate['house_type'];?></td>
+                            <td><?php echo $decorate['house_address'];?></td>
+                            <td>¥<?php echo $decorate['cost'];?></td>
+                            <td>
+                                <a href="<?php echo U('Decorate/decorateOperate', array("id" => $decorate['de_plan_id'])); ?>" class="link">编辑</a>
+                                <a class="link js-del" href="javascript:void(0);">删除</a>
+                            </td>
+                        </tr>
+                    <?php }}?>
+            </tbody>
+        </table>
+        <div id="jspage" class="jspage">
+            <?php echo $show_page;?>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="deleteUrl" value="{:U('Decorate/delDecorate')}" data-msg="方案" />
+</block>
+
+<block name="my_js">
+<script>
+    seajs.use(["jquery/layer", "com/global"]);
+</script>
+</block>

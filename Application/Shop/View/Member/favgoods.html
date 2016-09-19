@@ -1,0 +1,88 @@
+<extend name="Layouts:member" />
+<block name="title"><title>收藏的商品-买家中心-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="tit-bar">
+	<h2>收藏的商品</h2>
+    <?php if(!empty($output['favorites_list'])){?>
+		<p class="sort-filter mt10 cf">
+			<em>分类筛选：</em>
+			<a href='__ROOT__/index.php?m=shop&c=member&a=favGoods' class = "<?php if($cat_array['is_all_category']) echo 'curr'; ?>">全部(<?php echo $cat_array['count']; ?>)</a>
+			<?php if(!empty($favorites_list)) { ?>
+                <?php if(isset($cat_array) || !empty($cat_array)) { ?>
+                    <?php foreach ($cat_array['data'] as $key => $value) { ?>
+                        <a href="__ROOT__/index.php?m=shop&c=member&a=favGoods&cat_id=<?php echo $value['gc_id']; ?>"  class="<?php if($value['current']){ echo 'curr';} ?>"><?php echo $value['type_name']; ?>(<?php echo $value['count']; ?>)</a>
+                    <?php } ?>
+                <?php } ?>
+            <?php } ?>
+		</p>
+    <?php }?>
+</div>
+<div class="favor-box mt20">
+    <?php if(!empty($favorites_list)) { ?>
+        <p class="favor-h js-favorBar">
+            <label><input type="checkbox" class="v-2 js-allCheck" /> 全选</label>
+            <a href="javascript:void(0);" class="ml10 js-unfavorite">取消收藏</a>
+        </p>
+        <ul class="favor-goods-list cf js-favorList">
+            <?php foreach($favorites_list as $key=>$favorites){?>
+                <li data-favid="<?php echo $favorites['fav_id']; ?>">
+                    <?php if ($favorites['goods']['goods_state'] == 1){?>
+                        <a href="<?php echo urlShop('goods', 'index', array('goods_id'=>$favorites['goods']['goods_id']));?>" >
+                            <img src="<?php echo thumb($favorites['goods'], 240);?>" width="180px" height="180px" alt="<?php echo $favorites['goods']['goods_name'];?>" />
+                        </a>
+                    <?php }else{?>
+                        <img src="<?php echo thumb($favorites['goods'], 240);?>" width="180px" height="180px" class="opa-2" alt="<?php echo $favorites['goods']['goods_name'];?>" />
+                    <?php }?>
+                    <p class="mt5 h40">
+                        <input type="checkbox" class="v-2 mr5 js-check" value="<?php echo $favorites['goods']['goods_id'];?>" />
+                        <!--<a href="
+                        <?php /*if ($favorites['goods']['goods_state'] == 1){
+                            echo urlShop('goods', 'index', array('goods_id'=>$favorites['goods']['goods_id']));
+                        }else{
+                            echo urlShop('show_store', 'index', array('store_id'=>$favorites['goods']['store_id']));
+                        }*/?>" ><?php /*echo $favorites['goods']['goods_name'];*/?></a>-->
+                        <?php if ($favorites['goods']['goods_state'] == 1){?>
+                            <a href="<?php echo urlShop('goods', 'index', array('goods_id'=>$favorites['goods']['goods_id']));?>" >
+                                <?php echo $favorites['goods']['goods_name'];?>
+                            </a>
+                        <?php }else{?>
+                            <?php echo $favorites['goods']['goods_name'];?>
+                        <?php }?>
+                    </p>
+                    <!--
+                    <p class="cor-red mt5">
+                        <?php if ($favorites['goods']['goods_state'] == 1){echo ncPriceFormat($favorites['goods']['goods_price']);}else{echo '已下架';}?>
+                    </p>
+                    -->
+                    <p class="mt10 cf">
+                        <?php if ($favorites['goods']['goods_state'] == 1){?>
+                            <a href="<?php echo urlShop('goods', 'index', array('goods_id'=>$favorites['goods']['goods_id']));?>" class="btn btn-small fl" >查看详情</a>
+                        <?php }else{?>
+                            <a href="<?php echo urlShop('show_store', 'index', array('store_id'=>$favorites['goods']['store_id']));?>" class="btn btn-small fl" >进入店铺</a>
+                        <?php } ?>
+                        <a href="javascript:void(0);" class="btn btn-small fr js-unfavorite">取消收藏</a>
+                    <p>
+                </li>
+            <?php } ?>
+		</ul>
+        <div class="favor-f cf">
+            <p class="mt25 fl js-favorBar">
+                <label><input type="checkbox" class="v-2 js-allCheck" /> 全选</label>
+                <a href="javascript:void(0);" class="ml10 js-unfavorite">取消收藏</a>
+            </p>
+            <?php echo $page;?>
+        </div>
+    </div>
+	<?php }else {?>
+        <p class="no-data">暂无收藏的商品</p>
+    <?php }?>
+</div>
+<input type="hidden" id="favorType" value="goods" />
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+	seajs.use(["m/favorites"]);
+</script>
+</block>

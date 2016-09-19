@@ -1,0 +1,27 @@
+<include file="Application/Common/Layout/head.html" /> 
+<div class="am-cf admin-main">
+<include file="Application/Common/Layout/left.html" /> 
+<!-- content start -->
+<div class="admin-content">
+    <table border="1">
+        <tr style="color:red;background:green">
+            <th style="width:30%">member_id</th>
+            <th style="width:30%">member_name</th>
+            <th style="width:30%">count</th>
+        </tr>
+    <?php foreach ($list as $key => $value) { ?>
+        <tr>
+            <td><?php echo $value['member_id']; ?></td>
+            <td><?php echo $value['mid']; ?></td>
+            <td><?php echo $value['count']; ?></td>
+        </tr>        
+    <?php } ?>
+    </table>
+        <form method="POST">
+        <input type="hidden" name='form_submit' value="ok">
+        <input type="submit" name='submit' value="change">
+        </form>
+</div>
+<!-- content end -->
+</div>
+<include file="Application/Common/Layout/foot.html" /> 

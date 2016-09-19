@@ -1,0 +1,64 @@
+<include file="Application/Common/Layout/head.html" /> 
+<div class="am-cf admin-main">
+<include file="Application/Common/Layout/left.html" /> 
+<!-- content start -->
+<div class="admin-content">
+  <div class="admin-content-body">
+    <div class="am-cf am-padding am-padding-bottom-0">
+      <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">文章分类2</strong> / <small>分类列表</small></div>
+    </div>
+    <hr>
+    <div class="am-g">
+      <div class="am-u-sm-12 am-u-md-6">
+        <div class="am-btn-toolbar">
+          <div class="am-btn-group am-btn-group-xs">
+            <button onclick="window.location='/Admin/article/articleClassAdd'" type="button" class="am-btn am-btn-default"><span class="am-icon-plus"></span>新增</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="am-g">
+      <div class="am-u-sm-12">
+        <table class="am-table am-table-striped am-table-hover table-main">
+        <thead>
+          <tr>
+            <th class="table-id">ID</th>
+            <th class="table-title" width="8%">排序</th>
+            <th class="table-type" width="50%">分类名称</th>
+            <th class="table-set">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <volist name="classlist" id="val">
+            <tr>
+              <td><?php echo  $val['ac_id'];?></td>
+              <td><?php echo $val['ac_sort'];?></td>
+              <td><?php echo $val['ac_name'];?></td>
+              <td>
+              <div class="am-btn-toolbar">
+                <div class="am-btn-group am-btn-group-xs">
+                  <button onclick="window.location='/Admin/Article/articleClass?type=edit&ac_id=<?php echo $val['ac_id'];?>'" class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                  <button onclick="window.location='/Admin/Article/articleClass?type=add&ac_id=<?php echo $val['ac_id'];?>'" class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span>新增下级 </button>
+                  <button onclick="window.location='/Admin/Article/articleClass?type=delete&ac_id=<?php echo $val['ac_id'];?>'" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
+                </div>
+              </div>
+              </td>
+            </tr>
+          </volist>
+        </tbody>
+        </table>
+      <div class="am-cf">
+        共 <?php echo $count ?> 条记录，每页显示15条记录
+        <div class="am-fr">{$page} </div>
+      </div>
+      <hr />
+    </div>
+    </div>
+</div>
+</div>
+<!-- content end -->
+</div>
+<include file="Application/Common/Layout/foot.html" />
+<script>
+	 
+</script>

@@ -1,0 +1,112 @@
+<style>
+th.table-id{width:240px;}
+</style>
+<include file="Application/Common/Layout/head.html" />
+<div class="am-cf admin-main">
+<include file="Application/Common/Layout/left.html" /> 
+  <!-- content start -->
+  <div class="admin-content">
+    <div class="admin-content-body">
+      <div class="am-cf am-padding am-padding-bottom-0">
+   
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">装修公司效果图风格管理</strong> / <small>管理</small></div>
+      </div>
+      <hr>
+      <div class="am-g">
+        <div class="am-u-sm-12 am-u-md-6">
+          <div class="am-btn-toolbar">
+            <div class="am-btn-group am-btn-group-xs">
+              <button type="button" class="am-btn am-btn-default" onClick="location.href='{:U('Store/effectdrawType')}'"><span class="am-icon-plus"></span> 管理</button>
+              <button type="button" class="am-btn am-btn-default" onClick="location.href='{:U('Store/effectdrawTypeOperate')}'"><span class="am-icon-archive"></span> 新增</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--筛选条件 start-->
+      <div class="j-shop-selectwrap clearfix am-padding am-padding-bottom-0">
+        <form method="get" name="formSearch" id="formSearch">
+          <div class="j-shop-inpbox">
+            名称：<input type="text" name="type_name" class="am-form-field" value="{$type_name}">
+          </div>
+          <div class="j-shop-inpbox">
+            <button class="am-btn am-btn-primary" type="submit">搜索</button>
+          </div>
+        </form>
+      </div>
+      <!--筛选条件 end-->
+
+      <div class="am-g">
+        <div class="am-u-sm-12">
+            <table class="am-table am-table-striped am-table-hover table-main">
+              <thead>
+              <tr>
+                <th class="table-title">风格名称</th>
+                <th class="table-date am-hide-sm-only">添加时间</th>
+                <th class="table-type">状态</th>
+                <th class="table-set">操作</th>
+              </tr>
+              </thead>
+              <tbody>
+              <volist name="type_list" id="vo">
+              <tr>
+                <td>{$vo.type_name}</td>
+                <td>{$vo.add_time|date="Y-m-d H:i:s",###}</td>
+                <td>
+                  <if condition="$vo.status eq 1">
+                    开启
+                    <else/>
+                    禁用
+                  </if>
+                </td>
+                <td>
+                  <div class="am-btn-toolbar">
+                    <div class="am-btn-group am-btn-group-xs">
+                        <button class="am-btn am-btn-default am-btn-xs am-text-secondary" onClick="location.href='{:U('Store/effectdrawTypeOperate?id='.$vo['id'])}'"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                        <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only" onClick="changeStatus({$vo.id},<if condition='$vo.status eq 1'>0<else/>1</if>)"><span class="am-icon-trash-o"> 
+                        <if condition="$vo.status eq 1">
+                          禁用
+                          <else/>
+                          开启
+                        </if>
+                      </button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              </volist>
+              </tbody>
+            </table>
+            <div class="am-cf">
+              <div class="am-fr">
+              {$page}
+              </div>
+            </div>
+        </div>
+
+      </div>
+    </div>
+
+    <footer class="admin-content-footer">
+      <hr>
+      <p class="am-padding-left">© 2014 AllMobilize, Inc. Licensed under MIT license.</p>
+    </footer>
+
+  </div>
+  <!-- content end -->
+
+</div>
+<include file="Application/Common/Layout/foot.html" /> 
+<script>
+  function changeStatus(id,status){
+    if(status == 0){
+      if(confirm("确定禁用吗？")){
+        location.href="__CONTROLLER__/changeEffectdrawType&id="+id+"&status="+status;
+      }
+    }else{
+      if(confirm("确定开启吗？")){
+        location.href="__CONTROLLER__/changeEffectdrawType&id="+id+"&status="+status;
+      }
+    }
+  }
+</script>

@@ -1,0 +1,115 @@
+<include file="Application/Common/Layout/head.html" />
+<div class="am-cf admin-main">
+    <include file="Application/Common/Layout/left.html" />
+
+    <!-- content start -->
+    <div class="admin-content">
+        <div class="admin-content-body">
+            <div class="am-cf am-padding am-padding-bottom-0">
+                <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">商品分类</strong> / <small>Category</small></div>
+            </div>
+
+            <hr>
+
+            <div class="am-g">
+                <div class="am-u-sm-12 am-u-md-6">
+                    <div class="am-btn-toolbar">
+                        <div class="am-btn-group am-btn-group-xs">
+                            <button onclick="window.location='/Admin/Goods/category?p={$Think.get.p}&act=add'" type="button" class="am-btn am-btn-default"><span class="am-icon-plus"></span>新增</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-g">
+                <div class="am-u-sm-12">
+
+                    <table class="am-table am-table-striped am-table-hover table-main tree">
+                        <thead>
+                        <tr>
+                            <!--<th class="table-check"><input type="checkbox" /></th>-->
+                            <th class="table-id" style="width:68px">&nbsp;</th>
+                            <th class="table-title" width="34%">分类名称</th>
+                            <th class="table-set">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach($gcate as $one){ ?>
+                        <!--顶级分类-->
+                            <tr class="treegrid-{$one['gc_id']}" >
+                                <td></td>
+                                <td>{$one['gc_name']}</td>
+                                <td>
+                                    <div class="am-btn-toolbar">
+                                        <div class="am-btn-group am-btn-group-xs">
+                                            <button onclick="window.location='/Admin/Goods/category?p={$Think.get.p}&act=edit&id={$one['gc_id']}'" class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                            <button onclick="window.location='/Admin/Goods/category?p={$Think.get.p}&act=del&id={$one['gc_id']}'" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+						 
+						 
+                            <?php if(!is_null($one['two_level'])){ ?>
+                                <?php foreach($one['two_level'] as $two){ ?>
+                                <!--二级-->
+                                    <tr class="treegrid-{$two['gc_id']} treegrid-parent-{$two['gc_parent_id']}">
+                                        <td></td>
+                                        <td><div class="disnav-ico secnav-ico"></div>{$two['gc_name']}</td>
+                                        <td>
+                                            <div class="am-btn-toolbar">
+                                                <div class="am-btn-group am-btn-group-xs">
+                                                    <button onclick="window.location='/Admin/Goods/category?p={$Think.get.p}&act=edit&id={$two.gc_id}'" class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                                    <button onclick="window.location='/Admin/Goods/category?p={$Think.get.p}&act=del&id={$two.gc_id}'" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr> 
+							
+                                    <!--三级-->
+                                    <?php if(!is_null($two['three_level'])){ ?>
+                                        <?php foreach($two['three_level'] as $three){ ?>
+                                            <tr class="treegrid-{$three['gc_id']} treegrid-parent-{$three['gc_parent_id']}">
+                                                <td></td>
+                                                <td><div class="disnav-ico thirnav-ico"></div>{$three['gc_name']}</td>
+                                                <td>
+                                                    <div class="am-btn-toolbar">
+                                                        <div class="am-btn-group am-btn-group-xs">
+                                                            <button onclick="window.location='/Admin/Goods/category?p={$Think.get.p}&act=edit&id={$three.gc_id}'" class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                                            <button onclick="window.location='/Admin/Goods/category?p={$Think.get.p}&act=del&id={$three.gc_id}'" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr> 
+                                        <?php } ?>
+                                    <?php } ?>
+                              
+                            
+								<?php } ?>
+							<?php } ?>
+						<?php } ?>
+                     
+                        </tbody>
+                    </table>
+
+                    <div class="am-cf">
+                        共 <?php echo $count ?> 条记录，不做分页处理
+          
+                    </div>
+                    <hr />
+
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+    <!-- content end -->
+</div>
+<script src="__JS__/admin/jquery.treegrid.js"></script>
+<script src="__JS__/admin/jquery.treegrid.bootstrap2"></script>
+<script type="text/javascript">
+    $(document).ready(function() { $('.tree').treegrid({initialState:"collapsed"});});
+</script>
+<include file="Application/Common/Layout/foot.html" />

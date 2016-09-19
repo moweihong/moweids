@@ -1,0 +1,20 @@
+<extend name="Layouts:home" />
+<block name="title"><title>支付成功-{:C('site_name')}</title></block>
+
+<block name="content">
+<style>
+    .buy-ok {border: 2px solid #999999; text-align: center; padding: 30px;width: 1280px;margin: 120px auto; }
+    .buy-ok h1 {color: black;}
+    .buy-ok p {margin-top: 20px;}
+    .buy-ok p a {color: #3da3ea;}
+</style>
+<div class="buy-ok">
+    <h1>支付成功！</h1>
+    <p class="buy-text1">乐购分期订单提交处理中，将在48小时内处理完成！在此期间请您保持手机畅通，我们的工作人员可能会电话联系，核实有关情况。</p>
+    <p class="buy-text2">货物运送至：<?php echo $receive_info['reciver_info']['address'];?>,<?php echo $receive_info['reciver_name'];?>,<?php echo $receive_info['reciver_info']['phone'];?></p>
+    <p class="buy-btnbox">
+        <a href="{:U('/shop/member/myorder')}" class="a-ts">我的订单</a>
+        <a href="{:U('/shop/member/order_detail', array('order_id' => $order_id))}" class="a-index">订单详情</a>
+    </p>    
+</div>
+</block>

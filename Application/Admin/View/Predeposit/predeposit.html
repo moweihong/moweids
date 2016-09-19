@@ -1,0 +1,124 @@
+<include file="Application/Common/Layout/head.html" /> 
+<div class="am-cf admin-main">
+<include file="Application/Common/Layout/left.html" /> 
+  <!-- content start -->
+  <div class="admin-content">
+    <div class="admin-content-body">
+      <div class="am-cf am-padding am-padding-bottom-0">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">会员2</strong> / <small>预存款</small></div>
+      </div>
+
+      <hr>
+
+      <div class="am-g">
+        <div class="am-u-sm-12 am-u-md-6" style="width:100%">
+          <div class="am-btn-toolbar">
+            <div class="am-btn-group am-btn-group-xs">
+              <button type="button" class="am-btn am-btn-default" onclick="location.href='/Admin/Predeposit/predeposit.html'"><span class="am-icon-plus"></span> 充值管理</button>
+              <button type="button" class="am-btn am-btn-default" onclick="location.href='/Admin/Predeposit/pdcashlist.html'"><span class="am-icon-save"></span> 提现管理</button>
+              <button type="button" class="am-btn am-btn-default" onclick="location.href='/Admin/Predeposit/pdloglist.html'"><span class="am-icon-archive"></span> 预存款明细</button>
+              <button type="button" class="am-btn am-btn-default" onclick="location.href='/Admin/Predeposit/pdaccountset.html'"><span class="am-icon-trash-o"></span> 汇出账号设置</button>
+            </div>
+          </div>
+        </div>
+        <br>
+        <br>
+        <form method="get" name="formSearch" id="formSearch">
+          <div class="j-shop-inpbox">
+            &nbsp;&nbsp;&nbsp;&nbsp;会员名称：<input type="text" name="mname" class="am-form-field" value="{:$_GET['mname']}">
+          </div>
+          <div class="j-shop-inpbox">
+            <div style="float:left">创建时间：</div>
+            <div class="am-form-group am-form-icon" style="float:left">
+              <i class="am-icon-calendar"></i>
+              <input type="date" name="query_start_date" class="am-form-field am-input-sm" value="{:$_GET['query_start_date']}">
+            </div>
+            <div style="float:left;margin:0px 5px">~</div>
+            <div class="am-form-group am-form-icon" style="float:left">
+              <i class="am-icon-calendar"></i>
+              <input type="date" name="query_end_date" class="am-form-field am-input-sm" value="{:$_GET['query_end_date']}">
+            </div>
+          </div>
+          <div class="j-shop-inpbox">
+            <div class="am-form-group">
+              <select data-am-selected="{btnSize: 'sm'}" name="paystate_search">
+                <option value="-1" selected='selected'>支付状态</option>
+                <option value="0" <if condition="$_GET['paystate_search'] eq 0 AND $_GET['paystate_search'] neq ''">selected='selected'</if>>未支付</option>
+                <option value="1" <if condition="$_GET['paystate_search'] eq 1  AND $_GET['paystate_search'] neq ''">selected='selected'</if>>已支付</option>
+              </select>
+            </div>
+          </div>
+          <div class="j-shop-inpbox">
+            <button class="am-btn am-btn-primary" type="submit">搜索</button>
+          </div>
+        </div>
+        </form>
+      </div>
+
+      <div class="am-g">
+        <div class="am-u-sm-12">
+            <table class="am-table am-table-striped am-table-hover table-main">
+              <thead>
+              <tr>
+                <th class="table-id">充值单号</th>
+                <th class="table-title">会员名称</th>
+                <th class="table-type">创建时间</th>
+                <th class="table-author am-hide-sm-only">付款时间</th>
+                <th class="table-date am-hide-sm-only">付款方式</th>
+                <th class="table-date am-hide-sm-only">充值金额（元）</th>
+                <th class="table-date am-hide-sm-only">支付状态</th>
+                <th class="table-set">操作</th>
+              </tr>
+              
+              </thead>
+              <tbody>
+              <volist name="list" id="vo">
+              <tr>
+                <td>{$vo.id}</td>
+                <td>{$vo.store_name}</td>
+                <td>{$vo.created_at|date="Y-m-d H:i:s",###}</td>
+                <td>
+                  <if condition="intval($vo['created_at'])">
+                    <if condition="date('His',$vo['created_at']) eq 0">
+                      {$vo.created_at|date="Y-m-d",###}
+                      <else/>
+                      {$vo.created_at|date="Y-m-d H:i:s",###}
+                    </if>
+                  </if>
+                </td>
+                <td class="am-hide-sm-only">{$vo.pay_class}</td>
+                <td class="am-hide-sm-only">{$vo.money}</td>
+                <td class="am-hide-sm-only">已支付</td>
+                <td>
+                  <div class="am-btn-toolbar">
+                    <div class="am-btn-group am-btn-group-xs">
+                      <button class="am-btn am-btn-default am-btn-xs am-hide-sm-only" onClick="location.href='__CONTROLLER__/rechargeinfo?id={$vo.pdr_id}'"><span class="am-icon-copy"></span> 查看</button>
+                      
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              </volist>
+              </tbody>
+            </table>
+            <div class="am-cf">
+              <div class="am-fr">
+              {$page}
+              </div>
+            </div>
+        </div>
+
+      </div>
+    </div>
+
+    <footer class="admin-content-footer">
+      <hr>
+      <p class="am-padding-left">© 2014 AllMobilize, Inc. Licensed under MIT license.</p>
+    </footer>
+
+  </div>
+  <!-- content end -->
+
+</div>
+<include file="Application/Common/Layout/foot.html" /> 
+

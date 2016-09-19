@@ -1,0 +1,116 @@
+<extend name="Layouts:seller" />
+<block name="title"><title>店铺设置-<?php if($_SESSION['com_type'] == 3){?>供货中心<?php } else{?>卖家中心<?php } ?>-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="content-wrap withdraw-record">
+	<h2 class="query-tit">提现记录</h2>
+    <div class="query-box mt10">
+        <div class="a-notice">
+            温馨提示：提现咨询热线 4006626985  服务时间：09:00 - 20:20
+        </div>
+        <form id="queryForm" class="query-bar mt10" action="/StoreCommon/withdrawHistory" method="get">
+            <p class="unit-line">
+            	<span class="unit">
+                    <label class="label" for="orderNum">起止时间：</label>
+                    <input type="text" id="start" name="s_time" class="text laydate-icon" value="<?php echo $_GET['s_time']?>" readonly placeholder="请选择日期" />
+                    <em class="cor-9 ml5 mr5">-</em>
+                    <input type="text" id="end" name="e_time" class="text laydate-icon" value="<?php echo $_GET['e_time']?>" readonly placeholder="请选择日期" />
+                </span>
+                <!-- <a href="<?php echo SHOP_SITE_URL;?>/index.php?act=seller_center&op=withdraw_record" class="cor-blue <?php if($_GET['time']==''){?>curr<?php }?>">全部</a> -->
+                <a href="{:U('StoreCommon/withdrawHistory', array('time'=>'1month'))}" class="cor-blue ml40 <?php if($_GET['time']=='1month'){?>curr<?php }?>">最近一个月</a>
+                <a href="{:U('StoreCommon/withdrawHistory', array('time'=>'3month'))}" class="cor-blue ml20 <?php if($_GET['time']=='3month'){?>curr<?php  }?>">最近三个月</a>
+            </p>
+            <p class="unit-line">
+                <span class="unit">
+                    <label class="label">提现状态：</label>
+                    <select name="payment_state">
+                        <option value="3" <?php if(!isset($_GET['payment_state'])||$_GET['payment_state']==3){?> selected="selected" <?php }?>>全部</option>
+                        <option value="0" <?php if(isset($_GET['payment_state'])&&$_GET['payment_state']==0){?> selected="selected" <?php }?>>申请中</option>
+                        <option value="1" <?php if(isset($_GET['payment_state'])&&$_GET['payment_state']==1){?> selected="selected" <?php }?>>提现成功</option>
+                        <option value="2" <?php if(isset($_GET['payment_state'])&&$_GET['payment_state']==2){?> selected="selected" <?php }?>>提现失败</option>
+                    </select>
+                </span>
+            </p>
+            <p class="query-btn"><button class="btn btn-blue js-queryBtn">查询</button></p>
+        </form>
+    </div>
+    <table class="table mt10" width="100%">
+        <colgroup>
+            <col width="15%">
+            <col width="20%">
+            <col width="10%">
+            <col width="20%">
+            <col width="10%">
+            <col width="">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>申请时间</th>
+                <th>提现银行</th>
+                <th>提现金额</th>
+                <th>处理完成时间</th>
+                <th>状态</th>
+                <th>备注</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($list as $key => $value) { ?>
+				<?php if($value['pdc_payment_state'] == 1){?>
+					<tr class="cor-green">
+                <?php }else if($value['pdc_payment_state'] == 2){?>
+					<tr class="cor-red">
+                <?php }else{?>
+					<tr>
+                <?php }?>
+                    <td><?php echo date('Y-m-d H:i:s',$value['pdc_add_time']);?></td>
+                    <td>
+                        <div class="bankname-box">
+                            个人账户 | <?php echo $value['pdc_bank_name'];?>
+                            <i class="tringle-bottom"></i>
+                            <div class="drop">
+                                <i class="tringle"></i>
+                                <p>收款银行：<?php echo $value['pdc_bank_name'];?></p>
+                                <p>银行账户：<?php echo substr_replace($value['pdc_bank_no'], '*************', 0, -4) ;?></p>
+                                <p>账户名称：<?php echo $value['pdc_bank_user'];?></p>
+                            </div>
+                        </div>
+                    </td>
+                    <td><?php echo $value['pdc_amount'];?></td>
+                    <td><?php echo !empty($value['pdc_payment_time'])?date('Y-m-d H:i:s',$value['pdc_payment_time']):'';?></td>
+                    <td>
+						<?php 
+                            switch ($value['pdc_payment_state']) {
+                                case 0:
+                                    echo '申请中';
+                                    break;
+                                case 1:
+                                    echo '提现成功';
+                                    break;
+                                case 2:
+                                    echo '提现失败';
+                                    break;
+                                default:
+                                    break;
+                            }
+                        ?>
+                    </td>
+                    <td>
+                        <p><?php echo $value['tesu_description'];?></p>
+						<?php if($value['pdc_payment_state'] == 2):?>
+                        	<a href="<?php echo SHOP_SITE_URL;?>/index.php?act=seller_center&op=add_deposit_card&bank_id=<?php echo $value['pdc_bank_id'];?>&pc_id=<?php echo $value['pdc_id'];?>" class="cor-blue a-decration">修改提现账户</a>
+						<?php endif;?>
+                    </td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+    <div id="jspage" class="jspage">
+        <?php echo $page; ?>
+    </div>
+</div>
+</block>
+<block name="my_js">
+<script type="text/javascript">
+    seajs.use("jquery/laydate");
+</script>
+</block>

@@ -1,0 +1,58 @@
+<?php if($order_type == 'factory_buy' || $order_type == ORDER_TYPE_FACTORY){?>
+    <extend name="Layouts:buy_factory" />
+<?php }else{?>
+    <extend name="Layouts:home" />
+<?php }?>
+<block name="title"><title>微信支付-{:C('site_name')}</title></block>
+<block name="head_css">
+<link href="__CSS__/buy.css" rel="stylesheet" type="text/css">
+</block>
+<block name="content">
+    <div class="ncc-main1">
+        <table class="ncc-table-style1" width="100%">
+            <tr>
+                <td class="w50"></td>
+                <td colspan="2">订单编号：<?php echo $orderinfo['pay_sn'] ?></td>
+                <td class="w50"></td>
+            </tr>
+            <tr>
+                <td class="w50"></td>
+                <td>商品名称：<?php echo $orderinfo['goods_name']?></td>
+                <td class="tr">应付金额：<strong class="fs22 cor-red">¥<?php echo $orderinfo['pay_amount'] ?></strong></td>
+                <td class="w50"></td>
+            </tr>
+        </table>
+        <div class="ncc-wx-style">
+            <p class="ml10 mt5 fl"><img src="__IMG__/wxtb.jpg" height="25" /></p>
+            <p class="ml10 fl">微信支付</p>
+            <p class="ml10 mt5 fl"><img src="__IMG__/tj.png" /></p>
+            <p class="fs16 ml30 fl">亿万用户的选择，更快更安全</p>
+            <p class="cor-black fr">支付<strong class="cor-red"><?php echo $orderinfo['pay_amount'] ?></strong>元</p>
+        </div>
+        <p class="tc">
+            <img src="<?php echo U('Payment/createQRCode', array('wxqrcode' => base64_encode($orderinfo['wxqrcode'])));?>" width="214" />
+        </p>
+        <p class="tc mt15">
+            <img src="__IMG__/zf.png" width="214" />
+        </p>
+    </div>
+</blcok>
+
+<block name="my_js">
+<script type="text/javascript">
+var ORDER_SN = "<?php echo $orderinfo['pay_sn']; ?>",
+	ORDER_TYPE = "<?php echo $orderinfo['order_type'] ?>",
+	LOCATION_URL = "<?php echo U('/shop/member/myorder', array($orderinfo['order_type'] => 1)); ?>";
+var order_interval = setInterval(function(){
+	$.post("<?php echo U('Payment/isPayed'); ?>", {
+		pay_sn		: ORDER_SN,
+		order_type	: ORDER_TYPE
+	},function(data){
+		if(data.status == 1) {
+			clearInterval(order_interval);
+			location.href = LOCATION_URL;
+		}
+	}, "json")
+}, 3000);
+</script>
+</block>

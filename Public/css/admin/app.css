@@ -1,0 +1,30 @@
+/*
+************ 总后台管理
+*/
+/* Write your styles */
+.middlebt{background:#3bb4f2;color:#fff;padding:5px 8px;font-size:12px;}
+.middlebt:hover{color:#fff;background:#0e90d2}
+.brandListPic{height:30px;width:90px}
+.brandInfoPic{border:2px solid #ccc;border-radius:2px;max-width:150px;max-height:50px}
+
+/*自定义分页*/
+.num,.next,.prev,.current,.end,.first{
+  position: relative;
+  display: block;
+  padding: 0.5em 1em;
+  text-decoration: none;
+  line-height: 1.2;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 0;
+  margin-bottom: 5px;
+  margin-right: 5px;
+  display: inline-block;
+}
+.current{background:#0e90d2;color:#fff}
+.adminCheckbox,.adminCheckbox_s,.adminCheckbox_attr{border:1px solid #ccc;width:33%;float:left;border-bottom:none;padding-left:5px;white-space:nowrap;overflow:hidden}
+.btcc{border-bottom:1px solid #ccc}
+.admin_attrValues{
+	width:33%;float:left;border-bottom:none;padding-left:5px;white-space:nowrap;overflow:hidden
+}
+ 

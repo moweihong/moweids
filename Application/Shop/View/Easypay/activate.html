@@ -1,0 +1,115 @@
+<extend name="Layouts:home"/>
+<block name="title"><title>额度激活-{:C('site_name')}</title></block>
+<block name="head_css">
+<link rel="stylesheet" type="text/css" href="__CSS__/apply.css">
+</block>
+
+<block name="content">
+<div class="wrapper activate-instruction mt140">
+	<div class="activate-instruction-bar">
+    	<h2>分期激活</h2>
+        <p class="cor-black mt30 fs16">您的授信已开通，现在只需一步——"激活"，通过新浪支付认证并绑定银行卡（用于每月偿还分期款）即可使用分期支付服务了。请按照下列步骤操作：</p>
+        <ul class="step mt50 cf">
+        	<li>第一步：点击"设置收款/分期还款账户"进入新浪支付</li>
+        	<li>第二步：设置支付密码</li>
+            <li>第三步：开通新浪支付委托扣款功能（绑定收款/分期还款账户）</li>
+        </ul>
+    </div>
+	<div class="activate-instruction-bar mt30">
+    	<h2>常见FAQ</h2>
+        <dl>
+        	<dt>1.为什么会跳转进入新浪支付？</dt>
+            <dd>新浪支付是获得国家金融服务资质的针对互联网金融平台提供的全面定制化的第三方资金账户管理解决方案提供商（新浪支付是中国支付清算协会会员，已通过Symantec认证、PCIDSS认证）。您在使用全木行分期服务时，资金是通过第三方资金账户进行管理，投资和还款资金开设独立专用账户，实现专款专用，与平台自有资金完全分离，既可以以保证您的资金安全，又能确保您能及时偿还分期款。</dd>
+        </dl>
+        <dl>
+        	<dt>2.设置支付密码有什么用？</dt>
+            <dd>此处设置的支付密码为新浪支付所设置。凭借次密码可以在新浪支付进行查询、充值、支付、冻结、解冻、提现、资金明细、交易记录、高危操作等。</dd>
+        </dl>
+        <dl>
+        	<dt>3.什么是新浪支付委托扣款？</dt>
+            <dd>设置新浪支付委托扣款是为了方便您每月及时偿还分期款，避免因错过还款而影响您的信誉。到了每月还款日，新浪支付会从您绑定的银行卡划扣资金偿还分期款，您只需确保银行卡余额足够即可。</dd>
+        </dl>
+        <dl>
+        	<dt>4.设置单笔限额和设置日累计限额是什么？</dt>
+            <dd>设置单笔限额和设置日累计限额即对您单笔资金和日累计资金转出转入做出了限制。为确保每月成功还款，直接勾选"无限额"，如果设定限额，当限额小于每月还款额时，会导致还款失败。同样，日累计限额也勾选"无限额"。</dd>
+        </dl>
+    </div>
+    <div class="activate-instruction-exp mt30">
+    	<h2><i class="ic ic-warning mr10"></i>为顺利完成激活，在点击下一步之前，请注意按照下面2图的特别提示说明操作激活。</h2>
+        <ul class="cf">
+        	<li>
+            	<img src="__IMG__/apply/instruction01.png" width="595px" height="595px" alt="" />
+                <p class="mt10">设置密码页面：请选择从银行卡代扣</p>
+            </li>
+            <li class="ml30">
+            	<img src="__IMG__/apply/instruction02.png" width="595px" height="595px" alt="" />
+                <p class="mt10">开通委托代扣：单笔限额及日累计限额请勾选"无限额"</p>
+            </li>
+        </ul>
+    </div>
+    <p class="mt50 tc">
+        <input type="checkbox" id="isAffirm" class="v-2 js-isAffirm" />
+        <label for="isAffirm" class="cor-black">我已阅读并同意</label>
+        <a href="javascript:void(0);" class="cor-blue ml5 js-treaty" data-url="{:U('contract/jkxy')}">《借款协议》</a>
+        <a href="javascript:void(0);" class="cor-blue js-treaty" data-url="{:U('contract/wtdkxy')}">《委托代扣协议》</a>
+        <a href="javascript:void(0);" class="cor-blue js-treaty" data-url="{:U('contract/hkcns')}">《还款承诺书》</a>
+        <a href="javascript:void(0);" class="cor-blue js-treaty" data-url="{:U('contract/fxgzs')}">《风险告知书》</a>
+    </p>
+    <p class="mt30 tc">
+        <a href="javascript:void(0)" class="btn btn-info btn-disable ml50 js-nextBtn">下一步：设置收款/分期还款账户</a>
+    </p>
+</div>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+(function($){
+    define("m/activate_instruction",function(require, exports, module){
+        require("jquery/layer");
+        var manage = require("com/manage");
+        var Module = {
+            init: function(){
+				/*
+                 * 弹窗-个人信息使用授权书
+                 * */
+				$("body").on("click", ".js-treaty", function(){
+                    var me = $(this),
+						url = me.data("url");
+					layer.open({
+						type: 2,
+						title:false,
+						closeBtn: 1,
+						area: ['700px', '500px'],
+						content: gConfig.apiurl + url
+					});
+                });
+				/*
+                 * 勾选确认所填资料
+                 * */
+                $("body").on("click", ".js-isAffirm", function(){
+                    if($(this).is(":checked")){
+                        $(".js-nextBtn").removeClass("btn-disable").addClass("btn-info");
+                    }else{
+                        $(".js-nextBtn").removeClass("btn-info").addClass("btn-disable");
+                    }
+                });
+				/*
+                 * 下一步
+                 * */
+                $("body").on("click", ".js-nextBtn", function(){
+					if($(this).hasClass("btn-disable")){
+						$.wrongMsg("请勾选我已阅读并同意协议");
+						return;
+					}
+					location.href = "{:U('easypay/do_activate')}";
+				});
+			}
+		};
+        module.exports = Module;
+    });
+    seajs.use("m/activate_instruction", function(module){
+        module.init();
+    });
+})($);
+</script>
+</block>

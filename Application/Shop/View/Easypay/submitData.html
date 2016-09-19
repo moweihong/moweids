@@ -1,0 +1,404 @@
+<extend name="Layouts:home"/>
+<block name="title"><title>提交申请资料-{:C('site_name')}</title></block>
+<block name="head_css">
+<link rel="stylesheet" type="text/css" href="__CSS__/apply.css">
+</block>
+
+<block name="content">
+<div class="wrapper mt140">
+    <form action="javascript:void(0);" id="form" class="easypay-box" method="post" autocomplete="off">
+        <h2 class="tit">提交申请资料</h2>
+        <h3 class="easypay-info-tit">个人信息</h3>
+        <div class="easypay-info">
+            <ul class="list ml20">
+                <li class="cf">
+                    <label class="handle" for="usrname"><em class="cor-red">*</em>姓名：</label>
+                    <div class="rel">
+                        <input type="text" id="usrname" name="usrname" class="text js-usrname" value="{$app_info.usrname}" placeholder="请输入真实姓名" maxlength="5" required />
+                        <span show="usrname.check" class="error-msg">
+                            <em class="errow-arrow"></em>
+                            请输入真实姓名
+                        </span>
+                    </div>
+                </li>
+                <li class="cf">
+                    <label class="handle"><em class="cor-red">*</em>性别：</label>
+                    <label class="w80 dis-in-block">
+                        <input type="radio" name="sex" class="v-2" value="0" <if condition="$app_info.sex eq 0">checked="checked"</if> /> 男
+                    </label>
+                    <label class="w80 dis-in-block">
+                        <input type="radio" name="sex" class="v-2" value="1" <if condition="$app_info.sex eq 1">checked="checked"</if> /> 女
+                    </label>
+                </li>
+                <li class="cf">
+                    <label class="handle"><em class="cor-red">*</em>婚姻状态：</label>
+                    <label class="w80 dis-in-block">
+                        <input type="radio" name="marital" class="v-2" value="0" <if condition="$app_info.marital eq 0">checked="checked"</if> /> 未婚
+                    </label>
+                    <label class="w80 dis-in-block">
+                        <input type="radio" name="marital" class="v-2" value="1" <if condition="$app_info.marital eq 1">checked="checked"</if> /> 已婚
+                    </label>
+                    <label class="w80 ddis-in-block">
+                        <input type="radio" name="marital" class="v-2" value="2" <if condition="$app_info.marital eq 2">checked="checked"</if> /> 其他
+                    </label>
+                </li>
+                <li class="cf">
+                    <label class="handle" for="idCard"><em class="cor-red">*</em>身份证号：</label>
+                    <div class="rel">
+                        <input type="text" id="idCard" name="id_card" class="text js-numletter" value="{$app_info.id_card}" placeholder="请输入15位或18位身份证号" maxlength="18" required />
+                        <span show="id_card.check" class="error-msg">
+                            <em class="errow-arrow"></em>
+                            请输入正确的身份证号码
+                        </span>
+                    </div>
+                </li>
+                <li class="cf">
+                    <label class="handle"><em class="cor-red">*</em>现住址：</label>
+                    <div class="rel fl">
+                        <select id="cmbProvince2" name="addr_province" class="js-province" style="width:100px">
+                            <option value="0">选择省份</option>
+                        </select>
+                        <select id="cmbCity2" name="addr_city" class="ml10 js-city" style="width:100px">
+                            <option value="0">选择城市</option>
+                        </select>
+                    </div>
+                    <div class="rel ml15 fl" style="width:120px">
+                        <select id="cmbArea2" name="addr_county" class="js-area js-requiredSel" style="width:100px">
+                            <option value="0">选择地区</option>
+                        </select>
+                        <span class="error-msg">
+                            <em class="errow-arrow"></em>
+                            请选择完整现住址
+                        </span>
+                    </div>
+                    <div class="rel fl">
+                        <input type="text" name="addr_street" class="text" value="{$app_info.addr_street}" placeholder="请输入详细地址" maxlength="20" style="width:400px;" />
+                        <span show="addr_street.check" class="error-msg">
+                            <em class="errow-arrow"></em>
+                            请输入详细地址
+                        </span>
+                    </div>
+                </li>
+                <li class="cf">
+                    <label class="handle"><em class="cor-red">*</em>户籍：</label>
+                    <div class="rel fl">
+                        <select id="cmbProvince1" name="usr_native_province" style="width:100px">
+                            <option value="0">请选择</option>
+                        </select>
+                    </div>
+                    <div class="rel ml15 fl">
+                        <select id="cmbCity1" name="usr_native_city" class="js-requiredSel" style="width:100px">
+                            <option value="0">请选择</option>
+                        </select>
+                        <select id="cmbArea1" class="ml10 dis-none" style="width:100px">
+                            <option value="0">请选择</option>
+                        </select>
+                        <span class="error-msg">
+                            <em class="errow-arrow"></em>
+                            请选择完整户籍
+                        </span>
+                    </div>
+                </li>
+                <li class="cf">
+                    <label class="handle"><em class="cor-red">*</em>学历：</label>
+                    <div class="rel">
+                        <select name="diploma" class="js-requiredSel">
+                            <option value="0" <if condition="$app_info.diploma eq 0 ">selected="selected"</if>>请选择</option>
+                            <option value="1" <if condition="$app_info.diploma eq 1 ">selected="selected"</if>>博士</option>
+                            <option value="2" <if condition="$app_info.diploma eq 2 ">selected="selected"</if>>硕士</option>
+                            <option value="3" <if condition="$app_info.diploma eq 3 ">selected="selected"</if>>本科</option>
+                            <option value="4" <if condition="$app_info.diploma eq 4 ">selected="selected"</if>>专科</option>
+                            <option value="5" <if condition="$app_info.diploma eq 5 ">selected="selected"</if>>高中</option>
+                            <option value="6" <if condition="$app_info.diploma eq 6 ">selected="selected"</if>>初中</option>
+                        </select>
+                        <span class="error-msg">
+                            <em class="errow-arrow"></em>
+                            请选择完学历
+                        </span>
+                    </div>
+                </li>
+                <li class="cf">
+                    <label class="handle" for="homePhone">住宅电话：</label>
+                    <input type="text" id="homePhone" name="home_phone" class="text js-homephone" value="{$app_info.home_phone}" placeholder="区号+电话号码" maxlength="12" />
+                </li>
+                <li class="cf">
+                    <label class="handle" for="mobilephone"><em class="cor-red">*</em>手机：</label>
+                    <div class="rel">
+                        <input type="text" id="mobilephone" name="mobile_phone" class="text js-number" value="{$app_info.mobile_phone}" placeholder="请输入手机号码" maxlength="11" required check-phone />
+                        <span show="mobile_phone.check" class="error-msg">
+                            <em class="errow-arrow"></em>
+                            请输入正确的手机号码
+                        </span>
+                    </div>
+                </li>
+                
+                <li class="cf">
+                    <label class="handle" for="profession"><em class="cor-red">*</em>工作性质：</label>
+                    <div class="rel">
+                        <select name="profession" class="js-requiredSel">
+                            <option value="0" <if condition="$app_info.profession eq 0">selected="selected"</if>>请选择</option>
+                            <option value="1" <if condition="$app_info.profession eq 1">selected="selected"</if>>国家机关公务员</option>
+                            <option value="2" <if condition="$app_info.profession eq 2">selected="selected"</if>>事业单位员工</option>
+                            <option value="3" <if condition="$app_info.profession eq 3">selected="selected"</if>>金融机构</option>
+                            <option value="4" <if condition="$app_info.profession eq 4">selected="selected"</if>>上市公司</option>
+                            <option value="5" <if condition="$app_info.profession eq 5">selected="selected"</if>>私营企业</option>
+                            <option value="6" <if condition="$app_info.profession eq 6">selected="selected"</if>>个体户</option>
+                            <option value="7" <if condition="$app_info.profession eq 7">selected="selected"</if>>待业或无业人员</option>
+                            <option value="8" <if condition="$app_info.profession eq 8">selected="selected"</if>>学生</option>
+                            <option value="9" <if condition="$app_info.profession eq 9">selected="selected"</if>>其他职业</option>
+                        </select>
+                        <span show="profession.check" class="error-msg">
+                            <em class="errow-arrow"></em>
+                            请选择完工作性质
+                        </span>
+                    </div>
+                </li>
+                <li class="cf">
+                    <label class="handle"><em class="cor-red">*</em>职位：</label>
+                    <div class="rel">
+                        <select name="profession_level" class="js-requiredSel">
+                            <option value="0" <if condition="$app_info.profession_level eq 0">selected="selected"</if>>请选择</option>
+                            <option value="1" <if condition="$app_info.profession_level eq 1">selected="selected"</if>>员工</option>
+                            <option value="2" <if condition="$app_info.profession_level eq 2">selected="selected"</if>>经理</option>
+                            <option value="3" <if condition="$app_info.profession_level eq 3">selected="selected"</if>>总监</option>
+                            <option value="4" <if condition="$app_info.profession_level eq 4">selected="selected"</if>>高管</option>
+                        </select>
+                        <span class="error-msg">
+                            <em class="errow-arrow"></em>
+                            请选择职位
+                        </span>
+                    </div>
+                </li>
+                <li class="cf">
+                    <label class="handle" for="workingLong"><em class="cor-red">*</em>工作年限：</label>
+                    <div class="rel">
+                        <select name="working_long" class="js-requiredSel">
+                            <option value="0" <if condition="$app_info.working_long eq 0">selected="selected"</if>>请选择</option>
+                            <option value="1" <if condition="$app_info.working_long eq 1">selected="selected"</if>>1年（含）以下</option>
+                            <option value="2" <if condition="$app_info.working_long eq 2">selected="selected"</if>>1~3年（含）</option>
+                            <option value="3" <if condition="$app_info.working_long eq 3">selected="selected"</if>>3~5年（含）</option>
+                            <option value="4" <if condition="$app_info.working_long eq 4">selected="selected"</if>>5年以上</option>
+                        </select>
+                        <span show="working_long.check" class="error-msg">
+                            <em class="errow-arrow"></em>
+                            请选择工作年限
+                        </span>
+                    </div>
+                </li>
+                <li class="cf">
+                    <label class="handle" for="income"><em class="cor-red">*</em>工资收入：</label>
+                    <div class="rel">
+                        <select name="income" class="js-requiredSel">
+                            <option value="0" <if condition="$app_info.income eq 0">selected="selected"</if>>请选择</option>
+                            <option value="1" <if condition="$app_info.income eq 1">selected="selected"</if>>6000以下</option>
+                            <option value="2" <if condition="$app_info.income eq 2">selected="selected"</if>>6000-10000</option>
+                            <option value="3" <if condition="$app_info.income eq 3">selected="selected"</if>>10000-15000</option>
+                            <option value="4" <if condition="$app_info.income eq 4">selected="selected"</if>>15000-20000</option>
+                            <option value="5" <if condition="$app_info.income eq 5">selected="selected"</if>>20000以上</option>
+                        </select>
+                        <span show="income.check" class="error-msg">
+                            <em class="errow-arrow"></em>
+                            请输入工资收入
+                        </span>
+                    </div>
+                </li>
+                <li class="cf">
+                    <label class="handle" for="school"><em class="cor-red">*</em>毕业学校：</label>
+                    <div class="rel">
+                        <input type="text" id="school" name="graduate_school" class="text js-teshu" value="{$app_info.graduate_school}" placeholder="请输入毕业学校" maxlength="30" required />
+                        <span show="graduate_school.check" class="error-msg">
+                            <em class="errow-arrow"></em>
+                            请输入毕业学校
+                        </span>
+                    </div>
+                </li>
+                <li class="cf">
+                    <label class="handle" for="graduateTime"><em class="cor-red">*</em>毕业时间：</label>
+                    <div class="rel">
+                        <input type="text" id="graduateTime" name="graduate_time" class="text laydate-icon js-laydate" value="{$app_info.graduate_time}" placeholder="请输入毕业时间" onclick="laydate()" />
+                        <span class="error-msg">
+                            <em class="errow-arrow"></em>
+                            请输入毕业时间
+                        </span>
+                    </div>
+                </li>
+                <li class="cf">
+                    <label class="handle" for="comName"><em class="cor-red">*</em>单位名称：</label>
+                    <div class="rel">
+                        <input type="text" id="comName" name="com_name" class="text js-teshu" value="{$app_info.com_name}" placeholder="请输入单位名称" maxlength="20" required />
+                        <span show="com_name.check" class="error-msg">
+                            <em class="errow-arrow"></em>
+                            请输入单位名称
+                        </span>
+                    </div>
+                </li>
+                <li class="cf">
+                    <label class="handle" for="hiredate"><em class="cor-red">*</em>入职时间：</label>
+                    <div class="rel">
+                        <input type="text" id="hiredate" name="hiredate" class="text laydate-icon js-laydate" value="{$app_info.hiredate}" placeholder="请输入入职时间" onclick="laydate()" />
+                        <span class="error-msg">
+                            <em class="errow-arrow"></em>
+                            请输入入职时间
+                        </span>
+                    </div>
+                </li>
+                <li class="cf">
+                    <label class="handle" for="comStreet"><em class="cor-red">*</em>单位地址：</label>
+                    <div class="rel">
+                        <input type="text" id="comStreet" name="com_street" class="text js-teshu" value="{$app_info.com_street}" placeholder="请输入现工作单位地址" maxlength="30" required />
+                        <span show="com_street.check" class="error-msg">
+                            <em class="errow-arrow"></em>
+                            请输入单位地址
+                        </span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <h3 class="easypay-info-tit">其他信息</h3>
+        <div class="easypay-info easypay-contact">
+            <h4>请填写3位联系人电话（至少包含2位直系亲属）</h4>
+            <!--输出联系人信息-->
+            <volist name="app_info.bondsmaninf_list" id="vo">
+                <div class="line mt20 cf js-contact">
+                    <label class="short">
+                        <em class="cor-red">*</em>姓名：
+                        <input type="text" class="text ml5 js-name" value="{$vo.rel_usrname}" maxlength="5" />
+                    </label>
+                    <label class="short">
+                        <em class="cor-red">*</em>关系：
+                        <select name="relation" class="js-relation" style="width:120px;">
+                            <option value="请选择" <if condition="is_null($vo['relation_id'])">selected='selected'"</if>>请选择</option>
+                            <option value="0" <if condition="$vo.relation_id eq 0 AND !is_null($vo['relation_id'])">selected='selected'</if>>配偶</option>
+                            <option value="1" <if condition="$vo.relation_id eq 1 AND !is_null($vo['relation_id'])">selected='selected'</if>>父母</option>
+                            <option value="2" <if condition="$vo.relation_id eq 2 AND !is_null($vo['relation_id'])">selected='selected'</if>>兄弟姐妹</option>
+                            <option value="3" <if condition="$vo.relation_id eq 3 AND !is_null($vo['relation_id'])">selected='selected'</if>>子女</option>
+                            <option value="4" <if condition="$vo.relation_id eq 4 AND !is_null($vo['relation_id'])">selected='selected'</if>>同事</option>
+                            <option value="5" <if condition="$vo.relation_id eq 5 AND !is_null($vo['relation_id'])">selected='selected'</if>>同学</option>
+                            <option value="6" <if condition="$vo.relation_id eq 6 AND !is_null($vo['relation_id'])">selected='selected'</if>>朋友</option>
+                        </select>
+                    </label>
+                    <label class="rel">
+                        <em class="cor-red">*</em>手机号：
+                        <input type="text" class="text ml5 js-number js-phone" value="{$vo.rel_mobile_phone}" maxlength="11" />
+                        <span class="error-msg" style="left:70px;">
+                            <em class="errow-arrow"></em>
+                            请输入正确的手机号
+                        </span>
+                    </label>
+                </div>
+            </volist>    
+        </div>
+        <dl class="easypay-info-dl cf">
+            <dt><em class="cor-red">*</em>证件照片</dt>
+            <dd class="cf o-h">
+                <div class="card-upload fl">
+                    <div class="h30 cf">
+                        <a href="javascript:void(0);" id="cardFrontalBtn" class="btn btn-small fl">身份证正面照</a>
+                         <span class="cor-9 mt5 ml5">（格式：gif、jpg、jpeg、png）</span>
+                    </div>
+                    <!--输出身份证正面图-->
+                    <if condition="empty($app_info['id_card_front_pic']['s_pic'])">
+                        <div id="cardFrontalList" class="h135 cf">
+                            <div class="file-item thumbnail upload-state-done">
+                                <p class="file-panel" style="height: 0px;"><a class="icon-view js-viewImg" title="预览"></a></p>
+                                <img src="__IMG__/apply/idcard.jpg" width="180" height="115" />
+                            </div>
+                        </div>
+                    <else/>
+                        <div id="cardFrontalList" class="h135 cf">
+                            <div class="file-item thumbnail upload-state-done">
+                                <p class="file-panel" style="height: 0px;"><a class="icon-view js-viewImg" title="预览"></a></p>
+                                <img src="{$app_info['id_card_front_pic']['s_pic']}" width="180" height="115" data-rel="{$app_info['id_card_front_pic']['m_pic']}" />
+                            </div>
+                        </div>
+                    </if>
+                    <div class="h30 mt30 cf">
+                        <a href="javascript:void(0);" id="cardReverseBtn" class="btn btn-small fl">身份证反面照</a>
+                        <span class="cor-9 mt5 ml5">（格式：gif、jpg、jpeg、png）</span>
+                    </div>
+                    <if condition="empty($app_info['id_card_reverse_pic']['s_pic'])">
+                        <div id="cardReverseList" class="h135 cf">
+                            <div class="file-item thumbnail upload-state-done">
+                                <p class="file-panel" style="height: 0px;"><a class="icon-view js-viewImg" title="预览"></a></p>
+                                <img src="__IMG__/apply/idcard2.jpg" width="180" height="115" />
+                            </div>
+                        </div>
+                    <else/>
+                        <div id="cardReverseList" class="h135 cf">
+                            <div class="file-item thumbnail upload-state-done">
+                                <p class="file-panel" style="height: 0px;"><a class="icon-view js-viewImg" title="预览"></a></p>
+                                <img src="{$app_info['id_card_reverse_pic']['s_pic']}" width="180" height="115" data-rel="{$app_info['id_card_reverse_pic']['m_pic']}" />
+                            </div>
+                        </div>
+                    </if>
+                </div>
+                <div class="card-demo fl">
+                    <p class="tr"><a href="javascript:void(0);" class="cor-blue js-uploadGuide">上传图片资料指引</a></p>
+                    <p class="mb10 mt20">上传图示：</p>
+                        <img class="pic" src="__IMG__/apply/idcard.jpg" width="310" height="190" data-rel="" />
+                    <p class="mt10"><span class="cor-red">注意：</span>请上传本人手持身份证证件照，要求面部轮廓清晰，且证件字迹清晰可识别。</p>
+                </div>
+            </dd>
+        </dl>
+        <dl class="easypay-info-dl nobor cf">
+            <dt>其他增信资料：</dt>
+            <dd>
+                <div class="h30 cf">
+                    <a href="javascript:void(0);" id="augmentedBtn" class="btn btn-small fl">选择图片</a>
+                    <span class="cor-9 mt5 ml5">（房产、车辆登记证、股票等其他有价证券证明等...）</span>
+                </div>
+                <div id="augmentedList" class="cf">
+                    <if condition="$app_info['other_pic_list']">
+                        <!--循环遍历其它资料-->
+                        <volist name="app_info.other_pic_list" id="vo">
+                            <div id="augmentedList" class="cf">
+                                <div class="file-item thumbnail upload-state-done">
+                                    <p class="file-panel" style="height: 0px;"><a class="icon-view js-viewImg" title="预览"></a><a class="icon-cancel js-cancel" title="删除"></a></p>
+                                    <img width="180" height="115" src="<?php echo $vo['s_pic'] ?>" data-rel="<?php echo $vo['m_pic']; ?>" />
+                                </div>
+                            </div>    
+                        </volist>
+                    </if>
+                </div>
+            </dd>
+        </dl>
+        <p class="fs14 tc cor-balck">
+            <input type="checkbox" id="isAffirm" class="v-2 js-isAffirm" />
+            <label for="isAffirm">
+                本人确认所填资料真实有效， 如有虚假将承担法律责任。
+            </label>
+        </p>
+        <p class="mt20 tc">
+            <button class="btn btn-disable ml10 js-nextBtn">下一步</button>
+        </p>
+    </form>
+</div>
+<input type="hidden" id="infoProvince" value="{$app_info.usr_native_province}" />
+<input type="hidden" id="infoCity" value="{$app_info.usr_native_city}" />
+<input type="hidden" id="infoArea" value="" />
+<input type="hidden" id="infoProvince2" value="{$app_info.addr_province}" />
+<input type="hidden" id="infoCity2" value="{$app_info.addr_city}" />
+<input type="hidden" id="infoArea2" value="{$app_info.addr_county}" />
+<div class="upload-guide-pop js-guidePop dis-none">
+	<h3 class="fs16 cor-black tc">上传图片资料指引！</h3>
+	<p class="cor-nor mt20">1.需要通过网络提交的资料都可以用照片，使用手机、数码相机拍摄即可。</p>
+    <p class="ml20">注意：拍摄后检查图片是否清晰（手的抖动很可能造成图片模糊）。</p>
+    <p class="cor-nor mt10">2.如何将手机拍摄的照片传至电脑？</p>
+    <p class="ml20">1)手机拍摄资料后，检查拍摄的图片是否清晰</p>
+    <p class="ml20">2)打开手机QQ</p>
+    <p class="ml20">3)在"消息"中找到并点"我的电脑"</p>
+    <p class="ml20">4)点图片图标，选择刚才拍摄的图片，发送即可。</p>
+    <p class="ml20">5)登录电脑，登录自己的QQ（与手机登录QQ一个账号），从"我的设备"——"我的**手机"下载图片进入电脑待用。</p>
+    <p class="ml20 mt10">
+    	<img src="__IMG__/apply/upload_guide01.png" width="238" height="162" alt="传图指引1" />
+        <img src="__IMG__/apply/upload_guide02.png" width="238" height="162" class="ml5" alt="传图指引2" />
+        <img src="__IMG__/apply/upload_guide03.png" width="238" height="162" class="ml5" alt="传图指引3" />
+    </p>
+</div>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+	seajs.use("m/easypay_step2");
+</script>
+</block>

@@ -1,0 +1,108 @@
+/*
+************ author: yanyali
+************ 家装设计
+*/
+/*首页*/
+.company-logo{margin-left:-8px;margin-top: -8px;}
+.company-logo li{margin-left: 8px;margin-top:8px;width: 176px;height: 176px;float: left;background-color: #fff;text-align: center;}
+.company-logo li img{width:176px;height:176px;}
+.floor-template .pro-list li{height: auto;}
+.floor-template .pro-list li .goods-info p{line-height: 12px;}
+
+/*详情页*/
+.house-type-info{margin-top:50px;padding:15px;border:1px solid #dedede;background-color:#fff;overflow:hidden;}
+.compony-img{float: left;width: 35%;}
+.house-type{width: 63%;float: right;}
+.house-type h2{font-size: 20px;margin:0 0 15px; line-height: 40px; color: #000; font-weight: bold;}
+.house-type p{font-size: 15px; line-height: 30px;color:#333;}
+.house-type .p-house-price{background-color: #f4f4f4;padding: 25px 30px;font-size: 18px;margin-bottom: 15px; overflow: hidden;}
+.p-house-price span{float: left;}
+.house-price{color: #e60011; font-size: 32px; font-weight: bold; margin-left: 50px;}
+.h-mortgate{position: relative;}
+.h-mortgate .easypay-slice{text-align: center; border: 1px solid #dedede; padding: 1px 10px; line-height: 30px; margin-right: 14px; color: #999999; cursor: pointer; margin-top: 5px; position: relative; }
+.h-mortgate .easypay-slice label{cursor:pointer;}
+.h-mortgate span:hover{border: 1px solid #B61E1D; color: #B61E1D;}
+.h-mortgate span:hover .goods-fqg-information{display:block;}
+.h-mortgate .goods-fqg-information{text-align: left; display: none; position: absolute; top: 33px; color: black; z-index: 2; border: 1px solid #999; background: white; left: 0;width: 300px;}
+.goods-fqg-information p{padding:0 10px;font-size:12px;}
+.mortgate-lable{float: left; display: block; font-size: 15px; color: #333; margin-top: 11px;}
+.h-mortgate span.using{border: 1px solid #B61E1D; background: url(../images/tb.png) no-repeat right bottom;}
+.house-type .go-buy a{background-color: #f2a344;color: #fff;font-size: 18px;padding: 3px 50px;margin-top: 50px; border-radius: 5px; text-decoration: none;}
+.decoration-detail{width:1280px;margin:50px auto 0 auto;}
+.decoration-detail-left{float:left;width:320px;border: 1px solid #dedede;background-color:#fff;}
+.decoration-detail-left h3{font-size: 22px;background-color: #fafafa;border-bottom:1px solid #dedede;line-height: 50px; padding-left: 20px; color: #444;}
+.decoration-detail-left table{width:280px;margin:20px auto;font-size:15px;}
+.decoration-detail-left table td{padding: 10px 0; vertical-align: top;}
+.decoration-detail-left table td span{display: block;}
+.decoration-detail-right{float:right;width:940px;}
+.decoration-detail-right h3{font-size: 22px;background-color: #fafafa;border:1px solid #dedede;line-height: 50px; padding-left: 20px; color: #444;}
+.decoration-detail-right h4{font-size: 20px;margin: 30px 0;padding-left:15px;border-left: 5px solid #f2a344;}
+.decoration-detail-right .img-box{padding: 0 30px 30px 30px;border:1px solid #dedede;background-color:#fff;}
+.decoration-detail-right .img-box img{margin-top: 30px; width: 100%;}
+
+/*装修效果图*/
+.detail-content,.detail-show{width:1280px;margin: 140px auto 0;}
+.detail-show-tit{border-bottom: 1px solid #333;padding-bottom: 5px;}
+.detail-show-tit span{display: inline-block;color: #666;font-size: 16px;background-color: #dedede;padding: 10px 0px;width: 160px;text-align: center;cursor: pointer;}
+.detail-show-tit .detail-show-now{color: #fff;background-color: #f2a344;}
+.company-info{padding: 30px;border: 1px solid #dedede;overflow: hidden;margin-top: 50px;}
+.compony-logo{float: left;width: 20%;}
+.company-info-text{width: 73%;float: right;}
+.detail-logo{}
+.detail-logo img{float: left;}
+.detail-logo span{font-size: 25px;color: #000;}
+.info-text{color: #59595a;line-height: 30px;margin: 20px 0;font-size: 16px;}
+.company-addr{font-size: 20px;margin: 30px 0;color: #000;}
+.detail-show{margin-top: 40px;}
+.detail-show .com-tit{margin-bottom: 0;}
+.show-left ul{margin-left: -1%;}
+.show-left ul li{margin-top: 30px;width: 49%;padding-left: 1%;float: left;height: 615px;}
+.jsimg-a{position: relative;display: block;text-align: center;}
+.show-left li:hover .img-num, .show-left ul li:hover .black-bg{display: block;}
+.img-num{position: absolute;color: #fff;background-color: #f2a344;padding: 5px 10px;border-radius: 5px;top: 20px;right: 20px;font-size: 15px;display: none;}
+.show-left ul li .show-img{display: block;width: 100%;height: 474px;}
+.show-left ul li .img-name{display: block;width: 85%;padding: 10px;margin: 15px 0;border: 1px solid #dedede;color: #333;}
+.img-name span{font-size: 18px;display: block;line-height: 28px;}
+.img-name .specification{font-size: 15px;}
+.houseprice em{font-style: normal;color: #f2a344;}
+.show-right{display: none;}
+.black-bg{background: #000;filter:alpha(opacity=70);background: rgba(0,0,0,0.7);position: absolute;width: 100%;height: 100%;top: 0;display: none;}
+.black-bg-img-num{position: absolute;color: #fff;background-color: #f2a344;padding: 5px 10px;border-radius: 5px;top: 20px;right: 20px;font-size: 15px;}
+.s-input{margin-top: 200px;width: 287px;margin: 200px auto 0px;}
+.s-input .show-pw{border:2px solid #f2a344;color: #fff;line-height: 35px;height: 35px;padding-left: 35px;border-bottom-left-radius: 5px;border-top-left-radius: 5px;width: 190px;background-color: transparent;font-size: 14px;background: url(../images/homedesign/lock.png) no-repeat 7px center;float: left;}
+.s-input .show-btn{border-bottom-right-radius: 5px;border-top-right-radius: 5px;line-height: 37px;height: 39px;padding: 0 15px;color: #fff;background-color: #f2a344;font-size: 14px;margin-left: -6px;cursor: pointer;}
+.show-message{color: #fff;margin-top: 15px;}
+.page-list{font-size: 18px;color: #959595;margin-top: 40px;text-align: center;}
+.page-list span{display: inline-block;cursor: pointer;}
+.current-page{color: #505050;}
+.goto-page{margin-left: 20px;}
+.goto-page input{border: 1px solid #ccc;width: 50px;line-height: 30px;text-align: center;height: 30px;}
+.page-btn{color: #fff;background-color: #f9b84c;padding: 7px 14px;display: inline-block;font-size: 16px;}
+.h-imgbox{width: 100%;height: 100%;}
+.img-con{width: 100%;height: 88%;overflow: hidden;}
+.h-imgbox img{display: block;width: 100%;height: 100%;}
+.look-btn{text-align: center;padding: 20px 0;}
+.look-btn span{cursor: pointer;line-height: 30px;color: #fff;background-color: #f2a344;font-size: 15px;padding: 0 20px;margin-left: 20px;border-radius: 5px;}
+
+/*乐购分期订单提交成功*/
+.h-buy-success{width:900px;margin:150px auto 0;padding:50px;border:2px solid #ffa800;box-shadow: 3px 3px 3px #ccc;background-color:#fff;}
+.h-buy-success h2{line-height:40px;margin-bottom:30px;font-size:28px;color:#333;}
+.h-buy-success p{font-size:14px;line-height: 35px;}
+
+/*乐购分期结算页*/
+.h-buy{border: 2px solid #ffa800;box-shadow: 3px 3px 3px #ccc;width: 1000px;margin: 150px auto 0;}
+.h-buy h2{color: #fff;background-color: #ffa800;line-height: 40px;padding-left: 30px;margin-bottom:40px;}
+.h-buy p{color: #333;font-size: 16px;margin: 25px 70px; line-height: 35px;}
+.h-buy em{font-style: normal;}
+.h-buy .money-big{font-size: 35px;color: #c9043c; font-weight: bold;}
+.h-buy .h-mark{font-size: 18px;color: #c9043c; font-weight: bold;}
+.h-buy .p-text2{}
+.h-buy .p-text2 .h-periodization{color: #c9043c;font-size: 22px; margin-left: 5px; font-weight: normal;}
+.h-buy .p-text2 .periodization-info{color: #999;font-size: 16px;margin-left: 30px;}
+.h-buy .p-text3{color: #AAA;font-size: 14px;margin-top: 40px;}
+.h-buy .p-text3 input{}
+.h-buy .p-text3 span{}
+.h-buy .p-text3 span a{color: #3ca4eb;}
+.h-buy .p-text4{text-align: center;}
+.h-buy .p-text4 a{color: #fff;border-radius: 5px;line-height: 39px;width: 180px; text-align: center; text-decoration: none; font-size: 18px; background-color: #f23756; margin: 20px 0;}
+.h-buy .p-text4 .disabled{background-color: #808080; cursor: not-allowed;}

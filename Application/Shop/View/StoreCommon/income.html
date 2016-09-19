@@ -1,0 +1,90 @@
+<extend name="Layouts:seller" />
+<block name="title"><title>我的收入-<?php if($_SESSION['com_type'] == 3){?>供货中心<?php } else{?>卖家中心<?php } ?>-{:C('site_name')}</title></block>
+{//--添加头部引入css文件--}
+<block name="head_css">
+
+</block>
+<block name="content">
+<div class="content-wrap">
+	<h2 class="query-tit">我的收入</h2>
+    <div class="query-box mt10 cf">
+        <ul class="income-ul fl">
+            <li>7天收入(截至今天0点)</li>
+            <li class="cf">
+                <span class="fs20 cor-red fl">¥{$in_money}</span> 元
+                <a href="{:U('StoreCommon/incomeDetail')}" class="cor-blue fr">收支明细</a>
+            </li>
+        </ul>
+        <ul class="income-ul income-ul2 fr">
+            <li>可用余额</li>
+            <li class="cf">
+                <span class="fs20 cor-red fl">¥{$yu_e}</span>元
+                <?php if(intval($yu_e) <= 0):?>
+                <a class="btn ml20 fr btn-disable">提现</a>
+                <?php else:?>
+                <a href="{:U('StoreCommon/withdraw')}" class="btn ml20 fr">提现</a>
+                <?php endif;?>
+                <a href="{:U('StoreCommon/recharge')}" class="btn btn-blue fr">充值</a>
+            </li>
+        </ul>
+    </div>
+    <h2 class="query-tit cf">
+    	近期收支记录
+        <a href="{:U('StoreCommon/incomeDetail')}" class="cor-blue mt5 fs14 fr">更多&raquo;</a>
+    </h2>
+    <table class="table" width="100%">
+        <thead>
+            <tr>
+                <th>时间</th>
+                <th>类型 | 收支流水号</th>
+                <th>收入(元)</th>
+                <th>支出(元)</th>
+                <th>余额(元)</th>
+                <th>支付渠道 | 订单号</th>
+                <th>操作 | 说明</th>
+            </tr>
+        </thead>
+        <tbody>	
+            <?php foreach ($money_record as $key => $val) { ?>
+                <tr>
+                    <td><?php echo date('Y-m-d H:i:s',$val['created_at']);?></td>
+                    <td>
+                        <p><?php echo incomeType($val['m_type']);?></p>
+                        <p class="cor-9"><?php echo $val['id'];?></p>
+                    </td>
+                    <?php if($val['is_pay'] == 0){ ?>
+                        <td><span class="cor-red">+ ¥<?php echo $val['money']; ?></span></td>
+                        <td>—</td>
+                    <?php }else{ ?>
+                        <td>—</td>
+                        <td><span class="cor-green">- ¥<?php echo $val['money']; ?></span></td>
+                    <?php } ?>
+                    <td><?php echo $val['yu_e'];?></td>
+                    <td>
+                        <p><?php echo orderPaymentName($val['pay_class']);?></p>
+                        <p class="cor-9"><?php echo $val['order_sn'];?></p>
+                    </td>
+                    <td>
+                        <?php if($_SESSION['com_type'] == 3 && !empty($val['order_id'])){?>
+                        <a href="<?php echo U('Factory/order_detail',array('order_id'=>$val['order_id']));?>" class="link" target="_blank">详情</a>
+                        <?php }else if($_SESSION['com_type'] == 1 && !empty($val['order_id'])){ ?>
+                       <a href="<?php echo U('StoreCommon/order_detail',array('order_id'=>$val['order_id']));?>" class="link" target="_blank">详情</a>
+                        <?php }else if($_SESSION['com_type'] == 2 && !empty($val['order_id'])){?>
+                        <a href="<?php echo U('storeCommon/ordermanage',array('order_id'=>$val['order_id']));?>" class="link" target="_blank">详情</a>
+                        <?php }?>
+                        <p><?php echo $val['des']; ?></p>
+                    </td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+    <div id="jspage">
+
+    </div>
+    <!--
+    <div class="no-data">还没有相关数据</div>
+    -->
+</div>
+</block>
+<block name="my_js">
+</block>

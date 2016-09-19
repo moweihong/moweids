@@ -1,0 +1,146 @@
+<extend name="Layouts:member" />
+<block name="title"><title>特速分期-买家中心-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="m-fund-transfer">
+	<h2>转账给商家</h2>
+    <form action="javascript:void(0);" id="form" class="mt10" method="post"  autocomplete="off">
+        <ul class="list">
+            <li class="cf">
+                <label class="handle" for="consignee">店铺名称：</label>
+                <div class="rel fs">
+                    <span>{$decorate_order.title}</span>
+					<span class="ml15">装修款 <em class="cor-red">￥{$decorate_order.order_amount_delta}</em></span>
+					<span class="ml15">已转账 <em class="cor-red">￥{$transfer_money}</em></span>
+					<span class="ml15">待转账 <em class="cor-red">￥{$transfer_end}</em></span>
+                </div>
+            </li>
+            <if condition="$transfer_end neq 0">
+                <li class="cf">
+                    <label class="handle" for="consignee">转账金额：</label>
+                    <div class="rel">
+                        <input type="text"  name="money" class="text" style="" required> 元
+                        <span show="money.check" class="error-msg">
+                            <em class="errow-arrow"></em>
+                            请输入转账金额
+                        </span>
+                    </div>
+                </li>
+                 
+				<li class="cf">
+                    <label class="handle" for="consignee">手机验证码：</label>
+                    <div class="rel">
+                        <input type="code"  name="code" class="text" style="" required>
+                        <a class="btn btn-info btn-small js-sendCode">点击发送</a>
+                        <span show="code.check" class="error-msg">
+                            <em class="errow-arrow"></em>
+                            请输入验证码
+                        </span>
+                    </div>
+                </li>
+                <li id="mobile_li" style="margin-left:150px;display:none">
+                    <div class="rel">
+                         <span id="mobile_msg"></span>
+                    </div>
+                </li>
+                <input type="hidden" name="order_sn" value="{$decorate_order.order_sn}">
+                <li class="cf">
+                    <label class="handle" for="consignee"></label>
+                    <div class="rel">
+                         <button class="btn btn-info btn-middle js-ok">确认</button>
+                    </div>
+                </li>
+            </if>
+        </ul>
+    </form>
+
+    <div class="m-history">
+	    <p class="tit-p">转账记录</p>
+	    <table class="table">
+	    	<colgroup>
+                <col width="50%">
+                <col width="50%">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>日期</th>
+                    <th>金额</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist name="transfer_list" id="vo">
+	            	<tr>
+	            		<td>{$vo.create_time|date="Y.m.d H:i:s",###}</td>
+	            		<td>￥{$vo.money}</td>
+	            	</tr>
+            	</volist>
+            </tbody>
+	    </table>
+    </div>
+</div>
+<script type="text/javascript">
+(function($){
+	define("s/fundTransfer",function(require, exports, module){
+		require("jquery/layer");
+        require("jquery/form");
+        var manage = require("com/manage");
+		var Module = {
+			init: function(){
+				var form = $("#form").form();
+                $("#form").on("click", ".js-ok", function(){
+                    if(!form.valid()) return false;
+                    var data = $("#form").serialize();
+                    data = manage.serializeJson(data);
+                    manage.getApi('__CONTROLLER__/transferMoney',data,function(result){
+                        window.location.href="__CONTROLLER__/transfersuccess?money="+data.money;
+                    })
+                });
+
+                /*
+                 * 发送验证码
+                 * */
+                var count = 0;
+                $("body").on("click", ".js-sendCode", function(){
+                    var me = $(this);
+                    if(me.hasClass("btn-disable")) return;
+                    var timer = null;
+                    me.addClass("btn-disable").text("请稍等...");
+                    manage.ajax({                   
+                        url:"{:U('Shop/TSFinance/sendcode')}",
+                        success:function(relust){
+                            var resultText = relust.resultText || {},
+                                message = resultText.message || "";
+                            leftsecond = 60;
+                            if (relust.code == 1) {
+                                clearInterval(timer);
+                                timer = setInterval(function(){
+                                    if(--leftsecond > 0){
+                                        me.html(leftsecond + "秒");
+                                        $('#mobile_li').show();
+                                        $('#mobile_msg').html(relust.message);
+                                    }else{
+                                        clearInterval(timer);
+                                        me.html("重新发送验证码").removeClass("btn-disable");
+                                    }
+                                }, 1000, "1");
+                            }else{
+                                me.html("重新发送验证码").removeClass("btn-disable");
+                            }
+                            count++;
+                        },
+                        error: function(){
+                            me.html("重新发送验证码").removeClass("btn-disable");
+                        }
+                    });
+                });
+
+			}
+		}
+        module.exports = Module;
+    });
+    seajs.use('s/fundTransfer',function(module){
+        module.init();
+    });
+})($); 
+</script> 
+</block>

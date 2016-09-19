@@ -1,0 +1,51 @@
+/*弹出对话框页面样式组件
+*/
+body, div, p{margin:0;padding:0;}
+body{position:relative;min-height:100%;font:12px/20px '\5FAE\8F6F\96C5\9ED1','\5b8b\4f53',arial,tahoma, Srial, helvetica, sans-serif;color:#666; background-color:#f5f5f5;}
+/*tab*/
+.tabhead {
+    position: relative;
+    z-index: 10;
+}
+
+.tabhead span {
+    display: inline-block;
+    padding: 0 5px;
+    height: 30px;
+    border: 1px solid #ccc;
+    background: url("images/dialog-title-bg.png") repeat-x;
+    text-align: center;
+    line-height: 30px;
+    cursor: pointer;
+    *margin-right: 5px;
+}
+
+.tabhead span.focus {
+    height: 31px;
+    border-bottom: none;
+    background: #fff;
+}
+
+.tabbody {
+    position: relative;
+    top: -1px;
+    margin: 0 auto;
+    border: 1px solid #ccc;
+}
+
+/*button*/
+a.button {
+    display: block;
+    text-align: center;
+    line-height: 24px;
+    text-decoration: none;
+    height: 24px;
+    width: 95px;
+    border: 0;
+    color: #838383;
+    background: url(../../themes/default/images/icons-all.gif) no-repeat;
+}
+
+a.button:hover {
+    background-position: 0 -30px;
+}

@@ -1,0 +1,205 @@
+<extend name="Layouts:home"/>
+<block name="title"><title>信息认证-{:C('site_name')}</title></block>
+<block name="head_css">
+<link rel="stylesheet" type="text/css" href="__CSS__/apply.css">
+</block>
+
+<block name="content">
+<div class="wrapper mt140">
+    <form action="javascript:void(0);" id="form" method="post" autocomplete="off">
+        <h2 class="easypay-info-tit">信息认证</h2>
+        <div class="approve-bar">
+            <h3>手机认证</h3>
+            <p>收集您号码的基本信息、账单信息、通话记录、上网记录、短信详单等用于认证服务。</p>
+            <p>运营商会发短信告知您，我们从网上营业厅查询过您的详单，这是我们认证您信息的正常过程。</p>
+            <h4 class="cor-black fs16 mt20">请输入手机服务密码及验证码</h4>
+            <ul class="easypay-list">
+                <li>
+                    <i class="ic ic-phonenum"></i>
+                    <input type="text" id="mobilephone" name="mobile_phone" class="text js-number" value="{$phoneinfo.phone} &nbsp;&nbsp;&nbsp;&nbsp; {$phoneinfo.phone_name}" readonly="readonly" placeholder="请输入手机号码" />
+                </li>
+                <li>
+                    <i class="ic ic-phonepwd"></i>
+                    <input type="password" id="phonepwd" name="phone_pwd" class="text js-number" value="" placeholder="请输入服务密码" maxlength="10"  required />
+                    <span class="cor-9 ml10">服务密码是通信公司为简化业务受理流程、拓宽业务受理渠道，向客户提供的一种办理业务的凭证。</span>
+                    <span show="phone_pwd.check" class="error-msg">
+                        <em class="errow-arrow"></em>
+                        请输入正确的服务密
+                    </span>
+                </li>
+                <li>
+                    <i class="ic ic-captcha"></i>
+                    <input type="text" id="captcha" name="captcha" class="text js-number" value="" placeholder="请输入短信验证码" maxlength="10" required />
+                    <a id="jxl_send_code" href="javascript:void(0);" class="btn ml10 js-sendCode">发送验证码</a>
+                    <span show="captcha.check" class="error-msg">
+                        <em class="errow-arrow"></em>
+                        请输入验证码
+                    </span>
+                </li>
+            </ul>
+            <div class="exp">
+                <p class="fs14">当天只有3次错误密码的机会，如您输错3次今天将无法再次进行手机认证。</p>
+                <p class="cor-red">如您忘记密码，建议您拨打运营商服务电话或登录网站重置密码！ </p>
+                <p>电信：<a href="http://www.189.cn/" target="_blank">http://www.189.cn/</a></p>
+                <p>移动：<a href="http://www.10086.cn/" target="_blank">http://www.10086.cn/</a></p>
+                <p>联通：<a href="http://www.10010.com/" target="_blank">http://www.10010.com/</a></p>
+            </div>
+        </div>
+        <div class="approve-bar mt30">
+            <h3>电商认证（选填）</h3>
+            <p>收集您电商网站的基本信息、送货地址、订单信息等用于认证服务。</p>
+            <p>提示：填写完整的资料有助于审核通过！</p>
+            <h4 class="cor-black fs16 mt20">请输入京东用户名及密码</h4>
+            <ul class="easypay-list">
+                <li>
+                    <i class="ic ic-usename"></i>
+                    <input type="text" id="jdusername" name="jd_username" class="text" value="" placeholder="请输入京东用户名或邮箱" style="width:180px;" />
+                </li>
+                <li>
+                    <i class="ic ic-phonepwd"></i>
+                    <input type="password" id="jdpassword" name="jd_password" class="text" value="" placeholder="请输入京东会员登录密码" style="width:180px;" />
+                </li>
+            </ul> 
+        </div>
+        <p class="approve-treaty">
+            <input type="checkbox" id="isAffirm" class="v-2 js-isAffirm" />
+            <label for="isAffirm" class="cor-black">本人已阅读并同意</label>
+            <a href="javascript:void(0);" class="cor-blue ml30 js-treaty">《个人信息使用授权书》</a>
+        </p>
+        <p class="mt30 ml30">
+            <a href="javascript:history.back();" class="fs16">上一步</a>
+            <button class="btn btn-info btn-disable ml50 js-nextBtn">下一步</button>
+        </p>
+    </form>
+</div>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+(function($){
+    define("m/easypay_step3",function(require, exports, module){
+        require("jquery/layer");
+		require("jquery/form");
+        var manage = require("com/manage");
+        var Module = {
+            init: function(){
+				var form = $("#form").form();
+				/*
+                 * 弹窗-个人信息使用授权书
+                 * */
+				$("body").on("click", ".js-treaty", function(){
+                    layer.open({
+						type: 2,
+						title:false,
+						closeBtn:1,
+						area: ['700px', '500px'],
+						content: "__APP__/contract/grxxsysqs"
+					});
+                });
+				/*
+                 * 发送验证码
+                 * */
+				var count = 0;
+				$("body").on("click", ".js-sendCode", function(){
+					var me = $(this),
+						phonepwd = $.trim($("#phonepwd").val());
+					if(me.hasClass("btn-disable")) return;
+					var timer = null;
+					if(!phonepwd){
+						$.wrongMsg("服务密码不能为空");
+						return;
+					}
+					me.addClass("btn-disable").text("请稍等...");
+					if(count > 0){
+						data = {
+							password: phonepwd,
+							type	: 1,
+							ajax	: "yes"
+						};
+					}else{
+						data={
+							password : phonepwd,
+							ajax	: "yes"
+						};
+					}
+					manage.ajax({					
+						url:"{:U('easypay/do_jxl_phone')}",
+						data:data,
+						success:function(relust){
+							var resultText = relust.resultText || {},
+								message = resultText.message || "";
+							leftsecond = 120;
+							if (relust.code == 1) {
+								clearInterval(timer);
+								timer = setInterval(function(){
+									if(--leftsecond > 0){
+										me.html(leftsecond + "秒");
+									}else{
+										clearInterval(timer);
+										me.html("重新发送验证码").removeClass("btn-disable");
+									}
+								}, 1000, "1");
+							}else if(relust.code == -2){
+                                location.href = relust.url;
+                            }else{
+								me.html("重新发送验证码").removeClass("btn-disable");
+								$.wrongMsg(message);
+								// if(message == 10003){
+								// 	$.wrongMsg("服务密码错误");
+        //                             me.html("发送验证码");
+								// }else if(relust.resultText.message == 10004){
+								// 	$.wrongMsg("短信验证码错误");
+								// }else{
+								// 	$.wrongMsg("请返回上一步重新提交申请");
+								// }
+							}
+							count++;
+						},
+						error: function(){
+							me.html("重新发送验证码").removeClass("btn-disable");
+						}
+					});
+				});
+				/*
+                 * 勾选确认所填资料
+                 * */
+                $("body").on("click", ".js-isAffirm", function(){
+                    if($(this).is(":checked")){
+                        $(".js-nextBtn").removeClass("btn-disable").addClass("btn-info");
+                    }else{
+                        $(".js-nextBtn").removeClass("btn-info").addClass("btn-disable");
+                    }
+                });
+				/*
+                 * 下一步
+                 * */
+                $("body").on("click", ".js-nextBtn", function(){
+                    var me = $(this);
+                    if(!form.valid()){
+                        $.wrongMsg("必填项不能为空");
+                        return false;
+                    }
+					if(!$(".js-isAffirm").is(":checked")){
+						$.wrongMsg("请勾选本人已阅读并同意");
+						return;
+					}
+                    var data = $("#form").serialize();
+                    data = manage.serializeJson(data);
+                    manage.getApi("{:U('easypay/do_jxl_sina')}", data, function(relust){
+                        var relust = relust || {},
+                            url = relust.url || gConfig.apiurl;
+                        setTimeout(function(){
+                            location.href = url;
+                        },5000);
+                    });
+				});
+			}
+		};
+        module.exports = Module;
+    });
+    seajs.use("m/easypay_step3", function(module){
+        module.init();
+    });
+})($);
+</script>
+</block>

@@ -1,0 +1,140 @@
+<include file="Application/Common/Layout/head.html" />
+<style>
+  th.table-id{width:240px;}
+</style>
+<div class="am-cf admin-main">
+<include file="Application/Common/Layout/left.html" /> 
+  <!-- content start -->
+  <div class="admin-content">
+    <div class="admin-content-body">
+      <div class="am-cf am-padding am-padding-bottom-0">
+   
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">店铺2</strong> / <small>店铺审核</small></div>
+      </div>
+      <hr>
+      <div class="am-g">
+        <div class="am-u-sm-12 am-u-md-6">
+          <div class="am-btn-toolbar">
+            <div class="am-btn-group am-btn-group-xs">
+              <button type="button" class="am-btn am-btn-default" onClick="location.href='{:U('Store/shopmanager')}'"><span class="am-icon-plus"></span> 管理</button>
+              <button type="button" class="am-btn am-btn-default" onClick="location.href='{:U('Store/shopjoinin')}'"><span class="am-icon-archive"></span> 开店申请</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--筛选条件 start-->
+      <div class="j-shop-selectwrap clearfix am-padding am-padding-bottom-0">
+        <form method="get" name="formSearch" id="formSearch">
+          <div class="j-shop-inpbox">
+            店铺名称：<input type="text" name="store_name" class="am-form-field">
+          </div>
+          <div class="j-shop-inpbox">
+            店主账号：<input type="text" name="owner_and_name" class="am-form-field">
+          </div>
+          <div class="j-shop-inpbox">
+            <select data-am-selected="{btnSize: 'sm'}" name="joinin_state">
+              <option value="0" selected='selected'>审核状态</option>
+              <volist  name="joinin_state_array" id="vo">
+                <option value="{$key}" <if condition="$key eq $_GET['joinin_state']">selected='selected'</if>>{$vo}</option>
+              </volist >
+            </select>
+          </div>
+          <div class="j-shop-inpbox">
+            <select data-am-selected="{btnSize: 'sm'}" name="com_type">
+            <option value="0" selected='selected'>公司类型</option>
+            <option value="1" <if condition="$_GET['com_type'] eq 1">selected='selected'</if>>经销商</option>
+            <option value="2" <if condition="$_GET['com_type'] eq 2">selected='selected'</if>>装修公司</option>
+            <option value="3" <if condition="$_GET['com_type'] eq 3">selected='selected'</if>>工厂</option>
+            </select>
+          </div>
+          <div class="j-shop-inpbox">
+            <select data-am-selected="{btnSize: 'sm'}" name="business_type">
+            <option value="0" selected='selected'>主体类型</option>
+            <option value="1" <if condition="$_GET['business_type'] eq 1">selected='selected'</if>>企业</option>
+            <option value="2" <if condition="$_GET['business_type'] eq 2">selected='selected'</if>>个体</option>
+            </select>
+          </div>
+          <div class="j-shop-inpbox">
+            <button class="am-btn am-btn-primary" type="submit">搜索</button>
+          </div>
+        </form>
+      </div>
+      <!--筛选条件 end-->
+
+      <div class="am-g">
+        <div class="am-u-sm-12">
+            <table class="am-table am-table-striped am-table-hover table-main">
+              <thead>
+              <tr>
+                <th class="table-id">店铺</th>
+                <th class="table-id">公司类型</th>
+                <th class="table-id">主体类型</th>
+                <th class="table-title">店主账号</th>
+                <th class="table-type">所在地</th>
+                <th class="table-date am-hide-sm-only">申请时间</th>
+                <th class="table-date am-hide-sm-only">状态</th>
+                <th class="table-set">操作</th>
+              </tr>
+              </thead>
+              <tbody>
+              <volist name="store_list" id="vo">
+              <tr>
+                <td>{$vo.store_name}</td>
+                <if condition="$vo.com_type eq '1'">
+                  <td>经销商</td>
+                <elseif condition="$vo.com_type eq '2'"/>
+                  <td>装修公司</td>
+                <elseif condition="$vo.com_type eq '3'"/>
+                  <td>工厂</td>
+                <else/>
+                  <td>其它</td>
+                </if>
+                <if condition="$vo.business_type eq '1'">
+                  <td>企业</td>
+                <elseif condition="$vo.business_type eq '2'"/>
+                  <td>个体</td>
+                <else/>
+                  <td>其它</td>
+                </if>
+                <td>{$vo.member_name}</td>
+                <td>{$vo.company_address}</td>
+                <td>{$vo.tesu_created|date="Y-m-d H:i:s",###}</td>
+                <td class="am-hide-sm-only">{$joinin_state_array[$vo['joinin_state']]}</td>
+                <td>
+                  <div class="am-btn-toolbar">
+                    <div class="am-btn-group am-btn-group-xs">
+                      <if condition="in_array(intval($vo['joinin_state']),array(STORE_JOIN_STATE_NEW,STORE_JOIN_STATE_PAY,STORE_JOIN_STATE_VERIFYING))">
+                        <button class="am-btn am-btn-default am-btn-xs am-text-secondary" onClick="location.href='{:U('Store/storejoinindetail?member_id='.$vo['member_id'])}'"><span class="am-icon-pencil-square-o"></span> 审核</button>
+                        
+                        <else/>
+                        <button class="am-btn am-btn-default am-btn-xs am-text-secondary" onClick="location.href='{:U('Store/storejoinindetail?member_id='.$vo['member_id'])}'"><span class="am-icon-pencil-square-o"></span> 查看</button>
+                      </if>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              </volist>
+              </tbody>
+            </table>
+            <div class="am-cf">
+              <div class="am-fr">
+              {$page}
+              </div>
+            </div>
+        </div>
+
+      </div>
+    </div>
+
+    <footer class="admin-content-footer">
+      <hr>
+      <p class="am-padding-left">© 2014 AllMobilize, Inc. Licensed under MIT license.</p>
+    </footer>
+
+  </div>
+  <!-- content end -->
+
+</div>
+<include file="Application/Common/Layout/foot.html" /> 
+

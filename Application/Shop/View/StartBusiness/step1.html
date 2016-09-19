@@ -1,0 +1,41 @@
+<extend name="Layouts:seller" />
+<block name="title"><title>阅读协议-商家入驻-{:C('site_name')}</title></block>
+<block name="head_css">
+<link href="__CSS__/startshop.css" rel="stylesheet" type="text/css">
+</block>
+
+<block name="content">
+<div class="order-step mb10">
+    <div class="easypay-step rel">
+        <p class="tx cf">
+            <span class="f">阅读协议</span>
+            <span>选择开店类型</span>
+            <span>提交入驻资料</span>
+            <span>资料审核</span>
+            <span>店铺上线</span>
+        </p>
+        <div class="bg-step">
+            <p class="n1"></p>
+        </div>
+    </div>
+</div>
+<div class="start-shop-box"> 
+    <h2 class="tit">入驻协议</h2>
+    <div class="apply-agreement-content">
+        {$agreement}
+    </div>
+</div>
+<div class="tc mt20">
+    <input type="checkbox" id="input_apply_agreement" class="v-2" autocomplete="off" />
+    <label for="input_apply_agreement"> 同意《全木行商家协议》</label>
+</div>
+<div class="tc mt30">
+    <a href="javascript:void(0);" id="btn_apply_agreement_next" class="btn btn-blue btn-disable">下一步</a>
+</div>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+	seajs.use("s/startshop");
+</script>
+</block>

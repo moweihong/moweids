@@ -1,0 +1,134 @@
+<include file="Application/Common/Layout/head.html" /> 
+<div class="am-cf admin-main">
+<include file="Application/Common/Layout/left.html" /> 
+
+  <!-- content start -->
+  <div class="admin-content">
+    <div class="admin-content-body">
+      <div class="am-cf am-padding am-padding-bottom-0">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">广告位管理22</strong> / <small>advertise_position</small></div>
+      </div>
+
+      <hr>
+
+        <div class="am-g">
+            <form>
+                <div class="am-u-sm-12 am-u-md-2">
+                    <div class="am-btn-toolbar">
+                        <div class="am-btn-group am-btn-group-xs">
+                          <button onclick="window.location='/Admin/Adv/apmanageform'" type="button" class="am-btn am-btn-default"><span class="am-icon-plus"></span>新增</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="am-u-sm-12 am-u-md-2">
+                    <input type="text" name="search_name" class="am-form-field" placeholder="输入关键字...">
+                </div>
+                <div class="am-u-sm-12 am-u-md-1">
+                  <button class="am-btn am-btn-primary" type="submit"  style="display: inline-block">查询</button>
+                </div>
+                <div class="am-u-sm-12 am-u-md-8"></div>
+          </form>
+      </div>
+      <div class="am-g">
+        <div class="am-u-sm-12">
+ 
+            <table class="am-table am-table-striped am-table-hover table-main">
+              <thead>
+              <tr>
+                <!--<th class="table-check"><input type="checkbox" /></th>-->
+        <th class="table-id">ID</th>
+        <th class="table-title" width="15%">广告位名称</th>
+        <th class="table-title">类别</th>
+        <th class="table-type" >展示方式</th>
+        <th class="table-author am-hide-sm-only">宽度/字数</th>
+        <th class="table-title">高度</th>
+        <th class="table-title">正在展示</th>
+        <th class="table-title">已发布子广告</th>
+        <th class="table-set">是否启用</th>
+                                <th class="table-set">操作</th>
+              </tr>
+              </thead>
+              <tbody>
+        <volist name="ap_list" id="l">
+              <tr>
+                <!--<td><input type="checkbox" /></td>-->
+                <td>{$l.ap_id}</td>
+                <td><a href="#">{$l.ap_name}</a></td>
+        <td><?php echo $l['ap_class']==0?'图片':($l['ap_class']==1?'文字':'flash')?></td>
+        <td><?php echo $l['ap_display']==0?'幻灯片轮播':($l['ap_display']==1?'多广告展示':'单广告展示')?></td>
+        <td>{$l.ap_width}</td>
+        <td><?php echo $l['ap_class']==1?'':$l['ap_height'];?></td>
+        <td><?php
+           $i    = 0;$tt = 3600*24;
+           $time = time();
+           if(!empty($adv_list)){
+           foreach ($adv_list as $adv_k => $adv_v){
+            if($adv_v['ap_id'] == $l['ap_id'] && $adv_v['adv_end_date']+$tt > $time && $adv_v['adv_start_date'] < $time && $adv_v['is_allow'] == '1'){
+              $i++;
+            }
+           }}
+           echo $i;
+          ?></td>
+                                <td><?php
+           $i    = 0;
+           if(!empty($adv_list)){
+           foreach ($adv_list as $adv_k => $adv_v){
+            if($adv_v['ap_id'] == $l['ap_id']){
+              $i++;
+            }
+           }}
+           echo $i;
+          ?></td>            
+                <td class="am-hide-sm-only">
+          <eq name="l.is_use" value='1'><span class="color-1fb900">是</span><else/><span class="color-f74444">否</span></eq>
+        </td>
+                <td>
+                  <div class="am-btn-toolbar">
+                    <div class="am-btn-group am-btn-group-xs">
+                        <button onclick="window.location='/Admin/Adv/adv/ap_id/{$l.ap_id}'" class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 管理广告</button>
+                      <button onclick="window.location='/Admin/Adv/apmanageform/ap_id/{$l.ap_id}'" class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                      <!--<button onclick="deletefun({$l.ap_id})" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>-->
+                    </div>
+                  </div>
+                </td>
+              </tr>
+      </volist>
+        
+              
+              </tbody>
+            </table>
+      
+            <div class="am-cf">
+              共 {$ap_count} 条记录，每页显示<?php echo $pageSize ?>条记录
+              <div class="am-fr">
+                {$page} 
+              </div>
+            </div>
+     
+        </div>
+
+      </div>
+    </div>
+
+    <footer class="admin-content-footer">
+      <hr>
+      <p class="am-padding-left">© 2014 AllMobilize, Inc. Licensed under MIT license.</p>
+    </footer>
+  </div>
+  <!-- content end -->
+</div>
+<include file="Application/Common/Layout/foot.html" />
+<script type="text/javascript">
+        function deletefun(pid){
+                AMUI.dialog.confirm({
+                    title: ' ',
+                    content: '你是否确认删除？',
+                    onConfirm: function() {
+                        window.location ='/Admin/Adv/apmanage/ap_id/'+ pid;
+                    },
+                    onCancel: function() {
+                        //console.log('onCancel')
+                    }
+                });
+        }
+</script>

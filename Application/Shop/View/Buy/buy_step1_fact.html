@@ -1,0 +1,126 @@
+<extend name="Layouts:buy_factory" />
+<block name="title"><title>结算页-{:C('site_name')}</title></block>
+<block name="head_css">
+<link href="__CSS__/buy.css" rel="stylesheet" type="text/css">
+</block>
+
+<block name="content">
+<div class="wrapper mt120">
+    <form action="{:U('Payment/index')}" method="POST" id="order_form" name="order_form">
+        <input type="hidden" name="order_type" value="factory_buy" />
+        <input type="hidden" name="cart_id" value="<?php echo $cart_id;?>" />
+        <input type="hidden" id="payment_code" name="payment_code" value="" />
+        <input type="hidden" id="address_id" name="address_id" value="1" />
+        <?php if(isset($buyer_address_info)){?>
+            <h2 class="ncc-receipt-info-title">收货人信息</h2>
+            <h2 class="ncc-receipt-info-title" style="font-size:14px">买家收货信息</h2>
+            <ul class="add-address cf js-add-address">
+                <li class="js-select-address add-default-address" data-id="<?php echo $buyer_address_info['address_id'];?>">
+                    <p class="true-name">
+                        <em class="js-name"><?php echo $buyer_address_info['true_name'];?></em>
+                    </p>
+                    <p class="mt5">
+                        <span class="address js-address"><?php echo $buyer_address_info['area_info'],$buyer_address_info['address'];?></span>
+                        <span class="phone js-phone"><?php echo $buyer_address_info['mob_phone'] ? $buyer_address_info['mob_phone'] : $buyer_address_info['tel_phone'];?></span>
+                    </p>
+                </li>
+            </ul>
+        <?php }?>
+        <?php if(!isset($buyer_address_info)){?>
+            <h2 class="ncc-receipt-info-title">收货人信息</h2>
+        <?php }else{?>
+            <h2 class="ncc-receipt-info-title" style="font-size:14px">我的收货信息</h2>
+        <?php }?>
+        <ul class="add-address cf js-add-address">
+            <?php if (!empty($address_info)){
+                foreach ($address_info as $add_info) {?>
+                    <li class="js-select-address <?php if (!isset($buyer_address_info) &&  $add_info['is_default'] == 1){?>add-default-address<?php }?>" data-id="<?php echo $add_info['address_id'];?>">
+                        <p class="true-name">
+                            <em class="js-name"><?php echo $add_info['true_name'];?></em>
+                           <!--  <a href="javascript:void(0);" class="isdefault fr"><?php if ($add_info['is_default'] == 0){?>设为<?php }?>收货地址</a> -->
+                        </p>
+                        <p class="mt5">
+                            <span class="address js-address"><?php echo $add_info['area_info'],$add_info['address'];?></span>
+                            <span class="phone js-phone"><?php echo $add_info['mob_phone'] ? $add_info['mob_phone'] : $add_info['tel_phone'];?></span>
+                        </p>
+                        <p class="mt5">
+                            <a href="javascript:void(0);" class="del mr10 js-delAttr"></a>
+                            <a href="javascript:void(0);" class="bianji mr10 js-bianji"></a>
+                        </p>
+                        <i class="add-select"></i>
+                    </li>
+            	<?php }
+            }?>
+            <li class="js-add-last-before">
+            	<a href="javascript:void(0);" class="add-add js-add-addr">
+                    <p class="fs48">+</p>
+                    <p class="fs14">添加新地址</p>
+                </a>
+            </li>
+        </ul>
+        <h3 class="ncc-receipt-info-title">支付方式</h3>
+        <ul class="add-pay js-add-pay cf">
+            <?php if (!empty($payment_list)){
+                foreach ($payment_list as $key => $item) { ?>
+					<li payment_code="<?php echo $key; ?>"><?php echo $item;?></li>
+            	<?php }
+            }?>
+        </ul>
+        <div class="gongchang-goods-info">
+            <h2 class="ncc-receipt-info-title mt50"><?php echo $goods_info['store_name'];?></h2>
+            <table class="cart-table gongchang-table" width="100%">
+                <thead>
+                    <tr>
+                        <th>商品图片</th>
+                        <th>名称</th>
+                        <th>价格</th>
+                        <th>数量</th>
+                        <!--<th>优惠</th>-->
+                        <th>小计</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <a href="javascipr:void(0);" class="ncc-goods-thumb" style="float:none"><img src="<?php echo thumb($goods_info, 60);?>" alt="<?php echo $goods_info['goods_name'];?>"></a>
+                        </td>
+                        <td width="258px"><div class="gongchang-goods-title"><?php echo $goods_info['goods_name'];?></div></td>
+                        <td><?php echo $goods_info['goods_price'];?></td>
+                        <td><?php echo $goods_info['goods_num'];?></td>
+                        <!--<td>-</td>-->
+                        <td>￥<?php echo $goods_info['goods_price'] * $goods_info['goods_num'];?></td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="5">
+                            <dl class="gongchang-infomation cf">
+                                <dt class="fl">给商家留言：<textarea class="gongchang-textarea" name="pay_message"></textarea></dt>
+                                <dd class="fr">
+                                    <span class="ml30 fs14">运费：￥<label><?php echo $goods_info['goods_freight'];?></label></span>
+                                    <span class="ml30 fs14">合计：<c class="fs20 cor-red">￥</c><label class="fs20 cor-red"><?php echo $goods_info['goods_price'] * $goods_info['goods_num'] + $goods_info['goods_freight'];?></label></span>
+                                </dd>
+                            </dl>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+            <div class="tr fs14">
+                实际应付：<c class="cor-red fs20 mb20 mt20">￥</c><span class="cor-red fs20 mb20 mt20"><?php echo $goods_info['goods_price'] * $goods_info['goods_num'] + $goods_info['goods_freight'];?></span><br>
+				
+                寄送至<span class="mr20 js-addr"><?php echo $default_receive_info['area_info'],$default_receive_info['address'];?></span>收货人：
+                <span class="js-addr-name"><?php echo $default_receive_info['true_name'];?></span>
+                <span class="ml20 js-addr-phone"><?php echo $default_receive_info['mob_phone'];?></span><br>
+                
+				<a href="javascript:void(0);" class="btn btn-red mt20" id="submitOrder2">提交订单</a>
+            </div>
+        </div>
+    </form>
+</div>
+</blcok>
+
+<block name="my_js">
+<script type="text/javascript">
+seajs.use("web/cart_address");
+</script>
+</block>

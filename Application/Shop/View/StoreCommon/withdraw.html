@@ -1,0 +1,167 @@
+<extend name="Layouts:seller" />
+<block name="title"><title>申请提现-<?php if($_SESSION['com_type'] == 3){?>供货中心<?php } else{?>卖家中心<?php } ?>-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="content-wrap">
+	<h2 class="query-tit">申请提现</h2>
+	<div class="withdraw-bank bg-gray mt10">
+        <form action="javascript:void(0);" id="form" class= "mt10" method="post">
+            <ul class="list">
+                <li class="cf">
+                    <label class="handle">可提现金额：</label>
+                    <span><em class="s-money"><?php echo $deposit_avaiable;?></em> 元</span>
+                </li>
+                <li class="cf">
+                	<label class="handle"><em class="cor-red">*</em>选择提现银行：</label>
+                    <?php if(!empty($list)){
+						foreach ($list as $val){ ?>
+                            <div class="choosed-card rel mb5 js-choosedCard <?php echo $val['is_default']==1? 'choosed-card-active':'';?>" data-id="<?php echo $val['id'];?>">
+                                <label class="js-label">
+                                    <input type="radio" name="choosedCard" <?php echo $val['is_default']==1? 'checked':'';?>/> 
+                                    <?php echo $val['bankname'];?>
+                                    <?php if($val['is_default'] == 1){?>
+                                    <span class="js-defaultText">（默认）</span>
+                                    <?php }?>
+                                </label>
+                                <div class="oparate">
+                                    <span class="pointer ml20">管理 <i class="tringle"></i></span>
+                                    <span class="oparate-box js-oparate">
+                                        <?php if($val['is_default'] == 1){?>
+                                            <a href="<?php echo U('StoreCommon/addDepositCard', array('bank_id' =>$val['id']));?>">编辑</a>
+                                            <a href="javascript:void(0);" class="js-remove">删除</a>
+                                        <?php }else{?>
+                                            <a href="javascript:void(0);" class="js-defaultSet">设为默认</a>
+                                            <a href="<?php echo U('StoreCommon/addDepositCard', array('bank_id' =>$val['id']));?>">编辑</a>
+                                            <a href="javascript:void(0);" class="js-remove">删除</a>
+                                        <?php }?>
+                                    </span>
+                                </div>
+                                <span class="peo-name"><?php echo $val['username'].'('.substr_replace($val['banknum'], '*************', 0, -4).')';?></span>
+                            </div>
+                    	<?php }
+					}?>
+                	<a href="{:U('StoreCommon/addDepositCard')}" class="cor-blue">添加银行卡<i class="ic ic-add-card"></i></a>
+                </li>
+                <li class="cf">
+                    <label class="handle" for="money"><em class="cor-red">*</em>提现金额：</label>
+                    <div class="rel">
+                        <input type="text" id="money" name="money" class="text js-money" style="width:150px;" placeholder="最多可输入1000" maxlength="8"  data-max="1000" required /> 元
+                        <span show="money.check" class="error-msg">
+                            <em class="errow-arrow"></em>
+                            请填写提现金额
+                        </span>
+                    </div>
+                </li>
+                <li class="cf">
+                	<label class="handle">提现审核周期：</label>
+                	<span>
+                		1个工作日完成<br>
+                		提现咨询热线：4006626985， 服务时间：09:00 - 20:20
+                	</span>
+                </li>
+                <li class="cf mt10">
+                    <label class="handle"></label>
+                    <button class="btn btn-blue btn-middle js-confirmBtn">确认提现</button>
+                </li>
+            </ul>
+        </form>
+    </div>
+</div>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+(function($){
+	define("s/withdraw",function(require, exports, module){
+		require("jquery/layer");
+        require("jquery/form");
+        var manage = require("com/manage");
+		var Module = {
+			init: function(){
+				var form = $("#form").form();
+                /*
+                *选择提现银行
+                */
+                $("input[name=choosedCard]").click(function(){
+                    $(this).closest(".js-choosedCard").addClass('choosed-card-active').siblings(".js-choosedCard").removeClass('choosed-card-active');
+                });
+                /*
+                *提现银行-删除
+                */
+                $("#form").on("click", ".js-remove", function(){
+                    var me = $(this),
+                        $choosedCard = me.closest(".js-choosedCard"),
+                        bank_id = $choosedCard.data("id");
+                    var data = {
+                        bank_id: bank_id,
+                        type:2
+                    };
+                    manage.getApi("/StoreCommon/saveBank", data, function(){
+                        $choosedCard.remove();
+                    });
+                });
+                /*
+                *提现银行-设为默认
+                */
+                $("#form").on("click", ".js-defaultSet", function(){
+                    var me = $(this),
+                        $choosedCard = me.closest(".js-choosedCard"),
+                        bank_id = $choosedCard.data("id");
+                    var data = {
+                        bank_id: bank_id,
+                        type:3
+                    };
+                    $(".js-choosedCard").each(function(){
+                        if(!$(".js-defaultSet", this).length) $(".js-oparate", this).prepend('<a href="javascript:void(0);" class="js-defaultSet">设为默认</a>');
+                        $(".js-defaultText", this).remove();
+                    });
+                    manage.getApi("/StoreCommon/saveBank ", data, function(){
+                        $(".js-label", $choosedCard).append('<span class="js-defaultText">（默认）</span>');
+                        $(".js-defaultSet", $choosedCard).remove();
+                        $("input[name=choosedCard]", $choosedCard).trigger("click");
+                    });
+                });
+				/*
+				*确认提现
+				*/
+				$("#form").on("click", ".js-confirmBtn", function(){
+					if(!form.valid()) return false;
+                    if(!$(".choosed-card-active").length){
+                        $.wrongMsg("请选择提现银行");
+                        return;
+                    }
+                    var bank_id = $(".choosed-card-active").data("id"),
+                        avaiable = parseInt($(".s-money").text()),
+                        money = $('#money').val();
+                    if(money < 100 || money > 1000 || money > avaiable){
+                        $.wrongMsg("提现金额要大于100小于1000，且不能超过可提现金额！");
+                        return;
+                    }
+                    var data = $("#form").serialize();
+                    data = manage.serializeJson(data);
+                    data.bank_id = $(".choosed-card-active").data("id");
+                    delete data.choosedCard;
+					manage.ajax({
+						url: gConfig.apiurl + "/StoreCommon/submitWithdraw",
+						data: data,
+						success: function(result){
+							var resultText = result.resultText || {},
+								message = resultText.message || "操作失败";
+							if(result.code == 1){
+								window.location.href = gConfig.apiurl + "/StoreCommon/withdrawHistory";
+							}else{
+								$.wrongMsg(resultText.message || "操作失败");
+							}
+						}
+					});
+				});
+			}
+		};
+		module.exports = Module;
+	});
+	seajs.use("s/withdraw", function(module){
+		module.init();
+	});
+})($);
+</script>
+</block>

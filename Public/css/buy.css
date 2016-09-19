@@ -1,0 +1,111 @@
+/*
+************ author: longwei
+************ 购买流程
+*/
+/*空购物车*/
+.cart-head{padding:100px 0;text-align:center;}
+
+/*购物车开始*/
+h3{font:lighter 24px/30px arial,"microsoft yahei";color:#333;padding:10px 0;}
+.cart-table th{height:20px;line-height:20px;color:#333;font-size:12px;}
+.cart-table thead th{padding:8px 0;background-color:#fff;}
+.cart-table tbody th{padding:8px 4px;border-bottom:1px solid #dedede;background-color:#fafafa;}
+.cart-table tbody td{padding:8px 0;font-size:14px;text-align:center;background-color:#fff;}
+.cart-table tfoot td{height:16px;text-align:right;background-color:#fff;}
+
+.btn-label{width:12px;height:12px;background:url(../images/ic_web.png) no-repeat -13px -153px;}
+.btn-label-select{background-position:0px -153px;}
+
+.cart-table .item-disabled td{background-color:#d4d4d4;}
+.ncc-goods-info{position:relative;padding:2px;overflow:hidden;}
+.ncc-num-decrease, .ncc-num-increase{z-index:1;position:absolute;text-align:center;width:28px;height:24px;line-height:22px;font-size:20px;border:solid 1px #dedede;background-color:#fff;}
+.ncc-num-decrease{right:126px;top:2px;}
+.ncc-num-increase{left:136px;top:2px;}
+.ncc-num-decrease:hover, .ncc-num-increase:hover{color:#fafafa;border-color:#fabe00;background-color:#fabe00;}
+.ncc-num{margin-left:10px;text-align:center;border-radius:0;width:42px;padding:3px 4px;}
+.ncc-num:focus{z-index:2;position:relative;}
+
+.ncc-goods-thumb{float:left;width:85px;height:85px;border:solid 1px #dedede;overflow:hidden;}
+.ncc-goods-thumb img{width:85px;height:85px;}
+.ncc-goods-info dt{height:40px;line-height:20px;overflow:hidden;}
+.ncc-goods-info dd{height:16px;line-height:16px;margin-top:6px;color:#999;}
+.ncc-all-account{line-height:60px;}
+.ncc-btn-acidblue{width:200px;height:45px;line-height:45px;margin-right:20px;color:#fff;font-size:18px;text-align:center;background-color:#fabe00;}
+.ncc-btn-acidblue:hover{color:#fff;background-color:#e2ad04;}
+
+/*提交订单开始*/
+.add-table tr{border:1px solid #dedede;}
+.add-table td, .add-table th{padding:10px;}
+.add-table thead th{color:#333333;}
+.add-table tbody tr td{background-color:#fff;}
+
+.ncc-receipt-info-title{font:16px/40px arial,"microsoft yahei";color:#333;}
+.add-address li{position:relative;float:left;width:290px;height:110px;margin-right:70px;margin-bottom:30px;padding:5px 10px 5px 10px;color:#999999;font-size:12px;border:3px dashed #999999;cursor:pointer;}
+.add-address li:hover {    color: #333333;    border-color: #ffaa00;}
+.add-address .add-default-address{cursor:default;}	
+.add-address .true-name{height:25px;padding:5px;border-bottom:1px dotted #999999;}
+.add-address .true-name em{width:195px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;}
+.add-address .isdefault{padding:1px 5px 1px 5px;color:#fff;background-color:#999;}
+.add-address .address{width:180px;height:40px;margin-right:5px;overflow:hidden;vertical-align:middle;}
+.add-address .phone{width:90px;height:40px;text-align:right;vertical-align:middle;}
+.add-address .del, .add-address .bianji{width:20px;height:20px;background:url("../images/buy_del.png") no-repeat 0px 0px;}
+.add-address .bianji{background-position:-30px 1px;}
+
+.add-address .add-default-address{color:#333333;border-color:#ffaa00;}
+.add-address .add-default-address .isdefault {background-color:#c8003c;}
+.add-address .add-default-address .add-select {position:absolute;bottom:-4px;right:-3px;width:25px;height:25px;background-image:url(../images/buy_select.png);}
+.add-address .add-default-address .del{background-position:0px -29px;}
+.add-address .add-default-address .bianji{background-position:-26px -27px;}
+
+.add-add{position:absolute;top:0;left:0;width:100%;height:100%;color:#999;text-align:center;}
+.add-add .fs48{line-height:50px;margin-top:15px;font-size:48px;}
+
+.add-textarea{height:60px;vertical-align: top;}
+
+/*等待定价*/
+.dingjia{min-height:260px;padding:20px 0;text-align:center;border:2px solid #ffaa00;background-color:#fff;}
+.dingjia dd{width:500px;margin-bottom:15px;margin-left:490px;font-size:14px;text-align:left;}
+.dj-kefu{height:30px;line-height:30px;vertical-align:middle;}
+.ic-qq, .ic-alww{width:80px;height:30px;background-image:url(../images/ic_qq.png);vertical-align:middle;}
+.ic-alww{margin-left:10px;background-image:url(../images/ic_alww.png);}
+
+/*订单支付*/
+.pay-main{font-size:20px;border-bottom:1px solid #d2d2d2;}
+.pay-main2 span{font-size:12px}
+.pay-payment{color: #ff0000;}
+.pay-meth li{float:left;width:174px;height:60px;line-height:60px;margin:30px 15px 10px 0px;padding:0;font-size:16px;text-align:center;border:2px solid #e8e8e8;cursor:pointer;}
+.pay-zhifu li{margin-top:0px;}
+.pay-meth .pay-select-meth{border:2px solid #ffaa00;background:url(../images/buy_select.png) no-repeat 150px 36px;}
+.pay-not-openfenqi{height:50px;line-height:50px;}
+.pay-fenqi{display:none;position:relative;margin-bottom:60px;padding:30px 0;color:#333;border:1px solid #dedede;}
+.pay-fenqi dt{float:left;width:14%;font-size:20px;text-align:center;}
+.pay-fenqi dd{float:right;width:86%;}
+.pay-fenqi li{float:left;padding:4px 40px;line-height:30px;margin-right:14px;color:#999;text-align:center;border:1px solid #dedede;cursor:pointer;}
+.pay-fenqi .pay-select-fenqi, .pay-fenqi li:hover{color:#c9033b;border:1px solid #c9033b;}
+.pay-fenqi li:hover p{display:block;}
+.pay-fenqi p{display:none;z-index:2;position:absolute;top:56px;margin-left:-11px;padding:0px 10px;color:#333;font-size:12px;text-align:left;border:1px solid #999;background-color:#fff;}
+.pay-xieyi{display:none}
+.pay-fqmoney{display:inline-block;line-height:45px;margin-left:90px;}
+.pay-fqmoney2{position:absolute;bottom:-50px;right:220px;float:right;}
+.btn-submit{width:320px;height:60px;line-height:60px;font-size:16px;color:#fff;text-align:center;background-color:#fabe00;}
+.btn-submit:hover{color:#fff;background-color:#ed9e00;}
+.pay-easy-price{background:#fff;padding:20px;}
+
+/*微信支付页面*/
+.ncc-main1{width: 1200px;margin: auto; margin-top: 120px;}
+.ncc-main1 .ncc-table-style1{border:solid 1px #dedede;}
+.ncc-main1 .ncc-table-style1 td{padding:8px 0;color:#333;font-size:16px;border-bottom:solid 1px #dedede;background-color:#fff;}
+.ncc-wx-style{line-height:32px;margin:20px 0;padding:10px 50px 7px 10px;font-size:20px;border:2px solid #ef7411;background-color:#fff;overflow:hidden;}
+
+/*工厂结算页面*/
+.add-pay li{float:left;width:178px;height:40px;line-height:40px;margin-right:15px;font-size:16px;text-align:center;border:2px solid #e8e8e8;cursor:pointer;}
+.add-pay li.add-default{border:2px solid #ffaa00;background:url(../images/buy_select.png) no-repeat 153px 16px;}
+.gongchang-goods-title{height:20px;overflow:hidden;}
+
+.gongchang-table tr{border:1px solid #dedede}
+.gongchang-table thead th{text-align:center;background-color:#fafafa;}
+.gongchang-table tbody td{background-color:#fff;}
+.gongchang-table tfoot td{padding:20px;background-color:#fafafa;}
+
+.gongchang-infomation dd{line-height:110px;}
+.gongchang-textarea{width:600px;height:100px;vertical-align:top;overflow:auto;}

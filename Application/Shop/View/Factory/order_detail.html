@@ -1,0 +1,141 @@
+<extend name="Layouts:seller" />
+<block name="title"><title>订单详情-<?php if($_SESSION['com_type'] == 3){?>供货中心<?php } else{?>卖家中心<?php } ?>-{:C('site_name')}</title></block>
+<block name="content">
+<div class="order-info fs14 mb10 js-orderDetail">
+    <h2 class="order-tit">订单信息</h2>
+    <div class="order-info-k cf">
+        <div class="info fl">
+            <ul class="order-list">
+                <li class="cf">
+                    <cite>订单号：</cite>
+                    <?php echo $order_info['order_sn'];?>
+                </li>
+                <li class="cf">
+                    <cite> 下单时间：</cite>
+                    <?php echo date('Y-m-d H:i:s', $order_info['add_time']);?>
+                </li>
+                <li class="cf">
+                    <cite>付款方式：</cite>
+                    <?php echo $order_info['payment_name']; ?>
+                </li>
+                <li class="cf">
+                    <cite>经销商：</cite>
+                    <?php echo $order_info['buyer_name'];?>
+                </li>
+                <li class="cf">
+                    <cite>收货信息：</cite>
+                    <?php echo @$order_info['extend_order_common']['reciver_info']['address'];?><br />
+                    <?php echo $order_info['extend_order_common']['reciver_name'];
+                    if (!empty($order_info['extend_order_common']['reciver_info']['phone'])){ ?>
+                    ，<?php echo @$order_info['extend_order_common']['reciver_info']['phone'];
+                    } ?>
+                </li>
+                <li class="cf">
+                    <cite>经销商留言：</cite>
+                    <p><?php echo $order_info['extend_order_common']['order_message']; ?></p>
+                </li>
+            </ul>
+        </div>
+        <div class="r">
+            <div class="state mt20 cf">
+                <?php switch ($order_info['order_state']) {
+                    case ORDER_STATE_MAKEPRICE:
+                        ?>
+                        <h3>订单状态：商品已拍下，等待卖家定价</h3>
+                        <p class="mt20">
+                            <a href="javascript:void(0);" class="btn btn-blue btn-middle js-modifyPrice">定价</a>
+                            <a href="javascript:void(0);" class="btn btn-cancel btn-middle ml20 js-cancel">关闭订单</a>
+                            <a href="javascript:void(0);" class="cor-blue ml20 js-modifAddr">修改收货地址</a>
+                            <a href="javascript:void(0);" class="cor-blue ml20 js-remark">备注</a>
+                        </p>
+                        <?php
+                        break;
+                    case ORDER_STATE_CANCEL:
+                        ?>
+                        <h3>订单状态：订单已关闭</h3>
+                        <p class="mt10">
+                            关闭类型：<?php echo $order_log_info['log_role'];?>取消订单
+                        </p>
+                        <p class="mt10">
+                            原因：<?php echo $order_log_info['log_msg'];?>
+                        </p>
+                        <p class="seller-message cf">
+                            <cite>工厂备注：</cite>
+                            <span class="js-sellerMessage"><?php echo $order_info['tesu_seller_remark'];?></span>
+                        </p>
+                        <?php
+                        break;
+                    case ORDER_STATE_NEW:
+                        ?>
+                        <h3>订单状态：商品已拍下，等待经销商付款</h3>
+                        <p class="mt20">
+                            <a href="javascript:void(0);" class="btn btn-cancel btn-middle ml20 js-modifyPrice">修改价格</a>
+                            <a href="javascript:void(0);" class="btn btn-cancel btn-middle ml20 factory js-cancel">关闭订单</a>
+                            <a href="javascript:void(0);" class="cor-blue ml20 js-modifAddr">修改收货地址</a>
+                            <a href="javascript:void(0);" class="cor-blue ml20 js-remark">备注</a>
+                        </p>
+                        <p class="seller-message cf">
+                            <cite>卖家备注：</cite>
+                            <span class="js-sellerMessage"><?php echo $order_info['tesu_seller_remark'];?></span>
+                        </p>
+                        <?php
+                        break;
+                    case ORDER_STATE_PAY:
+                    ?>
+                        <h3>订单状态：经销商已付款，等待工厂发货</h3>
+                        <h4>经销商已付款至您的全木行余额账户，请发货</h4>
+                        <p class="mt20">
+                            <a href="javascript:void(0);" class="btn btn-cancel btn-middle ml20 js-send">发货</a>
+                            <a href="javascript:void(0);" class="btn btn-cancel btn-middle ml20 factory js-cancel">关闭订单</a>
+                            <a href="javascript:void(0);" class="cor-blue ml20 js-modifAddr">修改收货地址</a>
+                            <a href="javascript:void(0);" class="cor-blue ml20 js-remark">备注</a>
+                        </p>
+                        <p class="seller-message cf">
+                            <cite>卖家备注：</cite>
+                            <span class="js-sellerMessage"><?php echo $order_info['tesu_seller_remark'];?></span>
+                        </p>
+                    <?php
+                        break;
+                    case ORDER_STATE_SUCCESS:
+                        ?>
+                        <h3>订单状态：交易完成</h3>
+                        <p>你已发货，交易已完成。</p>
+                        <p class="mt20">
+                            <!--<a href="javascript:void(0);" class="btn btn-cancel btn-middle ml20 js-cancel">工厂下单</a>-->
+                            <a href="javascript:void(0);" class="cor-blue ml20 js-remark">备注</a>
+                        </p>
+                        <p class="seller-message cf">
+                            <cite>工厂备注：</cite>
+                            <span class="js-sellerMessage"><?php echo $order_info['tesu_seller_remark'];?></span>
+                        </p>-->
+                        <?php
+                        break;
+                    case ORDER_STATE_HANDLING:?>
+                        <h3>订单状态：平台处理中</h3>
+                        <p class="mt10">分期购订单处理中，将在
+                            <?php
+                            $date = date("H:i:s", $order_info['add_time']);
+                            if($date> '00:00:00' && $date < '08:29:59'){
+                                echo '当天10点';
+                            }elseif($date> '09:00:00' && $date < '18:29:59'){
+                                echo date('H:i:s', $order_info['add_time'] + 3600 * 2);
+                            }else{
+                                echo '第二天10点';
+                            }
+                            ?>
+                            前处理完成。</p>
+                        <?php
+                        break;
+                }?>
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="orderID" value="<?php echo $_GET['order_id'];?>">
+<include file="Layouts:order_goods"/>
+</block>
+<block name="my_js">
+<script type="text/javascript">
+    seajs.use("s/orderdetail");
+</script>
+</block>

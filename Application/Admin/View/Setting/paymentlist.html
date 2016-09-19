@@ -1,0 +1,66 @@
+<include file="Application/Common/Layout/head.html" /> 
+<div class="am-cf admin-main">
+<include file="Application/Common/Layout/left.html" /> 
+
+  <!-- content start -->
+  <div class="admin-content">
+    <div class="admin-content-body">
+      <div class="am-cf am-padding am-padding-bottom-0">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">支付方式</strong> / <small>Payment</small></div>
+      </div>
+
+      <hr>
+ 
+
+      <div class="am-g">
+        <div class="am-u-sm-12">
+ 
+            <table class="am-table am-table-striped am-table-hover table-main">
+              <thead>
+              <tr>
+                <!--<th class="table-check"><input type="checkbox" /></th>-->
+				<th class="table-id">ID</th>
+				<th class="table-title" width="15%">支付方式</th>
+				<th class="table-author am-hide-sm-only">状态</th>
+				<th class="table-set">操作</th>
+              </tr>
+              </thead>
+              <tbody>
+			  <volist name="paytype" id="p">
+              <tr>
+                <!--<td><input type="checkbox" /></td>-->
+                <td>{$i}</td>
+                <td><a href="#">{$p.payment_name}</a></td>
+                <td class="am-hide-sm-only">
+					<eq name="p.payment_state" value='1'>开启中<else/>关闭中</eq>
+				</td>
+                <td>
+                  <div class="am-btn-toolbar">
+                    <div class="am-btn-group am-btn-group-xs">
+                      <button onclick="window.location='/Admin/setting/paymentlist?act=edit&id={$p.payment_id}'" class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+			</volist>
+			  
+              
+              </tbody>
+            </table>
+			
+            <div class="am-cf">
+            此处列出了系统支持的支付方式，点击编辑可以设置支付参数及开关状态，无法删除，如需删除请联系开发人员。
+               
+            </div>
+            <hr />
+     
+        </div>
+
+      </div>
+    </div>
+ 
+
+  </div>
+  <!-- content end -->
+</div>
+<include file="Application/Common/Layout/foot.html" /> 

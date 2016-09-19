@@ -1,0 +1,88 @@
+<extend name="Layouts:seller" />
+<block name="title"><title>充值-<?php if($_SESSION['com_type'] == 3){?>供货中心<?php } else{?>卖家中心<?php } ?>-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="content-wrap">
+	<h2 class="query-tit">充值</h2>
+	<div class="withdraw-bank mt10">
+        <form action="{:U('Shop/StoreCommon/rechargeSub');}" id="form" class="mt10" method="POST">
+            <ul class="list">
+                <li class="cf">
+                   <label class="handle">账户可用余额：</label>
+                   <span><em class="s-money">¥{$yu_e}</em> 元</span>
+                </li>
+                 <li class="cf">
+                   <label class="handle">充值金额：</label>
+                   <div class="rel">
+                        <input type="text" id="money" name="money" class="text js-money" style="width:150px;" maxlength="15" required /> 元
+                        <span show="money.check" class="error-msg">
+                            <em class="errow-arrow"></em>
+                            请填写充值金额
+                        </span>
+                    </div>
+                </li> 
+                <li class="cf">
+                   <label class="handle">支付方式：</label>
+                    <foreach name="payment_list" item="payment">
+                        <span class="pay-way js-payWay mb20" data-way="{$payment['payment_code']}"><i class="ic-{$payment['payment_class']} mr10"></i>{$payment['payment_name']}</span>
+                    </foreach>
+                </li>
+                <input type="hidden" name="payment_code" value="">
+                <li class="cf mt10">
+					<label class="handle"></label>
+					<button class="btn btn-blue btn-middle js-confirmBtn">确认充值</button>
+                </li>
+            </ul>
+        </form>
+    </div>
+</div>
+
+</block>
+<block name="my_js">
+<script type="text/javascript">
+(function($){
+	define("s/recharge",function(require, exports, module){
+		require("jquery/layer");
+        require("jquery/form");
+        var manage = require("com/manage");
+		var Module = {
+			init: function(){
+                $("#money").focus(function(){
+                    $(this).siblings(".error-msg").hide()
+                })
+                $("#money").blur(function(){
+                    if(!$(this).val()) $(this).siblings(".error-msg").show();
+                });
+				//var form = $("#form").form();
+				$(".js-payWay").click(function(){
+					$(this).addClass("pay-way-select").siblings(".js-payWay").removeClass("pay-way-select")
+				});
+				/*
+				*确认提交
+				*/
+				$("#form").on("click", ".js-confirmBtn", function(){
+					//if(!form2.valid()) return false;
+					var money = $("#money").val(),
+						pay_way = $(".pay-way-select").data("way") || ""; //1:微信， 2：银联， 3：支付宝
+					if(!money){
+						$.wrongMsg("请输入充值金额");
+                        return false;
+					}
+					if(!pay_way){
+						$.wrongMsg("请选择支付方式");
+                        return false;
+					}
+                    $("input[name='payment_code']").val(pay_way);
+
+                    $("#form").submit();
+				});
+			}
+		};
+		module.exports = Module;
+	});
+	seajs.use("s/recharge", function(module){
+		module.init();
+	});
+})($);
+</script>
+</block>

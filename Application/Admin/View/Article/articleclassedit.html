@@ -1,0 +1,76 @@
+<include file="Application/Admin/Layout/head.html" /> 
+<div class="am-cf admin-main">
+<include file="Application/Admin/Layout/left.html" /> 
+  <!-- content start -->
+  <div class="admin-content">
+    <div class="admin-content-body">
+      <div class="am-cf am-padding am-padding-bottom-0">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">分类编辑</strong> / <small></small></div>
+      </div>
+
+      <hr/>
+
+      <div class="am-g">
+        <div class="am-u-sm-12 am-u-md-4 am-u-md-push-8">
+         
+        </div>
+
+        <div class="am-u-sm-12 am-u-md-8 am-u-md-pull-4">
+          <form class="am-form am-form-horizontal" action="" method="post">
+            <div class="am-form-group">
+              <label for="user-name" class="am-u-sm-3 am-form-label">分类名称</label>
+              <div class="am-u-sm-9">
+                <input type="text" id="ac_name" name="ac_name" value="{$classarray.ac_name}" placeholder="请输入风格名称">
+                <input type="hidden" id="ac_id" name="ac_id" value="{$classarray.ac_id}">
+              </div>
+            </div>
+			
+			<div class="am-form-group">
+              <label for="user-name" class="am-u-sm-3 am-form-label">排序</label>
+              <div class="am-u-sm-9">
+                <input type="text" id="ac_sort" name="ac_sort" value="{$classarray.ac_sort}" placeholder="请输入排序">
+               
+              </div>
+            </div>
+			
+			
+			<input type='hidden' name="act" value="{$Think.get.act}">
+            <div class="am-form-group">
+              <div class="am-u-sm-9 am-u-sm-push-3">
+                <input type="submit" class="am-btn am-btn-primary">
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+ 
+
+  </div>
+  <!-- content end -->
+
+</div>
+<include file="Application/Admin/View/foot.html" /> 
+<script>
+	$("#style_name").blur(function(){
+		var style_name  = $(this).val(); 
+		var style_name2 = $('#style_name_old').val(); 
+		if(style_name==style_name2) return;
+		$.ajax({
+			type: 'get',
+			cache:false,
+			url:'/Admin/Goods/ajax_check_duplicate',
+			data:{
+				type :'style_name',
+				value:style_name
+			},
+			success: function(data){
+				if(data=='1'){
+					alert('风格名已存在！');
+					$(this).focus();
+				} 
+			},
+			dataType:'json'
+		});
+	});
+</script>

@@ -1,0 +1,211 @@
+<extend name="Layouts:seller" />
+<block name="title"><title>所有订单-<?php if($_SESSION['com_type'] == 3){?>供货中心<?php } else{?>卖家中心<?php } ?>-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="content-wrap">
+    <h2 class="query-tit">所有订单</h2>
+    <div class="query-box mt10">
+        <form action="javascript:void(0);" class="query-bar" id="queryform" autocomplete="off" method="get">
+            <p class="unit-line">
+                <span class="unit">
+                    <label class="label" for="orderNum">订单号码：</label>
+                    <input type="text" id="orderNum" name="order_num" class="text" value="" placeholder="请填写订单号码" />
+                </span>
+                <span class="unit">
+                    <label class="label" for="orderNum">下单时间：</label>
+                    <input type="text" id="start" name="start_add_time" class="text laydate-icon" value="<?php echo $_GET['start_add_time']?>" placeholder="请选择日期" />
+                    <em class="ml5 mr5">-</em>
+                    <input type="text" id="end" name="end_add_time" class="text laydate-icon" value="<?php echo $_GET['end_add_time']?>" placeholder="请选择日期" />
+                </span>
+                <a href="javascript:void(0);" class="cor-blue ml20 js-near7">最近7天</a>
+                <a href="javascript:void(0);" class="cor-blue ml20 js-near30">最近30天</a>
+            </p>
+            <p class="unit-line">
+                <span class="unit">
+                    <label class="label" for="goodsName">商品名称：</label>
+                    <input type="text" id="goodsName" name="goods_name" class="text" value="<?php echo $_GET['goods_name']?>" placeholder="请填写商品名称" />
+                </span>
+                <span class="unit">
+                    <label class="label">付款方式：</label>
+                    <select name="pay_way">
+                        <option value="0" <?php if($_GET['pay_way']==0){?> selected="selected" <?php }?>>全部</option>
+                        <option value="1" <?php if($_GET['pay_way']==1){?> selected="selected" <?php }?>>支付宝支付</option>
+                        <option value="2" <?php if($_GET['pay_way']==2){?> selected="selected" <?php }?>>微信支付</option>
+                        <option value="3" <?php if($_GET['pay_way']==3){?> selected="selected" <?php }?>>余额支付</option>
+                        <option value="4" <?php if($_GET['pay_way']==4){?> selected="selected" <?php }?>>银联支付</option>
+                    </select>
+                </span>
+            </p>
+            <p class="unit-line">
+                <span class="unit">
+                    <label class="label" for="buyerName">买家昵称：</label>
+                    <input type="text" id="buyerName" name="buyer_name" class="text" value="<?php echo $_GET['buyer_name']?>" placeholder="请填写买家昵称" />
+                </span>
+                <!--<span class="unit">
+                    <label class="label">维权状态：</label>
+                    <select name="safeguard_state">
+                        <option value="0" <?php if($_GET['safeguard_state']==0){?> selected="selected" <?php }?>>全部</option>
+                        <option value="1" <?php if($_GET['safeguard_state']==1){?> selected="selected" <?php }?>>退款处理中</option>
+                        <option value="3" <?php if($_GET['safeguard_state']==3){?> selected="selected" <?php }?>>退款结束</option>
+                    </select>
+                </span>-->
+            </p>
+             <p class="query-btn">
+                <button href="javascript:void(0);" class="btn btn-blue js-queryBtn">筛选</button>
+                <!--<a href="index.php?<?php echo $_SERVER['QUERY_STRING'];?>&op=export" class="btn btn ml10">批量导出</a>-->
+            </p>
+        </form>
+    </div>
+    <p class="order-tab-t cf js-tabT">
+        <a href="<?php echo  urlShop('Factory', 'factoryorder'); ?>" <?php if(!isset($_GET['order_state'])) {?> class="curr" <?php }?>>全部</a>
+        <a href="<?php echo  urlShop('Factory', 'factoryorder', array('order_state' => ORDER_STATE_NEW));?>"  <?php if($_GET['order_state'] == ORDER_STATE_NEW){?> class="curr"<?php }?> >待付款</a>
+        <a href="<?php echo  urlShop('Factory', 'factoryorder', array('order_state' => ORDER_STATE_PAY)); ?>"  <?php if($_GET['order_state'] == ORDER_STATE_PAY){?> class="curr"<?php }?> >待发货</a>
+        <a href="<?php echo  urlShop('Factory', 'factoryorder', array('order_state' => ORDER_STATE_SUCCESS)); ?>"  <?php if($_GET['order_state'] == ORDER_STATE_SUCCESS){?> class="curr"<?php }?> >已完成</a>
+    </p>
+    <table class="order-table js-order" width="100%">
+        <colgroup>
+            <col width="30%">
+            <col width="10%">
+            <col width="7%">
+            <col width="10%">
+            <col width="12%">
+            <col width="10%">
+            <col width="">
+        </colgroup>
+        <thead>
+            <tr>
+                <th class="n1">商品</th>
+                <th>单价</th>
+                <th>数量</th>
+                <th>经销商</th>
+                <th><a href="javascript:void(0);" class="cor-blue" id="paytime">下单时间 <i class="ic <?php if ($sortby == 'desc'){echo 'ic-down-arrow';}else{echo 'ic-up-arrow';}?>"></i></a></th>
+                <th>订单状态</th>
+                <th>实付金额</th>
+            </tr>
+        </thead>
+        <?php foreach ($order_list as $key => $value) { ?>
+            <tbody data-id="<?php echo $value['order_id']; ?>">
+                <tr class="gap"><td colspan="8"></td></tr>
+                <tr class="hd">
+                    <td colspan="8">
+                        <span>订单号：<?php echo $value['order_sn'] ?></span>
+                        <span class="pay"><?php echo $value['payment_name']; ?></span>
+                        <p class="r">
+                            <a href="{:U('Factory/order_detail', array('order_id' => $value['order_id']))}" class="cor-blue" >查看详情</a>
+                            <a href="javascript:void(0);" class="cor-blue js-remark">备注</a>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="goods-td cf">
+                            <a href="<?php echo U('ShowFactory/goodsDetial',array('goods_id'=>$value['goods_id'],'store_id'=>$value['store_id']));?>" class="pic" ><img src="<?php echo thumb($value, 240);?>" width="80px" height="80px" alt="" /></a>
+                            <p class="name"><a href="<?php echo U('ShowFactory/goodsDetial',array('goods_id'=>$value['goods_id'],'store_id'=>$value['store_id']));?>" class="cor-blue" ><?php echo $value['goods_name']; ?></a></p>
+                            <p class="norms">规格：<?php echo  $value['goods_spec'];?></p>
+                            <?php if($value['order_type'] == 2){?><p class="mt2"><span class="tag-green">分期购</span></p><?php }?>
+                        </div>
+                    </td>
+                    <td>¥ <?php echo $value['goods_price']; ?></td>
+                    <!-- 商品数量 -->
+                    <td>x <?php echo $value['goods_num'];?></td>
+                    <!-- 买家 -->
+                    <td><?php echo $value['buyer_name'];?></td>
+                    <!--  时间 -->
+                    <td class="word-nor"><?php echo date('Y-m-d H:i:s', $value['add_time']); ?></td>
+                   <!-- 订单状态 -->
+                    <td>
+                        <!-- 输出订单状态 -->
+                        <?php
+                            if($value['order_state'] == 0){
+                                echo '已关闭';
+                            }elseif($value['order_state'] == 1){
+                                echo '待定价';
+                            }elseif($value['order_state'] == 10){
+                                echo '待付款';
+                            }elseif($value['order_state'] == 20){
+                                echo '已付款';
+                            }elseif($value['order_state'] == 30){
+                                echo '已发货';
+                            }elseif($value['order_state'] == 40){
+                                echo '已完成';
+                            }elseif($value['order_state'] == 50){
+                                echo '平台处理中';
+                            }else{
+                                echo '异常状态';
+                            }
+                        ?>
+                        <!-- 输出订单操作 -->
+                        <!--
+                        共3总状态
+                        已关闭  ORDER_STATE_CANCEL 0
+                        待付款  ORDER_STATE_NEW 10
+                        待发货  ORDER_STATE_PAY 20
+                        已完成  ORDER_STATE_SEND 30
+                        -->
+                        <?php if($value['order_state'] ==ORDER_STATE_NEW) { ?>
+                            <p class="mt10"><a href="javascript:void(0);" class="btn factory js-closeBtn">关闭订单</a></p>
+                        <?php }else if($value['order_state'] ==ORDER_STATE_CANCEL){  ?>
+                            <!--关闭订单操作-->
+                        <?php }else if($value['order_state'] ==ORDER_STATE_PAY){ ?>
+                            <p class="mt10"><a href="javascript:void(0);" class="btn js-send">发货</a></p>
+                        <?php }else if($value['order_state'] ==ORDER_STATE_SEND){ ?>
+                            <!--已完成-->
+                        <?php } ?>
+                    </td>
+                    <!-- 订单金额 -->
+                    <td>¥ <?php echo $value['order_amount']; ?></td>
+                </tr>
+                <?php
+                if (!empty($value['tesu_seller_remark'])){?>
+                    <tr class="ft">
+                        <td colspan="8">
+                            <p>卖家备注：<span class="js-sellerMessage"><?php echo $value['tesu_seller_remark'];?></span></p>
+                        </td>
+                    </tr>
+                <?php }?>
+            </tbody>
+        <?php } ?>
+    </table>
+    <div id="jspage" class="jspage">
+        <?php echo $page; ?>
+    </div>
+</div>
+<input type="hidden" id="7day" value="<?php echo date("Y-m-d 00:00",strtotime("-6 day"));?>" />
+<input type="hidden" id="30day" value="<?php echo date("Y-m-d 00:00",strtotime("-29 day"));?>" />
+<input type="hidden" id="today" value="<?php echo date("Y-m-d 00:00",strtotime("+1 day"));?>" />
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+seajs.use("s/orderlist", function(Orderlist){
+    $(".js-near7").on("click", function(){
+        $("#start").val($("#7day").val());
+        $("#end").val($("#today").val());
+    });
+    $(".js-near30").on("click", function(){
+        $("#start").val($("#30day").val());
+        $("#end").val($("#today").val());
+    });
+    /*
+     **下单时间排序
+     */
+    $('#paytime').click(function(){
+        var sortby = "";
+        if($("i", this).hasClass("ic-down-arrow")){
+            $("i", this).removeClass("ic-down-arrow").addClass("ic-up-arrow");
+            sortby = "asc";
+        }else{
+            $("i", this).removeClass("ic-up-arrow").addClass("ic-down-arrow");
+            sortby = "desc";
+        }
+        var base_url = window.location.href + "&" + $("#queryform").serialize() + "&sortby=" + sortby;
+        window.location.href = base_url;
+    });
+   //提交订单查询
+    $(".js-queryBtn").on("click",function(){
+        var base_url = "{:U('Factory/factoryOrder')}?" + $("#queryform").serialize();
+        window.location.href = base_url;
+    });
+});
+</script>
+</block>

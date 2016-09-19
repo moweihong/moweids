@@ -1,0 +1,230 @@
+<extend name="Layouts:seller" />
+<block name="title"><title>发布商品-<?php if($_SESSION['com_type'] == 3){?>供货中心<?php } else{?>卖家中心<?php } ?>-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="wrap-in">
+    <h2 class="tit">发布商品</h2>
+    <div class="add-goods-box fs14 js-addGoodsStep1">
+		<!--
+		<div class="sort-selector cf">
+            <cite>您经常使用的类目:</cite>
+            <div class="comm-select js-commSelect">
+                <p class="select-text js-text"><span>请选择</span></p>
+                <ul class="js-select">
+                    <?php foreach ($output['staple_array'] as $k => $v) { ?>
+                        <li data-url="<?php echo urlShop('seller_center','add_goods_step2')?>&ct_id=<?php echo $v['gc_id_1']?>&type_id=<?php echo $v['type_id']?>&gc_id=<?php if($v['gc_id_3']){echo $v['gc_id_3'];}
+							elseif($v['gc_id_2']){echo $v['gc_id_2'];}
+							else{echo $v['gc_id_1'];} ?>&ct_1=<?php $s=explode('>',$v['staple_name']);
+							echo trim($s[0]);?>&ct_2=<?php $s=explode('>',$v['staple_name']);
+							echo trim('>'.$s[1]);?>&ct_3=<?php $s=explode('>',$v['staple_name']);
+							echo trim('>'.$s[2]);?>">
+							<span><?php echo $v['staple_name']; ?></span>
+							<em class="js-remove" data-gcid="<?php if($v['gc_id_3']){echo $v['gc_id_3'];}elseif($v['gc_id_2']){echo $v['gc_id_2'];}else{echo $v['gc_id_1'];} ?>" data-sid="<?php echo $v['staple_id']; ?>">x</em>
+                        </li>
+                    <?php } ?>
+                </ul>
+            </div>
+        </div>-->
+        <div class="sort-select mt90 js-sortSel">
+            <h3 class="cor-black fs16 mt20">请选择类目</h3>
+            <div class="sort-wrap mt10 cf js-sortWrap">
+                <ul class="js-category1">
+                    <foreach name="goods_class" item="v" >
+                        <li class="category" data-id="{$v.gc_id}" data-typeid="{$v.type_id}">
+                            <span>{$v.gc_name}</span>
+                            <em>&gt;</em>
+                        </li>
+                    </foreach>
+                </ul>
+                <ul class="js-category2"></ul>
+                <ul class="js-category3"></ul>
+            </div>
+            <p class="notice mt20">
+                您当前选择的是：<span><span class="js-pct1"></span><span class="js-pct2"></span><span class="js-pct3"></span></span>
+            </p>
+            <p class="tc mt20">
+                <a href="javascript:void(0);" class="btn btn-blue js-nextBtn">下一步</a>
+            </p>
+        </div>
+    </div>
+</div>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+(function($){
+    define("s/goodsCategory",function(require, exports, module){
+		require("jquery/layer");
+		var fid = "",
+			tyid = "",
+			lastid = "";
+		var manage = require("com/manage");
+		var Module = {
+			init: function (){	
+				/*
+				 * 选择类目
+				 * */
+				$(".add-goods-box").on("click", ".category", function () {
+					var me = $(this),
+						$ul = me.closest("ul"),
+						gc_id = me.data('id'),
+						type_id = me.data('typeid');
+					me.addClass("curr").siblings("li").removeClass("curr");
+					tyid = type_id;//将最近一次点击的id
+					lastid = gc_id;//将最近一次点击的id
+					if($ul.hasClass("js-category1")){ //点击一级类目，刷新二级类目
+						$(".js-category2").add(".js-category3").empty();
+						$(".js-pct2").add(".js-pct3").text("");
+						$(".js-pct1").text($("span", me).text());
+						fid = gc_id;
+						Module.getCategory(gc_id, 2);
+					}else if($ul.hasClass("js-category2")){ //点击二级类目，刷新三级类目
+						$(".js-category3").empty();
+						$(".js-pct3").text("");
+						$(".js-pct2").text(">" + $("span", me).text());
+						Module.getCategory(gc_id, 3);
+					}else{
+						$(".js-pct3").text(">" + $("span", me).text());
+					}
+				});
+				/*
+				 * 鼠标悬停常用类目
+				 * */
+				$(".js-commSelect").on({
+					mouseenter: function(){
+						$(this).addClass("hover").find(".js-select").show();
+					},
+					mouseleave: function(){
+						$(this).removeClass("hover").find(".js-select").hide();
+					}
+				});
+				/*
+				 * 选择常用类目
+				 * */
+				$(".js-select").on("click", "li", function (){
+					var url = $(this).data("url");
+					window.location.href = url;
+				});
+				/*
+				 * 删除常用类目
+				 * */
+				$(".js-select").on("click", ".js-remove", function(e){
+					e.stopPropagation();
+					var me = $(this),
+						gc_id = me.data("gcid") || "",
+						staple_id = me.data("sid") || "";
+					manage.ajax({
+						url: gConfig.apiurl + "/StoreCommon/changeStapleAjax",
+						data: {
+							operation	: "del",
+							gc_id		: gc_id,
+							staple_id	: staple_id
+						},
+						success: function(result){
+							var resultText = result.resultText || {};
+							if(result.code == 1){
+								me.closest("li").remove();
+							}else{
+								$.wrongMsg(resultText.message || "操作失败");
+							}
+						}
+					});
+				});
+				/*
+				 * 下一步
+				 * */
+				$(".js-nextBtn").click(function(){
+					//检查gc_id是否是最后一级
+					var judge = Module.checkStaple(lastid);
+					if (!judge) {
+						$.wrongMsg('请选择最后一级类目');
+						return false;
+					}
+					var linking = {
+						ct_id	: fid,
+						type_id	: tyid,
+						gc_id	: lastid,
+						ct_1	: $(".js-pct1").text(),
+						ct_2	: $(".js-pct2").text(),
+						ct_3	: $(".js-pct3").text()
+					}
+					window.location.href = gConfig.apiurl + "/StoreCommon/addGoodsStep2/?" + $.param(linking);
+				});
+			},
+			/*
+			 ** 获取类目
+			 */
+			getCategory: function (id, deep) {
+				var pid = layer.load(360);
+				$.ajax({
+					type: "GET",
+					async: false,
+					url: gConfig.apiurl + "/StoreCommon/ajaGoodsClass",
+					data: {
+						gc_id: id,
+						deep: deep
+					},
+					success: function (data) {
+						layer.close(pid);
+						var newdata = $.parseJSON(data);
+						var html = [];
+						$.each(newdata || [], function (n, item) {
+							var gc_id = item.gc_id || "",
+								type_id = item.type_id || "",
+								gc_name = item.gc_name || "";
+							var str = '<li class="category" data-id="' + gc_id + '" data-typeid="' + type_id + '"><span>' + gc_name + '</span><em>&gt;</em></li>';
+							html.push(str);
+						});
+						if (deep == 2) { //渲染二级类目
+							$('.js-category2').append(html.join(""));
+						} else if (deep == 3) { //渲染三级类目
+							$('.js-category3').append(html.join(""));
+						}
+					}
+				});
+			},
+			/*
+			 ** 检查类目是否是最后一级
+			 */
+			checkStaple: function (id) {
+				var isPass = true;
+				$(".js-sortWrap ul").each(function(){
+					if($("li", this).length && !$("li.curr", this).length){
+						isPass = false;
+						return false;
+					}
+				});
+				if($(".js-category3 li.curr").length){
+					isPass = false;
+					return true;
+				}
+				if(!isPass) return;
+				var flag = true,
+					pid = layer.load(360);
+				$.ajax({
+					type: "GET",
+					async: false,
+					url: gConfig.apiurl + "/StoreCommon/checkStapleAjax",
+					data: {gc_id: id},
+					dataType: "json",
+					success: function (data) {
+						layer.close(pid);
+						if (data.code == "1") { //已经是最后一级
+							flag = true;
+						} else {
+							flag = false;
+						}
+					}
+				});
+				return flag;
+			}
+		}
+		module.exports = Module;
+	});
+	seajs.use("s/goodsCategory", function(module){
+		module.init();
+	});
+})($);
+</script>
+</block>
+

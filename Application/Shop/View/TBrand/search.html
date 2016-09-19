@@ -1,0 +1,77 @@
+<extend name="Layouts:home" />
+<block name="title"><title>品牌专区-{:C('site_name')}</title></block>
+<block name="head_css">
+	<link href="__CSS__/brand.css" rel="stylesheet" type="text/css">
+    <style type="text/css">
+    .e-banner{height:440px;}
+    </style>
+</block>
+
+<block name="content">
+	<include file="Layouts:top_banner"/>
+	<div class="wrapper">
+	    <h2 class="main-tit">
+        	<span>实体门店</span>
+                <a href="{:U('TBrand/morestore',array('brand_id'=>$_GET['brand_id']))}">更多 &gt;</a>
+        </h2>
+	    <ul class="bg-white store-addr cf">
+                <volist name="store_list" id="v">
+                    <li><a href="{:U('shop/ShowStore/index',array('store_id'=>$v['store_id']))}">{$v.store_name}</a></li> 
+               </volist>
+	    </ul>
+	</div>
+	<div class="wrapper floor-template brand-index">
+	    <h2 class="main-tit">
+        	<span>精品家具</span>
+            <a href="{:U('TBrand/morefurniture',array('brand_id'=>$_GET['brand_id']))}">更多 &gt;</a>
+        </h2>
+	    <ul class="pro-list cf">
+                <volist name="goods_list" id="v">
+			<li>
+            	<a href="/index.php?m=shop&c=goods&a=index&goods_id=<?php echo $v['goods_id']; ?>" title="{$v.goods_name}">
+                    <div class="goods-pic">
+                        <img src="{:thumb($v, 240);}" alt="{$v.goods_name}" />
+                    </div>
+                    <div class="goods-info">
+                        <p class="name">{$v.goods_name}</p>
+                    	<p class="cor-9">{$v.goods_jingle}</p>
+                    </div>
+                </a>
+            </li>
+            </volist>
+	    </ul>
+	</div>
+	<?php if($brandInfo['store_id']){?>
+	    <div class="join-btn js-join-btn">
+	        <img src="__IMG__/join.png" title="" alt=""><br>
+	        <span>品牌加盟</span>
+	    </div>
+	<?php }?>
+</block>
+
+<block name="my_js">
+	<script type="text/javascript">
+		(function($){
+			define("brand/brand_index",function(require, exports, module){
+				require("jquery/layer");
+				var store_id = "<?php echo $brandInfo['store_id'];?>";
+				var Module = {
+					init: function(){
+						$('.js-join-btn').click(function(){
+							layer.open({
+								type: 2,
+								title: false,
+								area: ['350px', '380px'],
+								content: gConfig.apiurl + "/index.php?m=shop&c=TBrand&a=tpljoinbrand&store_id=" + store_id
+							});
+						});
+					}
+				}
+				module.exports = Module;
+			});
+			seajs.use("brand/brand_index", function(module){
+				module.init();
+			});
+		})($);
+	</script>
+</block>

@@ -1,0 +1,65 @@
+<extend name="Layouts:home" />
+<block name="title"><title>提示-全木行唯一官方网站</title></block>
+<block name="content">
+<style>
+.system-message{margin-top: 90px;}
+.back_img{background: url('__IMG__/tit_bg.jpg');width: 100%;height: 200px;margin-bottom: 50px}
+.content{width: 890px;height: 240px;margin: 0 auto;position: relative;}
+.div_left{float: left;width: 255px;height: 240px}
+.tips_title{font-size:22px; font-weight:bold;color: #333333}
+.come_back{width: 164px;height:36px;border: 1px black solid;font-size: 12px;cursor:pointer; position: absolute;bottom: 0px;}
+.come_back div{margin-top: 10px;margin-left: 15px; }
+.come_back div img{float: right;margin-top: 5px;margin-right: 15px}
+.come_wait{position: absolute;bottom: 45px}
+.div_right{float: right;height: 240px}
+.tips_content{margin-top: 10px;font-size: 14px; color: #666666;line-height: 28px}
+</style>
+<div class="system-message">
+	<div class="back_img"></div>
+	<div class="content">
+		<div class="div_left">
+			<div>
+				<if condition="isset($message)">
+					<span class="tips_title">成功！</span>
+					<br>
+					<span class="tips_content">{$message}</span>
+					<else/>
+					<span class="tips_title">对不起！</span>
+					<br>
+					<span class="tips_content">{$error}</span>
+				</if>
+			</div>
+			<div>
+				<div class="come_wait">
+					<b id="wait">{$waitSecond}</b>后自动跳转
+				</div>
+				<div class="come_back" onClick="location.href='__HOST__'">
+					<div>
+						<span>返回首页</span>
+						<img src="__IMG__/tips_jiantou.png"/>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="div_right">
+			<if condition="isset($message)">
+				<img src="__IMG__/tips_success.png"/>
+				<else/>
+				<img src="__IMG__/tips_error.png"/>
+			</if>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+(function(){
+var wait = document.getElementById('wait'),href = "{$jumpUrl}";
+var interval = setInterval(function(){
+	var time = --wait.innerHTML;
+	if(time <= 0) {
+		location.href = href;
+		clearInterval(interval);
+	};
+}, 1000);
+})();
+</script>
+</block>

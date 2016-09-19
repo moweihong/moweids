@@ -1,0 +1,98 @@
+<extend name="Layouts:pop" />
+<block name="head_css">
+<link href="__CSS__/web.css" rel="stylesheet" type="text/css">
+<link href="__CSS__/brand.css" rel="stylesheet" type="text/css">
+</block>
+
+<block name="content">
+<div class="join-brand">
+	<h2>欢迎加盟本品牌</h2>
+	<form action="" method="get" id="form1">
+        <p><input type="text" name="name" placeholder="姓名" class="text" style="width:280px" id="name"/></p>
+        <p><input type="text" name="tel" placeholder="联系电话" class="text" style="width:280px" id="tel"/></p>
+        <p>
+        	<div class="custom_select" style="width:83px;border-color: #dedede; margin-left: 0;">
+		        <select id="jcmbProvince" name="province_id" class="text" style="width:66px">
+		            <option value="0">省份</option>
+		        </select>
+		    </div>
+	        <div class="custom_select" style="width:83px;border-color: #dedede;">
+		        <select id="jcmbCity" name="city_id" class="text" style="width:66px">
+		            <option value="0">城市</option>
+		        </select>
+	        </div>
+	        <div class="custom_select" style="width:83px;border-color: #dedede; ">
+		        <select id="jcmbArea" name="area_id" class="text" style="width:66px">
+		            <option value="0">地区</option>
+		        </select>
+	        </div>
+        </p>
+        <p class="pbtn"><input type="button" name="name" value="免费申请" class="text btn-info" style="width:280px;cursor:pointer;height:28px;font-size:16px;" id="apply"/></p>
+    </form>
+</div>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+	(function($){
+		define("brand/brand_join",function(require, exports, module){
+			require("com/adarray");
+			var Module = {
+				init: function(){
+	                addressInit("jcmbProvince", "jcmbCity", "jcmbArea");
+	            }
+	        }
+	        module.exports = Module;
+	    });
+	    seajs.use("brand/brand_join", function(module){
+	        module.init();
+	    });
+	})($);
+	$(function(){
+		var store_id="<?php echo $_GET['store_id']?>";
+		$("#apply").click(function(){
+			if(!formValidate()){
+				return false;
+			}
+			var url='/index.php?m=shop&c=TBrand&a=joinbrand&type=apply&store_id='+store_id;
+			$.get(url,$("#form1").serialize(),function(data){
+				//console.log(data);
+				var data=eval("("+data+")");
+				if(data.status==1){
+					alert('申请成功');
+					parent.location.reload();
+					
+				}
+			})
+		})
+	});
+	function formValidate(){
+		var name=$("#name").val();
+		var tel=$("#tel").val();
+		var province=$("#jcmbProvince").val();
+		var city=$("#jcmbCity").val();
+		var county=$("#jcmbArea").val();
+		if(name==''){
+			alert('姓名不能为空');
+			return false;
+		}
+                if(tel==''){
+			alert('电话不能为空');
+			return false;
+		}	
+		if(province==0){
+			alert('请选择省份');
+			return false;
+		}
+		if(city==0){
+			alert('请选择城市');
+			return false;
+		}
+		if(county==0){
+			alert('请选择地区');
+			return false;
+		}
+		return true;
+	}
+</script>
+</block>

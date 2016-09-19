@@ -1,0 +1,222 @@
+<extend name="Layouts:store_factory" />
+<block name="title"><title>工厂商品详情页-{:C('site_name')}</title></block>
+<block name="head_css">
+<style type="text/css">
+body{background-color:#fff;}
+</style>
+</block>
+
+<block name="content">
+<div class="wrapper factory-goods-info cf js-goodsIntro"> 
+    <!-- S 多图展示 -->
+    <div class="ncs-goods-picture js-imageZoom"></div>
+    
+    <!-- S 商品基本信息 -->
+    <div class="ncs-goods-summary">
+    	<h1 class="name"><?php echo $goods['goods_name']; ?></h1>
+        <strong class="jingle"><?php echo $goods['goods_jingle']; ?></strong>
+        <ul class="store-contact">
+            <li class="ncs-price cf">
+                <cite>出厂价</cite>
+                <b>¥<?php echo $goods['goods_price']; ?></b>
+            </li>
+            <li class="mt5 cf">
+                <cite>客服</cite>
+				<?php if(!empty($store_info['store_qq'])){?>
+                	<a href="http://wpa.qq.com/msgrd?v=3&uin=<?php echo $store_info['store_qq'];?>&site=qq&menu=yes" class="qq-btn" title="QQ: <?php echo $store_info['store_qq'];?>">QQ交谈</a>
+                <?php }?>
+                <?php if(!empty($store_info['store_ww'])){?>
+                	<a href="http://amos.im.alisoft.com/msg.aw?v=2&amp;uid=<?php echo $store_info['store_ww'];?>&site=cntaobao&s=1&charset=<?php echo CHARSET;?>"  class="ww-btn">和我联系</a>
+                <?php }?>
+            </li>
+            <li class="cf">
+                <cite>电话</cite>
+                <?php if(empty($store_info['company_phone'])){ ?>
+                	<?php echo $store_info['store_tel'];?>
+                <?php }else{ ?>
+                	<?php echo $store_info['company_phone'];?>
+                <?php } ?>
+            </li>
+            <li class="ncs-freight cf">
+            	<cite>物流</cite>
+                <div class="freight">
+                    <?php if ($goods['goods_transfee_charge'] == 1){ ?>
+                    	<?php echo '运&#12288;&#12288;费' . ':'; ?>
+                    <?php }else{ ?>
+                        <!-- 如果买家承担运费 --> 
+                        <!-- 如果使用了运费模板 -->
+                        <?php if ($goods['transport_id'] != '0'){ ?>
+                        	<?php echo '至'; ?>
+                            <a href="javascript:void(0)" class="ncrecive js-ncrecive"><?php echo isset($goods['address']) ? $goods['address'] : '全国'; ?></a>
+                            <?php echo ':'; ?>
+                            <div class="transport-pannel js-transport-pannel">
+                                <?php if (is_array($area_list)) { ?>
+                                	<?php foreach ($area_list as $k => $v) { ?>
+                                		<a href="javascript:void(0)" nctype="<?php echo $k; ?>"><?php echo $v; ?></a>
+                            		<?php } ?>
+                            	<?php } ?>
+                        	</div>
+                        <?php } else { ?>
+                        	<?php echo '至 全国'; ?>
+                        <?php } ?>
+                    <?php } ?>
+                </div>
+                <!-- 分割线 -->
+                <div class="transport-price js-transport-price">
+                    <?php if ($output['group']) { ?>
+                        <span><?php echo $lang['goods_index_groupbuy_no_shipping_fee']; ?></span>
+                    <?php } else { ?>
+                        <?php if ($goods['transport_id'] == 0) { ?>
+                            <?php echo $lang['goods_index_trans_for_seller']; ?>
+                        <?php } else { ?>
+                            <!-- 如果买家承担运费 -->
+                            <?php if ($goods['transport_fee']) { ?>
+                                <?php foreach ($goods['transport_fee'] as $k => $v) { ?>
+                                    <?php if ($v['transport_type'] == '1') { ?>
+                                        <span>物流<?php echo $lang['nc_colon']; ?><em class="js-nc-wl"><?php echo $v['transport_fee']; ?></em><?php echo $lang['goods_index_yuan']; ?></span>
+                                    <?php } ?>
+                                    <?php if ($v['transport_type'] == '2') { ?>
+                                        <span>快递<?php echo $lang['nc_colon']; ?><em class="js-nc-kd"><?php echo $v['transport_fee']; ?></em><?php echo $lang['goods_index_yuan']; ?></span>
+                                    <?php } ?>
+                                <?php } ?>
+                            <?php } else { ?>
+                                <span><?php echo $lang['goods_index_trans_for_seller']; ?></span>
+                            <?php } ?>
+                        <?php } ?>
+                    <?php } ?>
+                </div>
+                <span class="cor-red js-loading-price dis-none">loading.....</span>
+            </li>
+        </ul>
+        <div class="ncs-key"> 
+            <!-- S 商品规格值-->
+            <?php if (is_array($goods['spec_name'])) { ?>
+            	<?php foreach ($goods['spec_name'] as $key => $val) { ?>
+                    <dl class="spec cf">
+                        <dt><?php echo $val; ?></dt>
+                        <dd>
+                            <?php if (is_array($goods['spec_value'][$key]) and !empty($goods['spec_value'][$key])) { ?>
+                                    <?php foreach ($goods['spec_value'][$key] as $k => $v) { ?>
+                                        <!-- 文字类型规格-->
+                                        <a href="<?php echo U('ShowFactory/goodsDetial',array('goods_id'=>$spec_list[$k],'store_id'=>$store_info['store_id']));?>" class="sp-txt <?php if (isset($goods['goods_spec'][$k])) { echo 'hovered'; } ?>"><?php echo $v; ?><i></i></a>
+                                    <?php } ?>
+                            <?php } ?>
+                        </dd>
+                    </dl>
+            	<?php } ?>
+            <?php } ?>
+            <!-- E 商品规格值--> 
+            <!-- S 数量及库存 -->
+            <dl class="cf">
+                <dt>数量</dt>
+                <dd class="ncs-figure-input">
+                	<a href="javascript:void(0)" class="decrease fl js-decrease disable">-</a>
+                    <input type="text" class="text fl js-number js-quantity" size="3" maxlength="6" value="1" autocomplete="off" />
+                    <a href="javascript:void(0)" class="increase fl js-increase">+</a>
+                    <span class="cor-9 mt5 ml10 fl">(当前库存 <b class="cor-black js-goodsStock"><?php echo $goods['goods_storage']; ?></b> 件)</span>
+                </dd>
+            </dl>
+            <!-- E 数量及库存 --> 
+            <!-- S 操作按钮 -->
+            <div class="ncs-btn">
+                <?php if(isset($is_mygoods) && $is_mygoods==1):?>
+                    <a href="javascript:void(0);" class="added no-buynow">上架到店铺</a>
+                    <a href="javascript:void(0);" class="buynow no-buynow">自己买</a>
+                <?php else:?>
+                    <?php if($is_up == true):?>
+                        <a href="javascript:void(0);" class="added">已上架</a>
+                    <?php else:?>
+                        <a href="javascript:void(0);" class="added js-added">上架到店铺</a>
+                    <?php endif?>
+                    <a href="javascript:void(0);" class="buynow js-buynow <?php if ($goods['goods_storage'] <= 0) { ?>no-buynow<?php } ?>">自己买</a>
+                <?php endif;?>
+            </div>
+            <!-- E 操作按钮 -->
+		</div>
+    </div>
+</div>
+
+<div class="wrapper mt10 cf">
+    <div class="recommend">
+        <h2>推荐商品</h2>
+        <ul compact="compact"recommendlist>
+            <?php foreach ($goods_commend as $val):?>
+                <?php if ($goods['goods_id'] != $val['goods_id']) { ?>
+                    <li>
+                        <a href="{:U('ShowFactory/goodsDetial',array('store_id'=>$val['store_id'], 'goods_id'=>$val['goods_id']))}" title="<?php echo $val['goods_name'];?>">
+                            <img src="<?php echo thumb($val,160);?>" alt="<?php echo $val['goods_name'];?>" />
+                            <h3 class="fs14 mt5"><?php echo $val['goods_name'];?></h3>
+                        </a>
+                        <p class="cor-red mt10">¥ <?php echo $val['goods_price'];?></p>
+                    </li>
+                <?php } ?>
+            <?php endforeach;?>
+        </ul>
+    </div>
+    <div class="detail-info">
+        <div class="title"><span>商品详情</span></div>
+        <p class="goods-attr cf">
+        	<span>商家货号：<?php echo $goods['goods_serial']; ?></span>
+            <?php if (isset($goods['brand_name'])) {
+                echo '<span>' . '品牌：' . $goods['brand_name'] . '</span>';
+            } ?>
+            <?php if (is_array($goods['goods_attr']) && !empty($goods['goods_attr'])) { ?>
+                <?php foreach ($goods['goods_attr'] as $val) {
+                    $val = array_values($val);
+                    echo '<span>' . $val[0] . '：' . $val[1] . '</span>';
+                } ?>
+            <?php } ?>
+        </p>
+        <div class="goods-text mt20"><?php echo $goods['goods_body']; ?></div>
+    </div>
+</div>
+<form id="buynowForm" method="post" action="{:U('Buy/buy_step1_fact')}">
+    <input type="hidden" id="cartID" name="cart_id" />
+</form>
+<input type="hidden" id="islogin" value="<?php echo $_SESSION['is_login'] ;?>" />
+<input type="hidden" id="goodsImage" value="[<?php if (!empty($goods_image)) { echo implode(',', $goods_image); }?>]" />
+<input type="hidden" id="goods_commonid" value="<?php echo $goods['goods_commonid'];?>" />
+<input type="hidden" id="goods_id" value="<?php echo $_GET['goods_id'];?>"/>
+<input type="hidden" id="store_id" value="<?php echo $store_info['store_id'];?>"/>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+	seajs.use("web/goods", function(Goods){
+		//选择地区查看运费
+        $(".js-transport-pannel a").click(function (){
+            var id = $(this).attr("nctype") || "";
+            if (!id) return false;
+            var me = $(this),
+				tpl_id = "<?php echo $output['goods']['transport_id'];?>",
+				goods_id = "<?php echo $output['goods']['goods_id']?>",
+            	url = "index.php?act=goods&op=calc_fee&rand=" + Math.random();
+            $(".js-transport-price").hide();
+            $(".js-loading-price").show();
+            $.getJSON(url, {
+				id		: id,
+				tid		: tpl_id,
+				goods_id: goods_id
+			}, function (data) {
+                if (!$.isEmptyObject(data)){
+                    for (var k in data) {
+                        switch (data[k]['transport_type']){
+						case "1":
+							$(".js-nc-wl").html(data[k]["transport_fee"]);
+							break;
+						case "2":
+							$(".js-nc-kd").html(data[k]["transport_fee"]);
+							break;
+                        }
+                    }
+                }else{
+                    $(".js-nc-kd").html('卖家承担运费');
+                }
+                $(".js-transport-price").show();
+            	$(".js-loading-price").hide();
+                $(".js-ncrecive").html(me.html());
+            });
+        });
+	});
+</script>
+</block>

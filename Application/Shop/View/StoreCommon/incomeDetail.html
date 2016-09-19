@@ -1,0 +1,153 @@
+<extend name="Layouts:seller" />
+<block name="title"><title>收支明细-<?php if($_SESSION['com_type'] == 3){?>供货中心<?php } else{?>卖家中心<?php } ?>-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="content-wrap">
+	<h2 class="query-tit">收支明细</h2>
+    <div class="query-box mt10">
+        <form action="javascript:void(0);" class="query-bar" id="queryform" autocomplete="off" method="get">
+            <p class="unit-line">
+                <span class="unit">
+                    <label class="label" for="orderNum">订单号：</label>
+                    <input type="text" id="orderNum" name="order_num" class="text" value="<?php echo $_GET['order_num'];?>" placeholder="请填写订单号" />
+                </span>
+                <span class="unit">
+                    <label class="label" for="orderNum">起止时间：</label>
+                    <input type="text" id="start" name="start_time" class="text laydate-icon" value="<?php echo $_GET['start_time']?>" placeholder="请选择日期" />
+                    <em class="cor-9 ml5 mr5">-</em>
+                    <input type="text" id="end" name="end_time" class="text laydate-icon" value="<?php echo $_GET['end_time']?>" placeholder="请选择日期" />
+                </span>
+                <a href="javascript:void(0);" class="cor-blue ml20 js-near30">最近30天</a>
+                <a href="javascript:void(0);" class="cor-blue ml10 js-near90">最近90天</a>
+            </p>
+            <p class="unit-line">
+                <span class="unit">
+                    <label class="label" for="serialNumber">收支流水号：</label>
+                    <input type="text" id="serialNumber" name="serial_number" class="text" value="<?php echo $_GET['serial_number']?>" placeholder="请填写收支流水号" />
+                </span>
+                <span class="unit">
+                    <label class="label">类型：</label>
+                    <select name="type">
+                        <option value="" <?php if(!isset($_GET['type'])){?> selected="selected" <?php }?>>全部</option>
+                        <option value="0" <?php if($_GET['type']!='' && $_GET['type']==0){?> selected="selected" <?php }?>>订单出账</option>
+                        <option value="1" <?php if($_GET['type']==1){?> selected="selected" <?php }?>>订单入账</option>
+                        <option value="2" <?php if($_GET['type']==2){?> selected="selected" <?php }?>>充值</option>
+                        <option value="3" <?php if($_GET['type']==3){?> selected="selected" <?php }?>>提现</option>
+                        <option value="4" <?php if($_GET['type']==4){?> selected="selected" <?php }?>>交易服务费</option>
+                    </select>
+                </span>
+            </p>
+             <p class="query-btn">
+                <button href="javascript:void(0);" class="btn btn-blue js-queryBtn">查询</button>
+                <!--<a href="index.php?<?php echo $_SERVER['QUERY_STRING'];?>&op=export" class="btn btn ml10">批量导出</a>-->
+            </p>
+        </form>
+    </div>
+    <table class="table mt10" width="100%">
+        <colgroup>
+            <col width="15%">
+            <col width="18%">
+            <col width="12%">
+            <col width="12%">
+            <col width="12%">
+            <col width="20%">
+            <col width="">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>时间</th>
+                <th>类型 | 收支流水号</th>
+                <th>收入（元）</th>
+                <th>支出（元）</th>
+                <th>余额（元）</th>
+                <th>支付渠道 | 订单号</th>
+                <th>操作 | 说明</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($money_record as $key => $val) { ?>
+                <tr>
+                    <td><?php echo date('Y-m-d H:i:s',$val['created_at']);?></td>
+                    <td>
+                        <p><?php echo incomeType($val['m_type']);?></p>
+                        <p class="cor-9"><?php echo $val['id'];?></p>
+                    </td>
+                    <?php if($val['is_pay'] == 0){ ?>
+                        <td><span class="cor-red">+ ¥<?php echo $val['money']; ?></span></td>
+                        <td>—</td>
+                    <?php }else{ ?>
+                        <td>—</td>
+                        <td><span class="cor-green">- ¥<?php echo $val['money']; ?></span></td>
+                    <?php } ?>
+                    <td><?php echo $val['yu_e'];?></td>
+                    <td>
+                        <p><?php echo orderPaymentName($val['pay_class']);?></p>
+                        <p class="cor-9"><?php echo $val['order_sn'];?></p>
+                    </td>
+                    <td>
+                        <?php if($_SESSION['com_type'] == 3 && !empty($val['order_id'])){?>
+                        <a href="<?php echo U('Factory/order_detail',array('order_id'=>$val['order_id']));?>" class="link" target="_blank">详情</a>
+                        <?php }else if($_SESSION['com_type'] == 1 && !empty($val['order_id'])){ ?>
+                        <a href="<?php echo U('StoreCommon/order_detail',array('order_id'=>$val['order_id']));?>" class="link" target="_blank">详情</a>
+                        <?php }else if($_SESSION['com_type'] == 2 && !empty($val['order_id'])){?>
+                        <a href="<?php echo U('storeCommon/ordermanage',array('order_id'=>$val['order_id']));?>" class="link" target="_blank">详情</a>
+                        <?php }?>
+                        <p><?php echo $val['des']; ?></p>
+                    </td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+    <div id="jspage" class="jspage">
+        <?php echo $page; ?>
+    </div>
+    <!--
+    <div class="no-data">还没有相关数据</div>
+    -->
+</div>
+<input type="hidden" id="30day" value="<?php echo date("Y-m-d 00:00",strtotime("-29 day"));?>" />
+<input type="hidden" id="90day" value="<?php echo date("Y-m-d 00:00",strtotime("-89 day"));?>" />
+<input type="hidden" id="today" value="<?php echo date("Y-m-d 00:00",strtotime("+1 day"));?>" />
+
+</block>
+<block name="my_js">
+<script type="text/javascript">
+(function($){
+    define("s/incomeDetail",function(require, exports, module){
+        require("jquery/layer");
+        require("jquery/laydate");
+        var Module = {
+            init: function(){
+                $(".js-near30").on("click", function(){
+                    $("#start").val($("#30day").val());
+                    $("#end").val($("#today").val());
+                });
+                $(".js-near90").on("click", function(){
+                    $("#start").val($("#90day").val());
+                    $("#end").val($("#today").val());
+                });
+               //提交订单查询
+                $(".js-queryBtn").on("click",function(){
+                    var start = $("#start").val();
+                    var end = $("#end").val();
+                    if(start == '' && end!=''){
+                        $.wrongMsg('请选择开始时间！');
+                        return false;
+                    }
+                    if(start != '' && end ==''){
+                        $.wrongMsg('请选择截止时间！');
+                        return false;
+                    }
+                    var base_url ="{:U('StoreCommon/incomeDetail')}?" + $("#queryform").serialize();
+                    window.location.href = base_url;
+                });
+            }
+        };
+        module.exports = Module;
+    });
+    seajs.use("s/incomeDetail", function(module){
+        module.init();
+    });
+})($);
+</script>
+</block>

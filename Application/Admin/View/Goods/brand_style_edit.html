@@ -1,0 +1,83 @@
+<include file="Application/Common/Layout/head.html" /> 
+<div class="am-cf admin-main">
+<include file="Application/Common/Layout/left.html" /> 
+  <!-- content start -->
+  <div class="admin-content">
+    <div class="admin-content-body">
+      <div class="am-cf am-padding am-padding-bottom-0">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">风格编辑</strong> / <small>Brand Sytle Edit</small></div>
+      </div>
+
+      <hr/>
+
+      <div class="am-g">
+        <div class="am-u-sm-12 am-u-md-4 am-u-md-push-8">
+         
+        </div>
+
+        <div class="am-u-sm-12 am-u-md-8 am-u-md-pull-4">
+          <form class="am-form am-form-horizontal" id="form1" action="" method="post">
+            <div class="am-form-group">
+              <label for="user-name" class="am-u-sm-3 am-form-label">风格名称</label>
+              <div class="am-u-sm-9">
+                <input type="text" id="style_name" name="style_name" value="{$style.style_name}" placeholder="请输入风格名称">
+                <input type="hidden" id="style_name_old" name="style_name_old" value="{$style.style_name}">
+              </div>
+            </div>
+			
+			<div class="am-form-group">
+              <label for="user-email" class="am-u-sm-3 am-form-label">状态</label>
+              <div class="am-u-sm-9" style='height:45px;line-height:45px'>
+                <input type="radio" name="status" value='1' <?php if($style['status']==1 || $_GET['act']=='add' ){echo 'checked';} ?> > 开启 &nbsp;&nbsp;
+                <input type="radio" name="status" value='0' <?php if($style['status']==0 && $_GET['act']!='add'){echo 'checked';} ?>> 关闭
+              </div>
+            </div>
+			
+			<input type='hidden' name="act" value="{$Think.get.act}">
+            <div class="am-form-group">
+              <div class="am-u-sm-9 am-u-sm-push-3">
+                <input type="submit" class="am-btn am-btn-primary">
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+ 
+
+  </div>
+  <!-- content end -->
+
+</div>
+<include file="Application/Common/Layout/foot.html" /> 
+<script>
+	$("#style_name").blur(function(){
+		var style_name  = $(this).val(); 
+		var style_name2 = $('#style_name_old').val(); 
+		if(style_name==style_name2) return;
+		$.ajax({
+			type: 'get',
+			cache:false,
+			url:'/Admin/Goods/ajax_check_duplicate',
+			data:{
+				type :'style_name',
+				value:style_name
+			},
+			success: function(data){
+				if(data=='1'){
+					alert('风格名已存在！');
+					$(this).focus();
+				} 
+			},
+			dataType:'json'
+		});
+	});
+	
+	$('#form1').submit(function(){
+		var getnameval = $("#style_name").val();
+		if(getnameval==''){
+			alert('风格名不能为空！');
+			return false;
+		}
+	});
+</script>

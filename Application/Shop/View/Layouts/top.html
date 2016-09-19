@@ -1,0 +1,55 @@
+<!--[if lt IE 8]>
+<script type="text/javascript">
+    window.location.href="__ROOT__/index.php?m=shop&c=shopCommon&a=needupgrade";
+</script>
+<![endif]-->
+<div class="topper">
+    <div class="wrapper cf">
+        <span class="ml20 fl">特速集团旗下品牌</span>
+        <div class="menu fr">
+            <empty name="Think.session.member_id">
+                <a href="{:U('Login/index')}"  title="登录商家管理中心" class="cor-white fr ml10">商家中心</a>
+            <else />
+                <empty name="Think.session.seller_id">
+                    <a href="{:U('StartBusiness/index')}"  title="登录商家管理中心" class="cor-white fr ml10">商家中心</a>
+                <else />
+                    <notempty name="Think.session.store_id">
+                        <a href="{:U('StoreCommon/index')}"  title="登录商家管理中心" class="cor-white fr ml10">商家中心</a>
+                    </notempty>                
+                </empty> 
+            </empty> 
+          	<!--
+          	<dl class="fr hover">
+                <dt>
+                    客户服务<i></i>
+                </dt>
+                <dd>
+                    <a href="/index.php?m=shop&c=Article&a=index&ac_id=2">帮助中心</a>
+                    <a href="/index.php?m=shop&c=Article&a=index&ac_id=5">售后服务</a>
+                    <a href="/index.php?m=shop&c=Article&a=index&ac_id=6">客服中心</a>
+                </dd>
+            </dl>
+            -->
+            <dl class="fr">
+                <dt>
+                    我的收藏<i></i>
+                </dt>
+                <dd>
+                    <a href="{:U('member/favgoods')}">商品收藏</a>
+                    <a href="{:U('member/favstore')}">店铺收藏</a>
+                </dd>
+            </dl>
+            <p class="mr20 fr">
+                <if condition="$Think.session.is_login eq 1">
+                    您好，用户
+					<a href={:U('shop/member/index')} class="cor-orange">{$Think.session.member_name}</a>
+                    <span class="ml10"><a href="/login/logout">退出</a></span>
+                <else />
+					<!--  <?php echo $lang['nc_hello'].$lang['nc_comma'];?> -->
+					<a href="/login" class="cor-white"> [ 登录 ]</a>
+					<a href="{:U('login/register')}" class="cor-white ml10">[ 注册 ]</a>
+                </if>
+            </p>
+        </div>
+    </div>
+</div>

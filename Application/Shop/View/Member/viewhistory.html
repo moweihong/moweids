@@ -1,0 +1,35 @@
+<extend name="Layouts:member" />
+<block name="title"><title>浏览记录-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="tit-bar">
+	<h2>浏览记录</h2>
+    <p class="sort-filter mt10 cf">
+    	<em>分类筛选：</em>
+        <a href="__ROOT__/index.php?m=shop&c=member&a=browseHistory">全部</a>
+    	<?php foreach ($output['gc'] as $k=>$v){?>
+        <a href="<?php echo $v['url'];?>"><?php echo $v['gc_name'] ?>(<?php echo $v['count'] ?>)</a>
+        <?php }?>
+    </p>
+</div>
+<div class="history-box mt20">
+	<h2>最新浏览记录</h2>
+	<?php if (!empty($output['viewed_goods'])){?>
+        <ul class="history-list mt10 cf">
+            <?php  foreach ($output['viewed_goods'] as $k => $v) { ?>
+                <li>
+                    <a href="<?php echo urlShop('goods', 'index', array('goods_id' => $v['goods_id'])); ?>">
+                        <img src="<?php echo thumb($v, 180); ?>" width="180px" height="180px" alt="<?php echo $v['goods_name']; ?>" />
+                        <p class="h40 mt5"><?php echo $v['goods_name']; ?></p>
+                    </a>
+                    <!--
+                    <p class="cor-red"><?php echo $lang['currency']; ?><?php echo $v['goods_price']; ?></p>
+                    -->
+                </li>
+            <?php } ?>
+        </ul>
+    <?php }else {?>
+    	<p class="no-data">暂无浏览记录</p>
+    <?php }?>
+</div>
+</block>

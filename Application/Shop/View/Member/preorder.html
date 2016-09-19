@@ -1,0 +1,118 @@
+<extend name="Layouts:member" />
+<block name="title"><title>预订单-买家中心-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="content-wrap pre-order-box js-preOrder">
+    <p class="tab-hd cf">
+    	<a href="__ROOT__/index.php?m=shop&c=member&a=favGoods">收藏的商品</a>
+        <a href="javascript:void(0);" class="curr">
+        	预订单
+            <?php if($output['order_list']){?><em class="pre-order-num"><?php echo count($output['order_list']);?></em><?php }?>
+        </a>
+    </p>
+    <p class="table-top fs14 cf js-tableTop">
+        <span style="width:70px;text-align:left;">
+            <label class="ml10"><input type="checkbox" class="v-2 mr5 js-allCheck" /> 全选</label>
+        </span>
+        <span style="width:338px">商品信息</span>
+        <span style="width:102px">单价</span>
+        <span style="width:122px">数量</span>
+        <span style="width:232px">备注</span>
+        <span style="width:112px">操作</span>
+    </p>
+    <form action="<?php echo urlShop('buy','buy_pre_step1');?>" method="POST" id="form_buy" name="form_buy">
+        <table class="table" width="100%">
+            <colgroup>
+                <col width="23px" />
+                <col width="375px" />
+                <col width="100px" />
+                <col width="120px" />
+                <col width="230px" />
+                <col width="110px" />
+            </colgroup>
+            <tbody>
+                <?php if($output['order_list']){
+                    foreach($output['order_list'] as $k1=>$v1){?>
+                        <tr class="shop-name" id="shop<?php echo $k1?>">
+                            <td colspan="6">
+                                <label class="ml10">
+                                    <input type="checkbox" class="v-2 mr5 js-partCheck" />
+                                    <?php echo $v1['store_name']?>
+                                </label>
+                                <span class="ml40">创建时间：<?php echo $v1['add_time'];?></span>
+                            </td>
+                        </tr>
+                        <?php if($v1['goods_list']){
+                            foreach($v1['goods_list'] as $k2=>$v2){?>
+                        <tr data-id="<?php echo $v2['order_goods_id']?>" for-id="shop<?php echo $k1?>" data-goods_id="<?php echo $v2['goods_id']?>" data-order_id="<?php echo $k1?>" data-store_id="<?php echo $v1['store_id']?>">
+                                    <td style="text-align:right;border-right:none 0;">
+                                        <input type="checkbox" class="v-2 js-check" />
+                                    </td>	
+                                    <td style="border-left:none 0;">
+                                        <div class="goods-td cf">
+                                            <a href="index.php?m=shop&c=goods&a=index&goods_id=<?php echo $v2['goods_id']?>" class="pic" target="_blank">
+                                                <img src="<?php echo thumb($v2,$type='')?>" width="80px" height="80px" alt="" />
+                                            </a>
+                                            <p class="h60">
+                                                <a href="index.php?m=shop&c=goods&a=index&goods_id=<?php echo $v2['goods_id']?>" class="cor-blue" target="_blank"><?php echo $v2['goods_name']?></a>
+                                            </p>
+                                            <p class="standard w280">规格：<?php echo $v2['spec_value']?></p>
+                                        </div>	
+                                    </td>	
+                                    <td class="cor-red">
+                                        ¥<span class="js-price"><?php echo $v2['goods_price']?></span>
+                                    </td>	
+                                    <td>
+                                        <div class="ncs-figure-input js-figureInput">
+                                            <a href="javascript:void(0)" class="decrease fl js-decrease">-</a>
+                                            <input type="text" name="quantity" class="text fl js-number" value="<?php echo $v2['goods_num']?>" size="3" maxlength="6" />
+                                            <a href="javascript:void(0)" class="increase fl js-increase">+</a>
+                                        </div>
+                                    </td>
+                                    <td class="rel">
+                                        <p class="text-overflow01 remark tl js-remark"><?php echo $v2['remark']?></p>
+                                        <p style="display:none;border:1px solid #333;position: absolute;z-index: 100;background:#fff;width:200px;left:20px;">
+                                            <?php echo $v2['remark'];?>
+                                        </p>                                        
+                                        <?php if($v2['remark_goods_image_info']){foreach($v2['remark_goods_image_info'] as $rInfo){?>
+                                        	<img width="50" height='50' src="<?php echo $rInfo['goods_image']?>" style="margin:2px;" />    
+                                        <?php }}?>
+                                    </td>
+                                    <td><a href="javascript:void(0);" class="btn btn-small js-del">删除</a></td>
+                                </tr>
+                            <?php }
+                        }
+                    }
+                }?>
+            </tbody>
+        </table>
+        <input type="hidden" id="amount" value="" name="amount" />
+        <input type="hidden" id="total_goods_price" value="" name="total_goods_price" />
+        <input type="hidden" id="goods_id_str" value="" name="goods_id_str" />
+        <input type="hidden" id="order_id_str" value="" name="order_id_str" />
+    </form>
+    <div class="calculate-bar cf js-calculateBar">
+        <label class="fl"><input type="checkbox" class="v-2 mr5 js-allCheck" /> 全选</label>
+        <a href="javascript:void(0);" class="ml20 fl js-batchDel">删除</a>
+        <p class="fr">
+            <span class="v-mid">已选商品 <em id="selected_quantity" class="cor-red">0</em> 件</span>
+            <span class="v-mid ml50">合计(不含运费)：<em class="cor-red">¥</em><em id="total_price" class="cor-red">0</em></span>
+            <input type="button" class="btn btn-red btn-small ml30 js-balanceBtn" value="结算" />
+        </p>
+    </div>
+    <div id="jspage" class="jspage dis-none"></div>
+</div>
+<input type="hidden" id="deleteUrl" value="/index.php?m=shop&c=member&a=delPreOrderGoods" data-type="pre-order-list" data-msg="商品" data-isreload="no" />
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+seajs.use("m/pre_order_list", function(Preorderlist){
+	$(".js-remark").hover(function(){
+		$(this).siblings("p").show();
+	},function(){
+		$(this).siblings("p").hide();
+	})
+});   
+</script>
+</block>

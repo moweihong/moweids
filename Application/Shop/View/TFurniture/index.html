@@ -1,0 +1,23 @@
+<extend name="Layouts:home" />
+<block name="title"><title>精品家具-{:C('site_name')}</title></block>
+<block name="content">
+	<include file="Layouts:top_banner"/>
+	<div class="wrapper floor-template furnitrue">
+	    <h2 class="main-tit"><span>热门推荐</span><span class="letter">RECOMEND</span></h2> 
+	    <ul class="pro-list cf">
+			<volist name='hotRecommend' id='v'>
+                <li>
+                    <a href="http://{$v.adv_content.adv_pic_url}" title="">
+                        <div class="goods-pic">
+                            <img src="{:advImg($v['adv_content']['adv_pic'])}" alt="" />
+                        </div>
+                        <div class="goods-info">
+                            <p class="name">{$v.adv_title}</p>
+                            <p class="cor-9">{$v.adv_content.adv_intro}</p>
+                        </div>
+                    </a> 
+                </li>
+			</volist>
+	    </ul>
+	</div>
+</block>

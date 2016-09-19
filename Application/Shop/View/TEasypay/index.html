@@ -1,0 +1,213 @@
+<extend name="Layouts:home" />
+<block name="title"><title>我的额度-{:C('site_name')}</title></block>
+<block name="head_css">
+	<link href="__CSS__/easypay.css" rel="stylesheet" type="text/css">
+</block>
+
+<block name="content">
+	<div class="e-banner js-banner">
+    <ul class="slides cf">
+        <li style="background-image:url(__IMG__/easypay/credit_banner_img1.jpg);"></li>
+        <li style="background-image:url(__IMG__/easypay/credit_banner_img2.jpg);"></li>
+    </ul>
+    <div class="credit-operating">
+        <div class="title">特速分期</div>
+        <!--小白，一审不通过 复审不通过-->
+        <?php if(($status['code'] == 0)||($status['code'] == 2)||($status['code'] == 4)){ ?>
+            <div class="one display">
+                <p class="info"><img src="__IMG__/easypay/credit_operating_img1.png"><em>我的额度</em></p>
+                <a href="javascript:void(0);" class="btn-apply js-applyBtn">申请额度</a>
+            </div>
+        <?php } ?>
+        <!--未审核  初审通过-->
+        <?php if(($status['code'] == 1)||($status['code'] == 3)){ ?>
+            <div class="two">
+                <div class="info">
+                    <em>额度审批中.....</em>
+                    <p class="progress"><span style="width:90%"></span></p>
+                    <p>90%</p>
+                </div>
+                <a href="javascript:void(0);">申请额度</a>
+            </div>
+        <?php }  ?>
+        <!--待激活-->
+        <?php if($status['code'] == 5){ ?>
+            <div class="three">
+                <p class="info">
+                    <span><?php echo ncPriceFormat($status['credit']); ?></span>元
+                    <em>分期额度</em>
+                </p>
+                <a href="<?php echo urlShop('Easypay', 'activate'); ?>">激活额度</a>
+            </div>
+        <?php } ?>
+        <!--已完成-->
+        <?php if($status['code'] == 7){ ?>
+            <div class="four">
+                <p class="info">
+                    分期额度（元）：<span><?php echo ncPriceFormat($status['credit']); ?></span>
+                    总欠款（元）：<span><?php echo ncPriceFormat($status['debt']); ?></span>
+                    <a href="<?php echo urlShop('index'); ?>">立即使用</a>
+                </p>
+                
+                <em>额度有效期至<?php echo date('Y-m-d',$status['expire']); ?>，过期后需再次申请</em>
+            </div>
+        <?php } ?>
+    </div>
+</div>
+<div class="credit-notice wrapper">
+    <div class="credit-title"><h2>分期须知</h2>Installment notice</div>
+    <div class="texts">
+        <dl>
+            <dt>业务介绍：</dt>
+            <dd class="stop">
+                <p>1.分期付款，是全木行平台专门为平台用户推出的信用付款业务即（赊购服务），以用户提供的资信证明材料为主要依据，并由全木行合作伙伴深圳市链金所金融服务有限公司（以下简称“链金所” ）确定授信额度并拨付消费资金，用户可将此资金用于购买家具、建材、以及支付装修款，享受“先消费、后付款”的信用赊购服务。用户再以分期还款的方式向链金所分期还款。</p>
+                <p>2.用户在全木行平台选择分期付款后，需要提供相关的资信证明材料，经由链金所审核并确定授信额度后，即可选购与全木行平台合作商家（装修公司）的商品或装修服务。</p>
+                <p>3.分期付款审批的消费资金不可提现，只能用于购买与全木行平台合作商家（装修公司）之商品或支付装修款。</p>
+                <p>4.分期购支持用户同时选定多个商品使用分期购服务。分期购只支持总价不低于1000元的订单。</p>
+                <p>5.同一个授信额度不能用于不同的商家或不同分期期数。</p>
+                <p>6.用户要购买的分期商品需要在授信额度内。当批准之额度不足以支付所购商品订单金额时，用户需补足差额部分。</p>
+                <p>7.用户选择分期付款项下的商品后，在产品没有质量问题的情况下，不能退货，否则需要承担因分期而形成的分期手续费/分期利息。</p>
+                <p>8.用户任何原因的退货均为用户与商家之间的商品交易问题，不影响分期付款服务的有效性，用户仍需承担分期手续费/分期利息。</p>
+                <p>9.用户使用全木行提供的分期付款服务，即同意委托全木行平台向商家支付购物款。</p>
+                <p>10.账单日与还款日。账单日是用户分期付款每月出还款账单的特定日期，为用户申请分期审批的当日；还款日是指用户最后的还款日期，即用户申请分期被审批后的相同日。每月还款日前3天系统将会以短信通知等方式提醒还款，还款成功后系统以短信通知等方式提醒成功还款。若用户在指定的还款日前尚未进行相应的还款，将会产生逾期费用且无法再使用分期付款服务，并承担逾期罚息的后果。</p>
+            </dd>
+        </dl>
+        <p class="h30 tr"><a href="javascript:void(0);" class="cor-blue js-viewMore">查看更多</a></p>
+        <dl>
+            <dt>注意事项：</dt>
+            <dd>
+                <p>1.分期付款审批的消费资金不可提现，只能用于购买与全木行平台合作商家（装修公司）之商品或支付装修款。</p>
+                <p>2.分期购支持用户同时选定多个商品使用分期购服务。分期购只支持总价不低于1000元的订单。</p>
+                <p>3.同一个授信额度不能用于不同的商家或不同分期期数。</p>
+            </dd>
+        </dl>
+        <p class="h30 tr"></p>
+        <dl>
+            <dt>还款介绍：</dt>
+            <dd>当用户选择分期并提交审核资料，链金所审核确定额度并打款后，用户即可购买商品或支付装修费用，用户与链金所已经完成新浪认证及绑定收款/分期还款账户等操作，在每期还款日前，用户只需通过绑定还款账户转账还款即可，操作简洁便利。 </dd>
+        </dl>
+    </div>
+</div>
+<div class="credit-process wrapper">
+    <div class="credit-title"><h2>申请开通流程</h2>Opening process</div>
+    <div class="info cf">
+        <dl class="n1">
+            <dt></dt>
+            <dd>填写额度申请表</dd>
+        </dl>
+        <dl class="n2">
+            <dt></dt>
+            <dd>上传征信报告</dd>
+        </dl>
+        <dl class="n3">
+            <dt></dt>
+            <dd>授信额度审批</dd>
+        </dl>
+        <dl class="n4">
+            <dt></dt>
+            <dd>分期激活</dd>
+        </dl>
+        <dl class="n5">
+            <dt></dt>
+            <dd>开通成功</dd>
+        </dl>
+    </div>
+</div>
+<div class="credit-protocol wrapper">
+    <div class="credit-title"><h2>分期相关协议</h2>Relevant agreement</div>
+    <div class="info cf">
+        <dl class="js-treaty" data-url="__ROOT__/shop/contract/jkxy">
+            <dt></dt>
+            <dd>借款协议</dd>
+        </dl>
+        <dl class="js-treaty" data-url="__ROOT__/shop/contract/wtdkxy">
+            <dt></dt>
+            <dd>委托代扣协议</dd>
+        </dl>
+        <dl class="js-treaty" data-url="__ROOT__/shop/contract/hkcns">
+            <dt></dt>
+            <dd>还款承诺书</dd>
+        </dl>
+        <dl class="js-treaty" data-url="__ROOT__/shop/contract/grzxsqs">
+            <dt></dt>
+            <dd>个人征信授权书 </dd>
+        </dl>
+        <dl class="js-treaty" data-url="__ROOT__/shop/contract/grxxsysqs">
+            <dt></dt>
+            <dd>个人信用使用授权书 </dd>
+        </dl>
+        <dl class="last js-treaty" data-url="__ROOT__/shop/contract/fxgzs">
+            <dt></dt>
+            <dd>风险告知书</dd>
+        </dl>
+    </div>
+</div>
+<input type="hidden" id="islogin" value="<?php if(!$_SESSION['is_login']){  echo 0; }else{ echo 1; }; ?>" />
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+(function($){
+	define("web/base",function(require, exports, module){
+		require("jquery/layer");
+		require("jquery/flexslider");
+		var islogin = $("#islogin").val() || ""; //登录状态
+		var manage = require("com/manage");
+		var Module = {
+			init: function(){
+				/*
+				**焦点图轮播
+				*/ 
+				$(".js-banner").flexslider();
+				/*
+				**查看更多
+				*/ 
+				$(".js-viewMore").click(function(){
+					var me = $(this),
+						$p = me.closest("p"),
+						$dl = $p.prev("dl"),
+						$dd = $("dd", $dl);
+					if($dd.hasClass("stop")){
+						$dd.removeClass("stop");
+						me.text("收起 ↑")
+					}else{
+						$dd.addClass("stop");
+						me.text("查看更多")
+					}
+				});
+				/*
+				**协议弹窗
+				*/ 
+				$(".js-treaty").click(function(){
+					var me = $(this),
+						url = me.data("url"); //alert(gConfig.apiurl + url);
+					layer.open({
+						type: 2,
+						title:false,
+						closeBtn: 1,
+						area: ['700px', '500px'],
+						content: gConfig.apiurl + url
+					});
+				});
+				
+				/*
+				**登录弹窗
+				*/ 
+			   $('.btn-apply').click(function(){
+					if(islogin != 1){
+					  login_dialog();
+					  return;
+					}
+					window.location = gConfig.apiurl + "{:U('shop/easypay/index');}";
+				});
+				
+			}
+		};
+		module.exports = Module;
+	});
+	seajs.use("web/base", function(module){
+		module.init();
+	});
+})($);
+</script>
+</block>

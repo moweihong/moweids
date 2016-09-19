@@ -1,0 +1,300 @@
+<extend name="Layouts:seller" />
+<block name="title"><title><?php if ($_GET['id'] > 0 ){?>编辑<?php }else{?>添加<?php }?>方案-卖家中心-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="content-wrap" style="padding:10px 0;">
+	<div class="tit-line">
+		<h2><?php if ($_GET['id'] > 0 ){?>编辑<?php }else{?>添加<?php }?>方案</h2>
+	</div>
+	<form action="javascript:void(0);" id="form" class="mt20" method="post" autocomplete="off">
+		<input type="hidden" id="decorateID" name="id" value="<?php echo $decorate_plan_info['de_plan_id'];?>"/>
+		<ul class="list">
+			<li class="cf">
+				<label class="handle" for="title"><em class="cor-red">*</em>标题：</label>
+				<div class="rel">
+					<input type="text" id="title" name="title" class="text" placeholder="请输入标题" maxlength="30" value="<?php echo $decorate_plan_info['title'];?>" required />
+                    <span show="title.check" class="error-msg">
+                        <em class="errow-arrow"></em>
+                        请输入标题
+                    </span>
+				</div>
+			</li>
+			<li class="cf">
+				<label class="handle" for="houseType"><em class="cor-red">*</em>户型：</label>
+				<div class="rel">
+					<input type="text" id="houseType" name="house_type" class="text" placeholder="请输入户型" maxlength="20" value="<?php echo $decorate_plan_info['house_type'];?>" required />
+                    <span show="house_type.check" class="error-msg">
+                        <em class="errow-arrow"></em>
+                        请输入户型
+                    </span>
+				</div>
+			</li>
+			<li class="cf">
+				<label class="handle" for="houseAddress"><em class="cor-red">*</em>户型地址：</label>
+				<div class="rel">
+					<input type="text" id="houseAddress" name="house_address" class="text" placeholder="请输入户型地址" maxlength="20" value="<?php echo $decorate_plan_info['house_address'];?>" required />
+                    <span show="house_address.check" class="error-msg">
+                        <em class="errow-arrow"></em>
+                        请输入户型地址
+                    </span>
+				</div>
+			</li>
+			<li class="cf">
+				<label class="handle" for="cost"><em class="cor-red">*</em>总造价：</label>
+				<div class="rel">
+					<input type="text" id="cost" name="cost" class="text js-money" placeholder="请输入总造价" maxlength="20" value="<?php echo $decorate_plan_info['cost'];?>" required />
+                    <span show="cost.check" class="error-msg">
+                        <em class="errow-arrow"></em>
+                        请输入总造价
+                    </span>
+				</div>
+			</li>
+			<li class="cf">
+				<label class="handle" for="area"><em class="cor-red">*</em>面积：</label>
+				<div class="rel">
+					<input type="text" id="area" name="area" class="text js-money" placeholder="请输入平米数" maxlength="20" value="<?php echo $decorate_plan_info['area'];?>" required />
+					<span show="area.check" class="error-msg">
+                        <em class="errow-arrow"></em>
+                        请输入平米数
+                    </span>
+				</div>
+			</li>
+			<li class="cf">
+				<label class="handle" for="decorate_type"><em class="cor-red">*</em>风格：</label>
+				<div class="rel">
+					<label>
+						<select name="decorate_type">
+							<option value="0"><?php echo $lang['nc_please_choose'];?></option>
+							<?php if(!empty($decorate_type_list)){
+								foreach ($decorate_type_list as $val) {?>
+									<option value="<?php echo $val['id']; ?>" <?php if ($decorate_plan_info['decorate_type'] == $val['id']){ echo 'selected=selected';}?>><?php echo $val['type_name']; ?></option>
+								<?php }
+							}?>
+						</select>
+					</label>
+					<span show="decorate_type.check" class="error-msg">
+                        <em class="errow-arrow"></em>
+                        请选择风格
+                    </span>
+				</div>
+			</li>
+			<li class="cf">
+				<label class="handle" for="is_discount"><em class="cor-red">*</em>是否贴息：</label>
+				<div class="rel">
+					<label class="mr20">
+						<input type="radio" name="is_discount" value="1" <?php if ($decorate_plan_info['is_discount'] == 1){?>checked<?php }?>> 贴息
+					</label>
+					<label class="mr20">
+						<input type="radio" name="is_discount" value="0" <?php if ($decorate_plan_info['is_discount'] == 0){?>checked<?php }?>> 不贴息
+					</label>
+					<span show="is_discount.check" class="error-msg">
+                        <em class="errow-arrow"></em>
+                        请选择是否贴息
+                    </span>
+				</div>
+			</li>
+			<li class="cf">
+				<label class="handle"><em class="cor-red">*</em>封面：</label>
+				<div class="h30 cf">
+					<a href="javascript:void(0);" id="coverFileBtn" class="btn fl">上传图片</a>
+					<span class="cor-9 ml10 fl">(图片格式GIF、JPG、JPEG、PNG)</span>
+				</div>
+				<div id="coverFileList" class="cf">
+					<?php if (!empty($decorate_plan_info['coverpage'])){
+						$coverpage = unserialize($decorate_plan_info['coverpage']);
+						?>
+						<div class="file-item thumbnail upload-state-done">
+							<p class="file-panel" style="height: 0px;"><a class="icon-view js-viewImg" title="预览"></a></p>
+							<img src="<?php echo $coverpage['s_pic'];?>" data-rel="<?php echo $coverpage['m_pic'];?>" width="200px" height="200px" />
+						</div>
+					<?php }?>
+				</div>
+			</li>
+			<li class="cf">
+				<label class="handle">合同：</label>
+				<div class="h30 cf">
+					<a href="javascript:void(0);" id="contractFileBtn" class="btn fl">上传图片</a>
+					<span class="cor-9 ml10 fl">(图片格式GIF、JPG、JPEG、PNG)</span>
+				</div>
+				<div id="contractFileList" class="cf">
+					<?php if (!empty($decorate_plan_info['contract_pic'])){
+						$contract_pic = unserialize($decorate_plan_info['contract_pic']);
+						foreach ($contract_pic as $v){
+						?>
+						<div class="file-item thumbnail upload-state-done">
+                        	<p class="file-panel" style="height: 0px;"><a class="icon-view js-viewImg" title="预览"></a><a class="icon-cancel js-cancel" title="删除"></a></p>
+							<img src="<?php echo $v['s_pic'];?>" data-rel="<?php echo $v['m_pic'];?>" width="200px" height="200px"/>
+						</div>
+					<?php }}?>
+                </div>
+            </li>
+            <?php if(empty($_GET['id'])):?>
+            <li class="cf">
+                <label class="handle" for="visitPwd"><em class="cor-red">*</em>访问密码：</label>
+                <div class="rel">
+                    <input type="password" id="visitPwd" name="visit_pwd" class="text" placeholder="请输入访问密码" maxlength="20" value="<?php echo $decorate_plan_info['visit_pwd'];?>" required  />
+                    <span show="visit_pwd.check" class="error-msg">
+                        <em class="errow-arrow"></em>
+                        请输入请输入访问密码
+                    </span>
+                </div>
+            </li>
+            <?php endif?>
+            <li class="cf">
+                <label class="handle"><em class="cor-red">*</em>装修详情：</label>
+                <textarea id="description" style="width:780px;"><?php echo $decorate_plan_info['description'];?></textarea>
+            </li>
+            <li class="cf mt20">
+                <label class="handle"></label>
+                <button class="btn btn-blue js-publishBtn">发布</button>
+            </li>
+		</ul>
+	</form>
+</div>
+</block>
+
+<block name="my_js">
+<script type="text/javascript" src="__JS__/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="__JS__/ueditor/ueditor.all.min.js"></script>
+<script type="text/javascript">
+(function($){
+	define("design/decorate_operate",function(require, exports, module){
+		require("jquery/layer");
+		require("jquery/form");
+		var decorateID = $("#decorateID").val();
+		var upload = require("jquery/upload");
+		var manage = require("com/manage");
+		var Module = {
+			init: function(){
+				var form = $("#form").form();
+				/*
+				 * 封面图片上传
+				 * */
+				upload.base({
+					pickID: "coverFileBtn",
+					objID: "coverFileList",
+					storage: "solution",
+					isSingle: true
+				});
+				/*
+				 * 合同图片上传
+				 * */
+				upload.base({
+					pickID: "contractFileBtn",
+					objID: "contractFileList",
+                    fileNumLimit: "300",
+					storage: "solution"
+				});
+				/*
+				 * 富文本编辑器
+				 * */
+				var ue = UE.getEditor("description", {
+					toolbars: [['fontfamily', 'fontsize', '|', 'bold', 'italic', 'underline', 'forecolor', 'backcolor', '|', 'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'lineheight', '|', 'insertorderedlist', 'insertunorderedlist', '|', 'simpleupload', 'insertimage']],
+					enableAutoSave: false,//关闭自动保存
+					elementPathEnabled: false, //关闭元素路径
+					wordCount: false, //关闭字数统计
+					autoHeightEnabled: false, //关闭自动长高
+					initialFrameHeight: 300,
+					initialFrameWidth: "100%",
+					initialStyle: "p{line-height:1em;font-size: 14px;}"
+				});
+				/*
+				 * 保存
+				 * */
+				$("#container").on("click", ".js-publishBtn", function(){
+					if(!form.valid()){
+						$.wrongMsg("必填项不能为空");
+						return false;
+					}
+					var coverpage_pic_s = $("#coverFileList img").attr("src") || "",
+						coverpage_pic_m = $("#coverFileList img").data("rel") || "",
+						contract_pic = [],
+						data = $("#form").serialize();
+					data = manage.serializeJson(data);
+					var rem = data.cost % 100;
+					if(data.cost <= 0 || rem != 0){
+						$.wrongMsg("总造价请填写100的倍数");
+						$("#cost").focus();
+						return;
+					}
+					if($("select[name=decorate_type]").val() == 0){
+						$.wrongMsg("请选择风格");
+						return;
+					}
+					if($("input[name=is_discount]").length && $("input[name=is_discount]:checked").length == 0){
+						$.wrongMsg("请选择是否贴息");
+						return;
+					}
+					if($("#coverFileList .file-item").length < 1){
+						$.wrongMsg("请上传封面图片");
+						return;
+					}
+					if(!coverpage_pic_m){
+						$.wrongMsg("封面图片上传失败");
+						return;
+					}
+					if(!ue.getContent()){
+						$.wrongMsg("请填写装修详情");
+						return;
+					}
+					var coverpage = {
+						s_pic: coverpage_pic_s,
+						m_pic: coverpage_pic_m
+					};
+					$("#contractFileList .file-item").each(function(){
+						var s_pic = $("img", this).attr("src") || "",
+							m_pic = $("img", this).data("rel") || "";
+						var contract_pic_obj = {
+							s_pic: s_pic,
+							m_pic: m_pic
+						}
+						contract_pic.push(contract_pic_obj);
+					});
+					data.coverpage = coverpage;
+					data.contract_pic = contract_pic;
+					data.description = ue.getContent()
+					var pid = parent.layer.load(360);
+					manage.ajax({
+						url: gConfig.apiurl + "/Decorate/decorateOperate",
+						data: data,
+						success: function(result) {
+							layer.close(pid);
+							var resultText = result.resultText || {};
+							if(result.code == 1){
+								if(!decorateID){ //发布方案
+									layer.confirm('<div class="tc" style="width:350px;"><h3 class="fs16 cor-black">方案发布成功！</h3></div>',
+										{
+											btn: ['继续发布', '我的方案'] //按钮
+										}, function () {
+											location.reload();
+										}, function () {
+											window.location = gConfig.apiurl + "/Decorate/solutionList";
+										}
+									);
+								}else{ //编辑方案
+									layer.confirm('<div class="tc" style="width:350px;"><h3 class="fs16 cor-black">方案编辑成功！</h3></div>',
+										{
+											btn: ['继续编辑', '我的方案'] //按钮
+										}, function () {
+											location.reload();
+										}, function () {
+											window.location = gConfig.apiurl + "/Decorate/solutionList";
+										}
+									);
+								}
+							}else{
+								$.wrongMsg(resultText.message || "操作失败");
+							}
+						}
+					});
+				});
+			}
+		}
+		module.exports = Module;
+	});
+	seajs.use("design/decorate_operate", function(module){
+		module.init();
+	});
+})($);
+</script>
+</block>

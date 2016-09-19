@@ -1,0 +1,76 @@
+<include file="Application/Common/Layout/head.html" /> 
+<div class="am-cf admin-main">
+<include file="Application/Common/Layout/left.html" /> 
+  <!-- content start -->
+  <div class="admin-content">
+    <div class="admin-content-body">
+      <div class="am-cf am-padding am-padding-bottom-0">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">规格编辑</strong> / <small>Goos Set</small></div>
+      </div>
+
+      <hr/>
+
+	 <div class="am-g">
+        <div class="am-u-sm-12 " style="text-align:center">
+		  <a class="middlebt" href='/Admin/Goods/goods'>所有商品</a>
+		  <a class="middlebt" href='/Admin/Goods/goods?type=wgxj'>违规下架</a>
+	      <a class="middlebt" href='/Admin/Goods/goods?type=dsh'>等待审核</a>
+	      <a class="middlebt" href='/Admin/Goods/goods_set'>商品设置</a>
+        </div>
+      </div>
+	  
+      <div class="am-g">
+        <div class="am-u-sm-12 am-u-md-4 am-u-md-push-8">
+         
+        </div>
+
+        <div class="am-u-sm-12 am-u-md-8 am-u-md-pull-4">
+          <form class="am-form am-form-horizontal" action="" method="post">
+            <div class="am-form-group"> 
+              <label for="user-email" class="am-u-sm-3 am-form-label">商品是否需要审核：</label>
+              <div class="am-u-sm-9" style='height:45px;line-height:45px'>
+                <input type="radio" name="goods_verify" value='1' <?php if($goods_verify['value']==1 ){echo 'checked';} ?> > 是 &nbsp;&nbsp;
+                <input type="radio" name="goods_verify" value='0' <?php if($goods_verify['value']==0 ){echo 'checked';} ?>> 否
+              </div>
+            </div>
+
+            <div class="am-form-group">
+              <div class="am-u-sm-9 am-u-sm-push-3">
+                <input type="submit" class="am-btn am-btn-primary">
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+     
+
+  </div>
+  <!-- content end -->
+
+</div>
+<include file="Application/Common/Layout/foot.html" /> 
+<script>
+	$("#sp_name").blur(function(){
+		var sp_name  = $(this).val(); 
+		var sp_name2 = $('#sp_name_old').val();    
+		if(sp_name==sp_name2) return;
+		$.ajax({
+			type: 'get',
+			cache:false,
+			url:'/Admin/Goods/ajax_check_duplicate',
+			data:{
+				type :'spec_name',
+				value:sp_name
+			},
+			success: function(data){
+				if(data=='1'){
+					alert('规格名已存在！');
+					$(this).focus();
+				} 
+			},
+			dataType:'json'
+		});
+	});
+</script>

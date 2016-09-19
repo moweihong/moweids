@@ -1,0 +1,35 @@
+/*
+************ author: longwei
+************ 商家入驻流程
+*/
+.start-shop-box{min-height:500px;border:solid 1px #3da3ea;background-color:#fff;overflow:hidden;}
+.start-shop-box .tit{line-height:30px;padding:5px 25px;color:#fff;font-size: 15px;font-weight:bold;background-color:#3da3ea;}
+.enter-exp{margin:0 10px;padding:20px 0;font-size:16px;text-align:center;border-bottom: 1px dashed #dedede;}
+.enter-intro{margin-top:90px;padding-left:40px;}
+.enter-intro dl{display:inline;float:left;width:155px;height:166px;margin-left:55px;color:#fff;border-radius:5px;background-color:#3da3ea;}
+.enter-intro dt{line-height:35px;padding-top:20px;font-weight:600;font-size:16px;text-align:center;}
+.enter-intro dd{line-height:25px;padding-left:30px;}
+.enter-intro .n1 dd{padding-left:45px;}
+.enter-intro .n3 dd{padding-left:15px;}
+.p-process{width:884px;height:52px;margin:20px auto;background:url(../images/order_step.png) 0 -416px no-repeat;}
+/*
+***************第一步 入驻协议
+*/
+.apply-agreement-content{height:500px;padding:20px;background-color:#fff;overflow-y:auto;overflow-x:hidden;}
+.apply-agreement-content span, .apply-agreement-content b, .apply-agreement-content cite, .apply-agreement-content a,  .apply-agreement-content strong{display:inline;}
+/*
+***************第二步 公司类型
+*/
+.com-type{width:240px;height:240px;line-height:240px;margin:100px 60px;color:#6f6e6e;border-radius:10px;font-size:24px;border:solid 2px #e6e6e6;background-color:#f5f5f5;overflow:hidden;cursor:pointer;}
+.com-type-checked{color:#fff;border-color:#3da3ea;background-color:#3da3ea;}
+/*
+***************第二步 企业类型
+*/
+.store-type{width:170px;height:40px;line-height:30px;margin:100px;padding-top:180px;font-size:18px;background: url(../images/s_select_no_ok.png) no-repeat center top;cursor:pointer;}
+.store-type-checked{background-image:url(../images/s_select_ok.png);}
+/*
+***************第三步 提交资料
+*/
+.start-shop-info{width:510px;margin:20px auto;}
+.add-upload{position:relative;width:105px;height:105px;background: url(../images/s_default.png) no-repeat;}
+.file-item{margin:0;width:103px;height:103px;}

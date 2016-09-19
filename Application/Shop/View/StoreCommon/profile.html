@@ -1,0 +1,253 @@
+<extend name="Layouts:seller" />
+<block name="title"><title>店铺设置-<?php if($_SESSION['com_type'] == 3){?>供货中心<?php } else{?>卖家中心<?php } ?>-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="content-wrap storeset-box">
+    <p class="tab-tit cf js-tabTit">
+        <a href="#0" class="curr">基本信息</a>
+        <a href="#1">联系我们</a>
+        <a href="#2">在线客服</a>
+        <!-- 隐藏退货设置功能
+        <if condition="$store_info['com_type'] neq '2'">
+            <a href="#3">退货设置</a>
+        </if> -->
+    </p>
+    <div class="store-settimg h700">
+    	<!--
+        ----------------基本信息
+        -->
+    	<form action="javascript:void(0);" id="formBaise" class="js-tabCont" method="post" autocomplete="off">
+            <input type="hidden" id="com_type" value="<?php echo $store_info['com_type'];?>" />
+            <ul class="list">
+                <input type="hidden" id="origin_name" value="<?php echo $store_info['store_name']?>" />
+                <li class="cf">
+                    <label class="handle" for="storeName"><em class="cor-red">*</em>店铺名称：</label>
+                    <?php if($store_info['is_modify_name']==1){?>
+                         <?php echo $store_info['store_name'];?>
+                    <?php }else{?>
+                        <div class="rel">
+                            <input type="text" id="storeName" name="store_name" class="text" placeholder="店铺名称长度最多支持30个字" minlength="2" maxlength="30" value="<?php echo $store_info['store_name']; ?>" required />
+                            <span class="cor-9 ml5">（只能修改一次哦，长度2到30个字）</span>
+                            <span show="store_name.check" class="error-msg">
+                                <em class="errow-arrow"></em>
+                                请输入店铺名称
+                            </span>
+                    	</div>
+                    <?php }?>
+                </li>
+                <li class="cf">
+                    <label class="handle"><em class="cor-red">*</em>店铺logo：</label>
+                    <div class="h30 cf">
+                        <a href="javascript:void(0);" id="imgFileBtn" class="btn fl">上传图片</a>
+						<span class="cor-9 ml10 fl">
+                            <?php if ($store_info['com_type'] != 2){?>
+                                (图片格式GIF、JPG、JPEG、PNG，大小200K以内，建议尺寸200px*80px)
+                            <?php }else{?>
+                                (图片格式GIF、JPG、JPEG、PNG，大小200K以内，建议尺寸238px*238px)
+                            <?php }?>
+                        </span>
+                    </div>
+                    <?php if ($store_info['com_type'] != 2){?>
+                        <div id="fileList" class="filelist-store cf">
+                            <div class="file-item thumbnail upload-state-done">
+                                <img width="200" height="80" src="__ROOT__<?php echo $store_info['store_label']; ?>" />
+                            </div>
+                        </div>
+                    <?php }else{?>
+                        <div id="fileList" class="filelist-design cf">
+                            <div class="file-item thumbnail upload-state-done file-design">
+                                <img width="238" height="238" src="__ROOT__<?php echo $store_info['store_label']; ?>" />
+                            </div>
+                        </div>
+                    <?php }?>
+                </li>
+                <?php if ($store_info['com_type'] != 2){?>
+                    <!-- 隐藏店铺认证和主营类目
+                     <li class="cf">
+                        <label class="handle">店铺认证：</label>
+                        <span class="btn btn-disable"><i class="round"></i> 企业认证</span>
+                    </li>
+                    <li class="cf">
+                        <label class="handle">主营类目：</label>
+                        <?php foreach ($major as $key => $value) { ?>
+                            <span class="btn btn-disable mr10"><i class="round"></i><?php echo $value['sc_name']; ?></span>
+                        <?php } ?> -->
+                       <!--  <span class="btn btn-disable mr10"><i class="round"></i> 客厅系列</span>
+                        <span class="btn btn-disable mr10"><i class="round"></i> 书房系列</span> -->
+                    <!-- </li> -->
+                <?php }?>
+                <li class="cf">
+                    <label class="handle">创建日期：</label>
+                    <?php echo date('Y-m-d H:i:s', $store_info['store_time']); ?>
+                </li>
+                <li class="cf">
+                    <label class="handle" for="description">店铺简介：</label>
+                    <textarea id="description" name="store_description" placeholder="请输入店铺简介" maxlength="300"><?php echo $store_info['store_description']; ?></textarea>
+                </li>
+                <li class="cf">
+                    <label class="handle"></label>
+                    <button class="btn btn-blue js-saveBasic">保存</button>
+                </li>
+            </ul>
+		</form>
+        <!--
+        ----------------联系我们
+        -->
+        <form action="javascript:void(0);" id="formContact" class="js-tabCont dis-none" method="post" autocomplete="off">
+            <ul class="list">
+            	<li class="cf">
+                    <label class="handle" for="tel"><em class="cor-red">*</em>手机号码：</label>
+                    <div class="rel">
+                        <input type="text" id="tel" name="store_phone" class="text js-number"  placeholder="请输入手机号码" maxlength="11" value="<?php echo $store_info['contacts_phone']; ?>" required check-phone />
+                        <span show="store_phone.check" class="error-msg">
+                            <em class="errow-arrow"></em>
+                            请输入正确的手机号码
+                        </span>
+                    </div>
+                </li>
+                <li class="cf">
+                    <label class="handle">客服电话：</label>
+                    <input type="text" class="text js-codes js-number" placeholder="区号" style="width:75px;" maxlength="8"  value="<?php echo $store_info['area_code']; ?>"/>
+                    <span class="cor-gray mr5 ml5">—</span>
+                    <input type="text" class="text js-phone js-number" placeholder="请输入座机号" style="width:200px;" maxlength="11"  value="<?php echo $store_info['tel']; ?>"/>
+                </li>
+                <li class="cf">
+                    <label class="handle"><em class="cor-red">*</em>联系地址：</label>
+                    <select id="cmbProvince" name="store_province_id" class="js-province" style="width:100px">
+                        <option value="0">选择省份</option>
+                    </select>
+                    <select id="cmbCity" name="store_city_id" class="ml10 js-city" style="width:100px">
+                        <option value="0">选择城市</option>
+                    </select>
+                    <select id="cmbArea" name="store_area_id" class="ml10 js-area" style="width:100px">
+                        <option value="0">选择地区</option>
+                    </select>
+                    <p class="mt10">
+                        <input type="text" id="where" name="store_address" class="text" value="<?php echo $store_info['company_address_detail']; ?>" placeholder="请填写详细地址，以便客户找到门店" maxlength="30" style="width:215px;" />
+                        <a href="javascript:void(0);" class="btn ml10 js-findBtn">搜索地址</a>
+                    </p>
+                </li>
+                <li class="cf">
+                    <label class="handle">地图定位：</label>
+                    <div id="map" style="width:480px;height:350px;"></div>
+				</li>
+                <li class="cf">
+                    <label class="handle"></label>
+                    <button class="btn btn-blue js-saveContact">保存</button>
+                </li>
+            </ul>
+		</form>
+        <!--
+        ----------------在线客服
+        -->
+        <form action="javascript:void(0);" id="formService" class="js-tabCont dis-none" method="post" autocomplete="off">
+        	<p class="notice fs14 tc">注：请至少设置一个在线客服</p>
+            <dl class="service-set js-serviceSet">
+            	<dt>客服一：</dt>
+                <dd>
+                	<label>
+                    	客服名称：
+                        <input name="service_name1" class="text js-serviceName" value="<?php echo $store_info['qq_nickname']; ?>" />
+                    </label>
+                    <label class="ml20">
+                    	客服工具：QQ
+                        <input name="service_qq" class="text ml10 js-number js-serviceTools" value="<?php echo $store_info['store_qq']; ?>"/>
+                    </label>
+                </dd>
+            </dl>
+            <dl class="service-set js-serviceSet">
+            	<dt>客服二：</dt>
+                <dd>
+                	<label>
+                    	客服名称：
+                        <input name="service_name2" class="text js-serviceName" value="<?php echo $store_info['ww_nickname']; ?>" />
+                    </label>
+                    <label class="ml20">
+                    	客服工具：旺旺
+                        <input name="service_wang" class="text ml10 js-serviceTools" value="<?php echo $store_info['store_ww']; ?>"/>
+                    </label>
+                </dd>
+            </dl>
+            <button class="btn btn-blue ml130 js-saveService">保存</button>
+        </form>
+        <!--
+        ----------------退货设置
+        -->
+        <?php if ($store_info['com_type'] != 2){?>
+          <!--   隐藏退货设置功能
+            <form action="javascript:void(0);" id="formRefund" class="js-tabCont dis-none" method="post" autocomplete="off">
+            	<p class="notice fs14">若您超时未处理买家退货退款申请，系统将默认同意买家退款申请并自动给买家发送您填写的退货地址信息。请确保地址的准确性，若因地址不准确导致的资损，由商家自行承担。</p>
+                <ul class="list mt10">
+                    <li class="cf">
+                        <label class="handle" for="consignee"><em class="cor-red">*</em>收货人：</label>
+                        <div class="rel">
+                            <input type="text" id="consignee" name="refund_receiver" class="text" placeholder="请输入收货人姓名" maxlength="8" required value="<?php echo $add_info['receiver']; ?>" />
+                            <span show="refund_receiver.check" class="error-msg">
+                                <em class="errow-arrow"></em>
+                                请输入收货人姓名
+                            </span>
+                        </div>
+                    </li>
+                    <li class="cf">
+                        <label class="handle"><em class="cor-red">*</em>联系电话：</label>
+                        <input type="text" class="text js-codes js-number" placeholder="区号" style="width:75px;" maxlength="8" value="<?php echo $add_info['area_code']; ?>" />
+                        <span class="cor-gray mr5 ml5">—</span>
+                        <input type="text" class="text js-phone js-number" placeholder="请输入手机号或座机号" style="width:200px;" maxlength="11" value="<?php echo $add_info['tel']; ?>" />
+                            
+                    </li>
+                    <li class="cf">
+                        <label class="handle"><em class="cor-red">*</em>联系地址：</label>
+                        <select id="cmbProvince2" name="refund_province_id" class="js-province" style="width:100px">
+                            <option value="0">选择省份</option>
+                        </select>
+                        <select id="cmbCity2" name="refund_city_id" class="ml10 js-city" style="width:100px">
+                            <option value="0">选择城市</option>
+                        </select>
+                        <select id="cmbArea2" name="refund_area_id" class="ml10 js-area" style="width:100px">
+                            <option value="0">选择地区</option>
+                        </select>
+                    </li>
+                    <li class="cf">
+                        <label class="handle" for="address"><em class="cor-red">*</em>详细地址：</label>
+                        <div class="rel">
+                            <input type="text" id="address" name="refund_address" class="text" placeholder="请输入详细地址" maxlength="30" required value="<?php echo $add_info['address']; ?>"/>
+                            <span show="refund_address.check" class="error-msg">
+                                <em class="errow-arrow"></em>
+                                请输入详细地址
+                            </span>
+                        </div>
+                    </li>
+                    <li class="cf">
+                        <label class="handle" for="tel2"><em class="cor-red">*</em>维权提醒手机号：</label>
+                        <div class="rel">
+                            <input type="text" id="tel2" name="refund_phone" class="text js-number" value="<?php echo $add_info['mobile_phone']; ?>"  placeholder="请输入维权提醒手机号" maxlength="11" required check-phone />
+                            <span class="cor-9 ml5">(维权通知短信将发送到该手机号上)</span>
+                            <span show="refund_phone.check" class="error-msg">
+                                <em class="errow-arrow"></em>
+                                请输入正确的维权提醒手机号
+                            </span>
+                        </div>
+                    </li>
+                    <li class="cf">
+                        <label class="handle"></label>
+                        <button class="btn btn-blue js-saveRefund">保存</button>
+                    </li>
+    			</ul>
+            </form> -->
+        <?php }?>
+    </div>
+</div>
+<input type="hidden" id="infoProvince" value="<?php echo $store_info['province_id']; ?>" />
+<input type="hidden" id="infoCity" value="<?php echo $store_info['city_id']; ?>" />
+<input type="hidden" id="infoArea" value="<?php echo $store_info['area_id']; ?>" />
+<input type="hidden" id="infoProvince2" value="<?php echo $add_info['province_id'] ?>" />
+<input type="hidden" id="infoCity2" value="<?php echo $add_info['city_id'] ?>" />
+<input type="hidden" id="infoArea2" value="<?php echo $add_info['area_id'] ?>" />
+</block>
+
+<block name="my_js">
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=CA9dc6d776f29eda85692bb19b8e0c70"></script>
+<script type="text/javascript">
+	seajs.use("s/storeset");
+</script>
+</block>

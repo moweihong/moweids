@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <block name="title"><title>{:C('site_name')}</title></block>
+    <meta name="keywords" content="全木行,全木行官网,家具免息分期,精品家具,家具分期，allwood" />
+    <meta name="keywords" content="深圳市全木行电子商务服务有限公司，隶属深圳市特速实业集团，自创立时起就致力于为精品家具生产商、供应商、经销商和消费者创造一个全面丰富、高端精致的家具展示平台。凭借优秀的家具免息分期服务和全新O2O服务模式，让各家具品牌商和广大消费者可以无缝沟通，便捷交易。" />
+    <link href="__CSS__/base.css" rel="stylesheet" type="text/css">
+    <link href="__CSS__/web.css" rel="stylesheet" type="text/css">
+    {//--添加头部引入css文件--}
+    <block name="head_css"></block>
+    <script type="text/javascript">
+		var ALLWOOD_ROOT = "__ROOT__",
+			ALLWOOD_HOST = "__HOST__",
+        	ALLWOOD_JS = "__JS__";
+    </script>
+    <script type="text/javascript" src="__JS__/jquery.js"></script>
+    <script type="text/javascript" src="__JS__/sea.js"></script>
+    <script type="text/javascript" src="__JS__/config.js"></script>
+    <script type="text/javascript">
+        seajs.use("web/common");
+    </script>
+</head>
+<body>
+<include file="Layouts:top"/>
+<div class="header-wrap">
+    <div class="wrapper cf">
+        <a href="/" class="site-logo fl"><img src="/data/upload/shop/common/{:c('site_logo')}" /></a>
+        <form action="{:U('/shop/search/');}" method="get" id="searchTop" class="search-form fl js-searchTop" >
+            <input name="act" id="search_act" value="search" type="hidden" />
+            <input type="text" id="keyword" name="keyword" class="input-text fl js-keyword" value="<?php echo isset($_GET['keyword'])?$_GET['keyword']:'';?>" placeholder="请输入您要搜索的商品关键字" maxlength="60" x-webkit-speech="" lang="zh-CN" onwebkitspeechchange="foo()" x-webkit-grammar="builtin:search" />
+            <input type="submit" id="button" class="input-submit js-input-submit" value="" />
+        </form>
+        <div class="main-nav">
+            <ul class="menu cf">
+                <li>
+                    <a href="{:U('shop/index/index')}" style="width:56px;" <if condition="$Think.CONTROLLER_NAME==Index">class="current"</if>>首页</a>
+                </li>
+                <li class="f-menu">
+                    <a href="__ROOT__/index.php?m=shop&c=TFurniture&a=index"  <if condition="$Think.CONTROLLER_NAME==TFurniture">class="current"</if>>精品家具 </a>
+                    <div class="f-submenu">
+                        <div class="wrapper  f-submenu-con cf">
+                            <ul class="fl f-submenu-con-left">
+                                <volist name='furniture' id='v'>
+                                    <li>            
+                                        <dl>
+                                            <notempty name='v.class3'> 
+                                                <dt><a href="{:U('search/index',array('cate_id'=>$v['gc_id']))}">{$v.gc_name}</a>&gt;</dt>
+                                                 <volist name='v.class3' id='v2'> 
+    
+                                                        <lt name='i' value='6'> 
+                                                            <dd>                        
+                                                                <a href="{:U('search/index',array('cate_id'=>$v2['gc_id']))}">{$v2.gc_name}</a>                       
+                                                            </dd>
+                                                        </lt>
+                                                 </volist>  
+                                            </notempty>
+                                        </dl>
+                                    </li>
+                               </volist> 
+                            </ul>
+                            <div class="fr f-submenu-con-right">
+                                <dl>
+                                    <dt>查看所有家具 &gt;</dt>
+                                    <dd><a href="">按销量排行 </a></dd>
+                                    <dd><a href="">按价格排行</a></dd>
+                                    <dd><a href="">按新品排行</a></dd>
+                                    <dd><a href="http://{$topFurniture.adv_content.adv_pic_url}"><img src="{:advImg($topFurniture['adv_content']['adv_pic'],true)}" title="" alt="" width='200px' height='200px'></a></dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <a href="__ROOT__/index.php?m=shop&c=TBrand&a=index" <if condition="$Think.CONTROLLER_NAME==TBrand">class="current"</if>>品牌专区</a>
+                </li>
+                <li>
+                    <a href="__ROOT__/index.php?m=shop&c=TCustomerize&a=index" <if condition="$Think.CONTROLLER_NAME==TCustomerize">class="current"</if>>定制专区</a>
+                </li>
+                <li class="h-menu js-mainMenu">
+                    <a href="__ROOT__/index.php?m=shop&c=THomedesign&a=index" <if condition="$Think.CONTROLLER_NAME==THomedesign">class="current"</if>>家装设计</a>
+                    <div class="h-sub-menu js-subMenu">
+                        <div style="margin-top:-50px;padding:50px 0;background-color: rgba(255,255,255,0.9); filter:alpha(opacity=90); ">
+                            <div class="wrapper">
+                                <form id="h_form" method="get" action="{:U('/shop/THomedesign/search');}">
+                                    <span>请选择您所在的省市</span>
+                                    <div class="custom_select">
+                                        <select id="designCmbProvince" name="province_id" style="width:202px\0;height:38px\0;line-height:38px\0">
+                                            <option value="19">广东省</option>
+                                        </select>
+                                    </div>
+                                    <div class="custom_select">
+                                        <select id="designCmbCity" name="city_id" style="width:202px\0;height:38px\0;line-height:38px\0;">
+    										<option value="0">选择城市</option>
+                                        	<option value="289">广州市</option>
+                                            <option value="290">韶关市</option>
+                                            <option value="291">深圳市</option>
+                                            <option value="292">珠海市</option>
+                                            <option value="293">汕头市</option>
+                                            <option value="294">佛山市</option>
+                                            <option value="295">江门市</option>
+                                            <option value="296">湛江市</option>
+                                            <option value="297">茂名市</option>
+                                            <option value="298">肇庆市</option>
+                                            <option value="299">惠州市</option>
+                                            <option value="300">梅州市</option>
+                                            <option value="301">汕尾市</option>
+                                            <option value="302">河源市</option>
+                                            <option value="303">阳江市</option>
+                                            <option value="304">清远市</option>
+                                            <option value="305">东莞市</option>
+                                            <option value="306">中山市</option>
+                                            <option value="307">潮州市</option>
+                                            <option value="308">揭阳市</option>
+                                            <option value="309">云浮市</option>
+                                        </select>
+                                    </div>
+                                    <select id="designCmbArea" name="area_id" class="dis-none">
+                                        <option value="0">选择地区</option>
+                                    </select>
+                                    <input type='hidden' value="t_homedesign"  name='act' />
+                                    <input type='hidden' value="list"  name='op' />
+                                   <!--  <button class="btn-info btn-small pointer ml20 fr">确定</button> -->
+                                </form>
+                            </div>
+                        </div>
+                        <div class="h400"></div>
+                    </div>
+                </li>
+                <li>
+                    <a href="__ROOT__/index.php?m=shop&c=TMaterial&a=index" <if condition="$Think.CONTROLLER_NAME==TMaterial">class="current"</if>>装修材料</a>
+                </li>
+                <li>
+                    <a href="__ROOT__/index.php?m=shop&c=TEasypay&a=index" <if condition="$Think.CONTROLLER_NAME==TEasypay">class="current"</if>>我的额度</a>
+                </li>
+                <li>
+                    <a href="__ROOT__/index.php?m=shop&c=TAllCategory&a=index" <if condition="$Think.CONTROLLER_NAME==TAllCategory">class="current"</if>>全部分类</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{//--内容--}
+<block name="content"></block>
+{//--footer文件--}
+<include file="Layouts:footer"/>
+{//--底部js--}
+<block name="my_js"></block>
+<script type="text/javascript">
+(function($){
+    define("home/homelayout",function(require, exports, module){
+        var manage = require("com/manage");
+        var param = manage.getParam();
+        var Module = {
+            init: function(){
+                /*
+                **搜索关键字为空
+                */
+                $(".js-searchTop").on("click", ".js-input-submit", function(){
+                    var keyword = $.trim($(".js-searchTop .js-keyword").val());
+                    if(!keyword){
+                        //$.wrongMsg("请输入关键字");
+                        //return false;
+                        //
+                    }
+                    $("#searchTop").submit();
+                });
+
+
+                $('#designCmbCity').change(function(){
+                    $('#h_form').submit();
+                });
+
+				/*
+                **家装设计地址-头部导航
+                
+                seajs.use("com/adarray", function() {
+                    if($("#designCmbArea").length) addressInit("designCmbProvince", "designCmbCity", "designCmbArea");
+                });
+				*/
+                /*
+                **家装设计悬停-头部导航
+                */
+                $(".js-mainMenu").on('mouseenter', function(e){
+                    $(".js-subMenu" ,this).show();
+                }).on("mouseleave",function(e){
+                    var ee = e.toElement || e.relatedTarget;
+                    if (ee == null) return;
+                    $(".js-subMenu" ,this).hide();
+                });
+            }
+        }
+        module.exports = Module;
+    });
+    seajs.use("home/homelayout", function(module){
+        module.init();
+    });
+})($);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,12 @@
+<extend name="Layouts:home" />
+<block name="title"><title>全站搜索页-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="blist-banner">
+   <notempty name='gcInfo'> 
+       <span class="s1"><gt name='gcInfo.gc_name' value='1'>{$gcInfo.gc_name}<else/>{$_GET.keyword}</gt></span><br>
+    <span>{$gcInfo.goods_count}</span>
+   </notempty> 
+</div>
+<include file="Layouts:search_goodslist"/>
+</block>

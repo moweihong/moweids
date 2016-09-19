@@ -1,0 +1,70 @@
+<extend name="Layouts:seller" />
+<block name="title"><title>编辑经销商-供货中心-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="content-wrap">
+	<p class="tab-tit cf js-tabTit">
+        <a href="{:U('Factory/vendor',array('type'=>1))}">我的经销商</a>
+        <a href="{:U('Factory/vendor',array('type'=>2))}">待审核</a>
+        <a href="{:U('Factory/vendor',array('type'=>3))}">审核设置</a>
+    </p>
+    <div class="store-settimg h700">
+    	<form action="javascript:void(0);" id="form" method="post" autocomplete="off">
+        	<input type="hidden" name="id" value="<?php echo $factory_friend['id'];?>" />
+            <ul class="list">
+                <li class="cf">
+                    <label class="handle">经销商账号：</label>
+                    <?php echo $factory_friend['member_name'];?>
+                </li>
+                <li class="cf">
+                    <label class="handle">经销商名称：</label>
+                    <?php echo $factory_friend['store_name'];?>
+                </li>
+                <li class="cf">
+                    <label class="handle">所在地区：</label>
+                    <?php echo $factory_friend['area_info'];?>
+                </li>
+                <li class="cf">
+                    <label class="handle">联系电话：</label>
+                    <?php echo $factory_friend['store_tel'];?>
+                </li>
+                <li class="cf">
+                    <label class="handle">访问店铺：</label>
+                    <label><input type="radio" name="is_visit" class="v-2" value="0" <?php echo $factory_friend['is_look'] == 0 ? 'checked':'';?> /> 开启</label> 
+                    <label class="ml20"><input type="radio" name="is_visit" class="v-2" value="1" <?php echo $factory_friend['is_look'] == 1 ? 'checked':'';?> /> 关闭</label> 
+                </li>
+                <li class="mt10 cf">
+                    <label class="handle"></label>
+                    <a href="javascript:void(0);" class="btn btn-blue js-saveBtn">保存</a>
+                </li>
+            </ul>
+        </form>
+    </div>
+</div>
+
+</block>
+<block name="my_js">
+<script type="text/javascript">
+(function($){
+	define("f/vendorEdit",function(require, exports, module){
+		require("jquery/layer");
+		var manage = require("com/manage");
+		var Module = {
+			init: function(){
+				/*
+				 * 保存 - 审核设置
+				 * */
+				$("body").on("click", ".js-saveBtn", function(){
+					var data = $("#form").serialize();
+					manage.getApi("/Factory/vendorSetLook", data);
+				});
+            }
+		}
+		module.exports = Module;
+	});
+	seajs.use("f/vendorEdit", function(module){
+		module.init();
+	});
+})($);
+</script>
+</block>

@@ -1,0 +1,361 @@
+<extend name="Layouts:home"/>
+<block name="title"><title>补充资料-{:C('site_name')}</title></block>
+<block name="head_css">
+<link rel="stylesheet" type="text/css" href="__CSS__/apply.css">
+</block>
+
+<block name="content">
+<div class="wrapper mt140">
+    <form action="javascript:void(0);" id="form" class="easypay-box" method="post" autocomplete="off">
+        <h2 class="tit">提交装修资料</h2>
+        <div class="easypay-info">
+            <ul class="list ml20 mt30">
+            	<li class="cf">
+                    <label class="handle"><em class="cor-red">*</em>装修房产地址：</label>
+                    <div class="rel fl">
+                        <select id="cmbProvince3" name="addr_province" class="js-province" style="width:100px">
+                            <option value="0">选择省份</option>
+                        </select>
+                        <select id="cmbCity3" name="addr_city" class="ml10 js-city" style="width:100px">
+                            <option value="0">选择城市</option>
+                        </select>
+                    </div>
+                    <div class="rel ml15 fl" style="width:120px">
+                        <select id="cmbArea3" name="addr_county" class="js-area js-requiredSel" style="width:100px">
+                            <option value="0">选择地区</option>
+                        </select>
+                        <span class="error-msg">
+                            <em class="errow-arrow"></em>
+                            请选择完整现住址
+                        </span>
+                    </div>
+                    <div class="rel fl">
+                        <input type="text" name="addr_street" class="text" value="<?php echo $output['app_info']['addr_street'] ?>" placeholder="请输入详细地址" maxlength="20" style="width:400px;" />
+                        <span show="addr_street.check" class="error-msg">
+                            <em class="errow-arrow"></em>
+                            请输入详细地址
+                        </span>
+                    </div>
+                </li>
+                <li class="cf">
+                    <label class="handle" for="propertyOwner"><em class="cor-red">*</em>房产产权人：</label>
+                    <div class="rel">
+                        <input type="text" id="propertyOwner" name="property_owner" class="text" value="<?php echo $output['app_info']['property_owner'] ?>" placeholder="如共有的需要一起填" maxlength="30" required />
+                        <span show="property_owner.check" class="error-msg">
+                            <em class="errow-arrow"></em>
+                            请输入房产产权人
+                        </span>
+                    </div>
+                </li>
+                <li class="cf">
+                    <label class="handle" for="housePrice"><em class="cor-red">*</em>房产购买价格：</label>
+                    <div class="rel">
+                        <input type="text" id="housePrice" name="house_price" class="text js-money" value="<?php echo $output['app_info']['house_price'] ?>" placeholder="请填写数字" maxlength="15" required />
+                        <span class="ml10">元</span>
+                        <span show="house_price.check" class="error-msg">
+                            <em class="errow-arrow"></em>
+                            请输入房产购买价格
+                        </span>
+                    </div>
+                </li>
+                <li class="cf">
+                    <label class="handle" for="designPrice"><em class="cor-red">*</em>装修合同价：</label>
+                    <div class="rel">
+                        <input type="text" id="designPrice" name="design_price" class="text js-money" value="<?php echo $output['app_info']['house_price'] ?>" placeholder="请填写数字" maxlength="15" required />
+                        <span class="ml10">元</span>
+                        <span show="design_price.check" class="error-msg">
+                            <em class="errow-arrow"></em>
+                            请输入装修合同价
+                        </span>
+                    </div>
+                </li>
+                <li class="cf">
+                    <label class="handle" for="designDate"><em class="cor-red">*</em>装修合同工期：</label>
+                    <div class="rel">
+                        <input type="text" id="designDate" name="design_date" class="text laydate-icon js-laydate" value="<?php echo $output['app_info']['design_date'] ?>" placeholder="请填写数字" onclick="laydate()" />
+                        <span show="design_date.check" class="error-msg">
+                            <em class="errow-arrow"></em>
+                            请输入装修合同工期
+                        </span>
+                    </div>
+                </li>
+                <li class="cf">
+                    <label class="handle" for="houseArea"><em class="cor-red">*</em>建筑面积：</label>
+                    <div class="rel">
+                        <input type="text" id="houseArea" name="house_area" class="text js-number" value="<?php echo $output['app_info']['usrname'] ?>" placeholder="请填写数字" maxlength="15" required style="width:150px" />
+                        <span class="ml10">平方米</span>
+                        <span show="house_area.check" class="error-msg">
+                            <em class="errow-arrow"></em>
+                            请输入建筑面积
+                        </span>
+                    </div>
+                </li>
+                <li class="cf">
+                    <label class="handle"><em class="cor-red">*</em>房产情况：</label>
+                    <label class="w120 dis-in-block">
+                        <input type="radio" name="house_case" class="v-2" value="1" <?php if($output['app_info']['house_case']==1) { ?>checked="checked"<?php } ?> /> 一次性购买
+                    </label>
+                    <label class="w120 dis-in-block">
+                        <input type="radio" name="house_case" class="v-2" value="2" <?php if($output['app_info']['house_case']==2) { ?>checked="checked"<?php } ?> /> 按揭购买
+                    </label>
+                </li>
+                <li class="cf">
+                    <label class="handle"><em class="cor-red">*</em>装修付款方式：</label>
+                    <label class="w120 dis-in-block">
+                        <input type="radio" name="pay_way" class="v-2" value="1" <?php if($output['app_info']['pay_way']==1) { ?>checked="checked"<?php } ?> /> 一次性付款
+                    </label>
+                    <label class="w120 dis-in-block">
+                        <input type="radio" name="pay_way" class="v-2" value="2" <?php if($output['app_info']['pay_way']==2) { ?>checked="checked"<?php } ?> /> 按进度付款
+                    </label>
+                    <label class="w120 dis-in-block">
+                        <input type="radio" name="pay_way" class="v-2" value="3" <?php if($output['app_info']['pay_way']==3) { ?>checked="checked"<?php } ?> /> 其他
+                    </label>
+                </li>
+        	</ul>
+        </div>
+        <dl class="easypay-info-dl nobor cf">
+            <dt><em class="cor-red">*</em>房产证/购物合同：</dt>
+            <dd>
+                <div class="h30 cf">
+                    <a href="javascript:void(0);" id="housingBtn" class="btn btn-small fl">选择图片</a>
+                </div>
+                <div id="housingList" class="cf">
+                    <!--
+                    <div class="file-item thumbnail upload-state-done">
+                        <p class="file-panel" style="height: 0px;"><a class="icon-view js-viewImg" title="预览"></a><a class="icon-cancel js-cancel" title="删除"></a></p>
+                        <img width="180" height="115" src="" data-rel="" />
+                    </div>
+                    -->
+                </div>
+            </dd>
+        </dl>
+        <dl class="easypay-info-dl nobor cf">
+            <dt><em class="cor-red">*</em>装修合同：</dt>
+            <dd>
+                <div class="h30 cf">
+                    <a href="javascript:void(0);" id="fitmentBtn" class="btn btn-small fl">选择图片</a>
+                </div>
+                <div id="fitmentList" class="cf">
+                    <!--
+                    <div class="file-item thumbnail upload-state-done">
+                        <p class="file-panel" style="height: 0px;"><a class="icon-view js-viewImg" title="预览"></a><a class="icon-cancel js-cancel" title="删除"></a></p>
+                        <img width="180" height="115" src="" data-rel="" />
+                    </div>
+                    -->
+                </div>
+            </dd>
+        </dl>
+        <dl class="easypay-info-dl nobor cf">
+            <dt>其他增信资料：</dt>
+            <dd>
+                <div class="h30 cf">
+                    <a href="javascript:void(0);" id="augmentedBtn" class="btn btn-small fl">选择图片</a>
+                    <span class="cor-9 mt5 ml5">房产证、车辆登记证、收入证明资料、半年银行流水清单、结婚证户口本等（授信时已提交的资料无需重复提交）</span>
+                </div>
+                <?php if(!$output['app_info']['other_pic_list']){ ?>
+                    <div id="augmentedList" class="cf">
+                    </div>
+                <?php }else{ ?>
+                    <!--循环遍历其它资料-->
+                    <?php foreach ($output['app_info']['other_pic_list']  as $key => $value) { ?>
+                        <div id="augmentedList" class="cf">
+                            <div class="file-item thumbnail upload-state-done">
+                                <p class="file-panel" style="height: 0px;"><a class="icon-view js-viewImg" title="预览"></a><a class="icon-cancel js-cancel" title="删除"></a></p>
+                                <img width="180" height="115" src="<?php echo $value['s_pic'] ?>" data-rel="<?php echo $value['m_pic']; ?>" />
+                            </div>
+                        </div>    
+                    <?php } ?>
+                <?php } ?> 
+            </dd>
+        </dl>
+        <p class="fs14 tc cor-balck">
+            <input type="checkbox" id="isAffirm" class="v-2 js-isAffirm" />
+            <label for="isAffirm">
+                本人确认所填资料真实有效， 如有虚假将承担法律责任。
+            </label>
+        </p>
+        
+        <p class="mt20 tc">
+            <button href="javascript:void(0)" class="btn btn-disable js-submitBtn">下一步</button>
+        </p>
+    </form>
+</div>
+<input type="hidden" id="plan_id" value="<?php echo $_GET['plan_id']; ?>" />
+<input type="hidden" id="peroid" value="<?php echo $_GET['period']; ?>" />
+<input type="hidden" id="infoProvince" value="<?php echo $output['app_info']['usr_native_province'] ?>" />
+<input type="hidden" id="infoCity" value="<?php echo $output['app_info']['usr_native_city'] ?>" />
+<input type="hidden" id="infoArea" value="" />
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+(function($){
+    define("m/easypay_more_material",function(require, exports, module){
+        require("jquery/layer");
+		require("jquery/laydate");
+		require("jquery/form");
+        var upload = require("jquery/upload");
+        var manage = require("com/manage");
+        var Module = {
+            init: function(){
+				 var form = $("#form").form();
+				 /*
+                 * 城市三级联动
+                 * */
+                seajs.use("com/adarray", function() {
+                    var infoProvince = $("#infoProvince").val() || "",
+                        infoCity = $("#infoCity").val() || "",
+                        infoArea = $("#infoArea").val() || "";
+					addressInit("cmbProvince3", "cmbCity3", "cmbArea3", infoProvince, infoCity, infoArea);
+                });
+				/*
+				 * 日期失去焦点
+				 * */
+				$(".js-laydate").blur(function(){
+					$(this).siblings(".error-msg").hide();
+				});
+				/*
+				 * 房产证/购物合同
+				 * */
+				upload.base({
+					pickID: "housingBtn",
+					objID: "housingList",
+					fileSingleSizeLimit: "1000",
+					thumbnailWidth: "180",
+					thumbnailHeight: "115",
+					fileNumLimit: "300",
+					storage: "easypay"
+				});
+				/*
+				 * 装修合同
+				 * */
+				upload.base({
+					pickID: "fitmentBtn",
+					objID: "fitmentList",
+					fileSingleSizeLimit: "1000",
+					thumbnailWidth: "180",
+					thumbnailHeight: "115",
+					fileNumLimit: "300",
+					storage: "easypay"
+				});
+                /*
+                 * 其他增信资料
+                 * */
+                upload.base({
+                    pickID: "augmentedBtn",
+                    objID: "augmentedList",
+					fileSingleSizeLimit: "1000",
+                    thumbnailWidth: "180",
+                    thumbnailHeight: "115",
+                    fileNumLimit: "300",
+                    storage: "easypay"
+                });
+				/*
+                 * 勾选确认所填资料
+                 * */
+                $("body").on("click", ".js-isAffirm", function(){
+                    if($(this).is(":checked")){
+                        $(".js-submitBtn").removeClass("btn-disable").addClass("btn-info");
+                    }else{
+                        $(".js-submitBtn").removeClass("btn-info").addClass("btn-disable");
+                    }
+                });
+				/*
+                 * 提交
+                 * */
+                $("body").on("click", ".js-submitBtn", function(){
+					var isPass = true;
+					if(!form.valid()){
+						if($(".js-isAffirm").is(":checked")){
+							$.wrongMsg("必填项不能为空");
+						}
+						return false;
+					}
+					if($("#cmbArea3").val() == 0){
+                        $("#cmbArea3").focus();
+                        $.wrongMsg("请选择完整装修房产地址");
+                        return;
+                    }
+					if(!$(".js-laydate").val()){
+						$(this).siblings(".error-msg").show();
+						$.wrongMsg("请选择装修合同工期");
+						$(".js-laydate").focus();
+						return;
+					}
+					if(!$("input[name=house_case]:checked").val()){
+                        $("input[name=house_case]").focus();
+                        $.wrongMsg("请选择房产情况");
+                        return;
+                    }
+					if(!$("input[name=pay_way]:checked").val()){
+                        $("input[name=pay_way]").focus();
+                        $.wrongMsg("请选择装修付款方式");
+                        return;
+                    }
+					if($("#housingList .file-item").length < 1){
+						$.wrongMsg("请上传房产证/购物合同");
+						return;
+					}
+					if($("#fitmentList .file-item").length < 1){
+						$.wrongMsg("请上传装修合同");
+						return;
+					}
+					var housing_pic_list = [],
+						fitment_pic_list = [],
+						other_pic_list = [];
+					$("#housingList .file-item").each(function(){
+						var s_pic = $("img", this).attr("src") || "",
+							m_pic = $("img", this).data("rel") || "";
+						var housing_pic_obj = {
+							s_pic: s_pic,
+							m_pic: m_pic
+						}
+						housing_pic_list.push(housing_pic_obj);
+					});
+					$("#fitmentList .file-item").each(function(){
+						var s_pic = $("img", this).attr("src") || "",
+							m_pic = $("img", this).data("rel") || "";
+						var fitment_pic_obj = {
+							s_pic: s_pic,
+							m_pic: m_pic
+						}
+						fitment_pic_list.push(fitment_pic_obj);
+					});
+					$("#augmentedList .file-item").each(function(){
+						var s_pic = $("img", this).attr("src") || "",
+							m_pic = $("img", this).data("rel") || "";
+						var other_pic_obj = {
+							s_pic: s_pic,
+							m_pic: m_pic
+						}
+						other_pic_list.push(other_pic_obj);
+					});
+					if(!$(".js-isAffirm").is(":checked")){
+						$.wrongMsg("请勾选本人确认所填资料真实有效");
+						return;
+					}
+					var data = $("#form").serialize();
+                    data = manage.serializeJson(data);
+					data.housing_pic_list = housing_pic_list;
+					data.fitment_pic_list = fitment_pic_list;
+					data.other_pic_list = other_pic_list;
+                    data.plan_id = $('#plan_id').val();
+                    data.period = $('#peroid').val();
+					manage.getApi("{:U('/shop/easypay/saveApplicationMore')}", data, function(result){
+						var result = result || {},
+							url = result.url || gConfig.apiurl;
+						setTimeout(function(){
+							location.href = url;
+						},3000);
+					});
+				});
+			}
+        };
+        module.exports = Module;
+    });
+    seajs.use("m/easypay_more_material", function(module){
+        module.init();
+    });
+})($);
+</script>
+</block>

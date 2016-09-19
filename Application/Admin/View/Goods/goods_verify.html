@@ -1,0 +1,73 @@
+<include file="Application/Common/Layout/head.html" /> 
+<div class="am-cf admin-main">
+<include file="Application/Common/Layout/left.html" /> 
+  <!-- content start -->
+  <div class="admin-content">
+    <div class="admin-content-body">
+      <div class="am-cf am-padding am-padding-bottom-0">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">拒绝审核</strong></small></div>
+      </div>
+
+      <hr/>
+	  <div class="am-g">
+        <div class="am-u-sm-12 " style="text-align:center">
+		  <a class="middlebt" href='/Admin/Goods/goods'>所有商品</a>
+		  <a class="middlebt" href='/Admin/Goods/goods?type=wgxj'>违规下架</a>
+	      <a class="middlebt" href='/Admin/Goods/goods?type=dsh'>等待审核</a>
+	      <a class="middlebt" href='/Admin/Goods/goods_set'>商品设置</a>
+        </div>
+      </div>
+	  <br/>
+      <div class="am-g">
+        <div class="am-u-sm-12 am-u-md-4 am-u-md-push-8">
+         
+        </div>
+
+        <div class="am-u-sm-12 am-u-md-8 am-u-md-pull-4">
+          <form class="am-form am-form-horizontal" action="" method="post">
+            <div class="am-form-group">
+              <label for="user-intro" class="am-u-sm-3 am-form-label">拒绝理由 </label>
+              <div class="am-u-sm-9">
+                <textarea class="" rows="5" name="goods_verifyremark"  placeholder="请输入拒绝理由...">{$goods_verifyremark.goods_verifyremark}</textarea>
+              </div>
+            </div>
+            <div class="am-form-group">
+              <div class="am-u-sm-9 am-u-sm-push-3">
+                <input type="submit" class="am-btn am-btn-primary">
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  
+
+  </div>
+  <!-- content end -->
+
+</div>
+<include file="Application/Common/Layout/foot.html" /> 
+<script>
+	$("#attrName").blur(function(){
+		var attrName  = $(this).val(); 
+		var attrName2 = $('#attrName_old').val(); 
+		if(attrName==attrName2) return;
+		$.ajax({
+			type: 'get',
+			cache:false,
+			url:'/Admin/Goods/ajax_check_duplicate',
+			data:{
+				type :'attrName',
+				value:attrName
+			},
+			success: function(data){
+				if(data=='1'){
+					alert('属性名已存在！');
+					$(this).focus();
+				} 
+			},
+			dataType:'json'
+		});
+	});
+</script>

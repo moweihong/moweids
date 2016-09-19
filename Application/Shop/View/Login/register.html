@@ -1,0 +1,251 @@
+<extend name="Layouts:login" />
+<block name="title"><title>注册页-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="register-box">
+    <div class="reg-title cf js-regTitle">
+        <span class="cur"><em>1</em>手机注册</span>
+        <span><em>2</em>注册完成</span>
+    </div>
+    <div class="reg-section">
+    	<!-- 
+        ----------手机注册
+        -->
+        <form action="javascript:void(0);" id="regForm" class="reg-form js-register" method="post" autocomplete="off">
+            <ul class="inp-box">
+            	<li class="line">
+                    <label class="long-inp ic-phone js-phone"><input type="text" id="mobile" name="mobile" class="text js-number" placeholder="请输入您的手机号码" maxlength="11" required check-phone /></label>
+                    <span show="mobile.check" class="error-msg">
+                        <em class="errow-arrow"></em>
+                        请输入正确的手机号码
+                    </span>
+                </li>
+                <li class="line cf">
+                    <label class="short-inp ic-vcode fl"><input type="text" id="code" name="code" class="text js-number" maxlength="6" placeholder="请输入短信验证码" required /></label>
+                    <a href="javascript:void(0);" class="red-btn fr disable-btn js-sendCode">点击获取验证码</a>
+                    <span show="code.check" class="error-msg">
+                        <em class="errow-arrow"></em>
+                        请输入正确的验证码
+                    </span>
+                </li>
+                <li class="line">
+                	<label class="long-inp ic-newpasswd"><input type="password" id="password" name="member_passwd" class="text" placeholder="请设置账户密码" maxlength="16" required /></label>
+                    <span show="member_passwd.check" class="error-msg">
+                        <em class="errow-arrow"></em>
+                        请输入密码
+                    </span>
+                </li>
+                <li class="line">
+                	<label class="long-inp ic-newpasswd"><input type="password" id="repasswd" name="re_passwd" class="text" placeholder="请再次确认账户密码" maxlength="16" required /></label>
+                    <span show="re_passwd.check" class="error-msg">
+                        <em class="errow-arrow"></em>
+                        请输入确认密码
+                    </span>
+                </li>
+            </ul>
+            <p class="mt10">
+            	<label>
+                	<input type="checkbox" class="v-2 js-isAffirm" />
+                    同意协议并注册
+                </label>
+                <a href="__ROOT__/index.php?m=shop&c=contract&a=zcxy" target="_blank">&laquo;全木行用户注册协议&raquo;</a>
+            <p>
+            <p class="mt10">
+            	<input type="submit" class="orange-btn disable-btn mt5 js-submitBtn" value="同意协议并注册" />
+            <p>
+            <p class="mt10 fs14">
+            	我已经注册,马上
+                <a href="__ROOT__/shop/login">登录&raquo;</a>
+            </p>
+        </form>
+        <!-- 
+        ----------注册完成
+        -->
+        <div class="reg-succ js-register dis-none">
+            <p><img src="__IMG__/large_ok.png" width="102" height="102" alt="成功图标" /></p>
+            <h3 class="mt10">恭喜您，<span class="cor-orange js-account"></span>帐号注册成功！</h3>
+            <p><a href="__ROOT__/index.php?m=shop&c=member&a=profile" class="orange-btn">去买家中心完善资料</a></p>
+            <p><a href="/" class="fs20">还是先去购物吧&gt;</a></p>
+        </div>
+        <!--注册完成结束-->
+    </div>
+</div>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+(function($){
+	define("web/register",function(require, exports, module){
+		require("jquery/layer");
+		require("jquery/form");
+		var isSendCode = false, //手机验证码是否发送
+			isUsername = true, //检测账号是否存在
+			countnum = 120, //时间 
+			timeInterval = null;
+		var manage = require("com/manage");
+		var Module = {
+			init: function(){
+				var form = $("#regForm").form();
+				/*
+				*用户名验证
+				**/
+				$(".js-phone").on("focus", "input", function(){
+					layer.closeAll("tips");
+				}).on("blur", "input", function(){
+					var me = $(this),
+						val = me.val();
+					if(!val || !$.isTelephone(val)){
+						$(".js-sendCode").addClass("disable-btn");
+						return;
+					}
+					Module.checkUsername();
+				});
+				/*
+				 * 获取验证码
+				 * */
+				$("body").on("click", ".js-sendCode", function(){
+					var me = $(this),
+						mobile = $("#mobile").val();
+					if(!mobile || !$.isTelephone(mobile)){
+						$(".js-phone").siblings(".error-msg").show();
+						return;
+					}
+					if(isUsername || me.hasClass("disable-btn")) return;
+					me.addClass("disable-btn");
+					//账号校验通过,执行发送验证码操作
+					$.post(gConfig.apiurl + "/index.php?c=login&a=verify_code",{
+						mobile	: mobile,
+						tag		: "register"
+					}, function (result) {
+						isSendCode = true;
+						Module.countdown();
+					},"json");
+				});
+				/*
+				 * 勾选是否同意协议
+				 * */
+				$("body").on("change", ".js-isAffirm", function(){
+					if($(this).is(":checked")){
+						$(".js-submitBtn").removeClass("disable-btn");
+					}else{
+						$(".js-submitBtn").addClass("disable-btn");
+					}
+				});
+				/*
+				*注册按钮
+				**/
+				$(".js-submitBtn").click(function(){
+					if(!form.valid()) return false;
+					if(isUsername) return;
+					if(!$(".js-isAffirm").is(":checked")){
+						$.wrongMsg("请勾选同意协议");
+						return;
+					}
+					var me = $(this),
+						mobile = $.trim($("#mobile").val()),
+						code = $.trim($("#code").val()),
+//						password = $.trim($("#password").val()),
+//						repasswd = $.trim($("#repasswd").val()),
+						password = $("#password").val(),
+						repasswd = $("#repasswd").val(),    
+						data = $("#regForm").serialize();
+					data = data.replace(/\+/g," ");
+					data = manage.serializeJson(data);
+					if(!mobile || !$.isTelephone(mobile)){
+						$.wrongMsg("请输入正确的手机号码");
+						return;
+					}
+					if(code.length != 6){
+						$("#code").focus();
+						$.wrongMsg("请输入完整的验证码");
+						return;
+					}
+					if(data.member_passwd.indexOf(" ") > -1) {
+						$.wrongMsg("密码不能含有空格");
+						return;
+					}
+					if(!(/[a-zA-Z]/.test(password) && /[0-9]/.test(password)) || (password.length < 6 || password.length > 16)){
+						$.wrongMsg("密码应是6-16位的数字加字母组合");
+						return;
+					}
+					if(password != repasswd){
+						$.wrongMsg("两次输入的密码不一样，请重新输入");
+						return;
+					}
+					delete data.re_passwd;
+					var pid = parent.layer.load(360);
+					$.ajax({
+						type: "POST",
+						url: gConfig.apiurl + "/index.php?c=login&a=new_usersave",
+						data: data,
+                        dataType: "json",
+						success: function(result){
+							parent.layer.close(pid);
+							var message = result.message || "注册失败"
+							if(result.code==0){ //注册成功
+								$(".js-account").text($("#mobile").val());
+								$(".js-regTitle span:eq(1)").addClass("cur").siblings("span").removeClass("cur");
+								$(".js-register:eq(1)").show().siblings(".js-register").hide();
+							}else{
+								$.wrongMsg(message);
+							}
+						}
+					});
+				});
+			},
+			/*
+			*验证用户名
+			**/
+			checkUsername: function(callback){
+				mobile = $.trim($("#mobile").val());
+				$.ajax({
+					url: gConfig.apiurl + "/index.php?c=login&a=check_member&column=ok&ajaxrequest=true",
+					type: "GET",
+					dataType: "json",
+					async: false,
+					data: {mobile: mobile},
+					success: function (result) {
+						var result = result || {},
+							resultText = result.resultText || {};
+						if(result.code == 0) {  //未注册
+							isUsername = false;
+							if(!isSendCode){
+								$(".js-sendCode").removeClass("disable-btn");
+							}
+						}else{
+							isUsername = true;
+							$(".js-sendCode").addClass("disable-btn");
+							$.wrongTip(".js-phone", resultText.message || "该手机号已经注册,请更换手机号", 4, 99999999);
+						}
+					},
+					error: function(){
+						$.wrongMsg("网络异常")
+					}
+				});
+			},
+			countdown: function(){
+				clearInterval(timeInterval);
+				timedown();
+				timeInterval = setInterval(timedown, 1000);
+				function timedown(){
+					if(countnum == 0){
+						$(".js-sendCode").text("重新发送");
+						if(!isUsername) $(".js-sendCode").removeClass("disable-btn");
+						countnum = 120;
+						isSendCode = false;
+						clearInterval(timeInterval);
+					}else{
+						$(".js-sendCode").text("重新发送(" + countnum + 's' + ")").addClass("disable-btn");
+						countnum--;
+					}
+				}
+			}
+		}
+		module.exports = Module;
+	});
+	seajs.use("web/register", function(module){
+		module.init();
+	});
+})($);
+</script>
+</block>

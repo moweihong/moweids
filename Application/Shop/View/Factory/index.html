@@ -1,0 +1,61 @@
+<extend name="Layouts:seller" />
+<block name="title"><title>首页-供货中心-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="seller-top cf">
+	<div class="store-logo mt20 fl">
+        <a href="{:U('ShowFactory/index',array('store_id'=> $_SESSION['store_id']))}" >
+            <img width="200" height="80" src="<?php echo $store_info['store_label']; ?>" alt="<?php echo $store_info['store_name'];?>"/>
+        	<h3><?php echo $store_info['store_name'];?></h3>
+        </a>
+    </div>
+    <div class="trade fl mt20">
+    	<p class="cf">
+        	<cite>昨日交易额：</cite>
+        	<span class="cor-red fs24">¥<?php echo $yesterday_money;?></span>
+        </p>
+        <p class="mt10 cf">
+        	<cite>可提现金额：</cite>
+        	<span class="cor-red fs24" ><a class='cor-red fs24' href="{:U('/shop/StoreCommon/incomeDetail');}">¥ <?php echo $store_info['deposit_avaiable'] ?></a></span>
+        </p>
+    </div>
+    <a href="{:U('StoreCommon/goodsPub')}" class="publish-btn fl" target="_blank">发布商品</a>
+    <a href="{:U('ShowFactory/index',array('store_id' => $_SESSION['store_id']))}" class="visit-btn" target="_blank">访问店铺</a>
+</div>
+<div class="order-bar mt10 cf">
+    <a href="{:U('factory/factoryorder',array('order_state'=>20))}" class="nobor">
+    	<p class="cor-red fs24"><?php echo $no_delivery;?></p>
+        <p>等发货订单</p>
+    </a>
+    <a href="{:U('factory/factoryorder')}" class="first">
+    	<p class="cor-red fs24"><?php echo $yesterday_count;?></p>
+        <p>昨日下单笔数</p>
+    </a>
+</div>
+<div class="sales-volume mt10">
+	<h2>商品销量TOP5</h2>
+    <p class="sale-t fs16 cf">
+    	<span class="n1">排名</span>
+        <span class="n2">商品</span>
+        <span class="n3">单价</span>
+        <span class="n4">库存</span>
+        <span class="n5">销量</span>
+    </p>
+    <ul class="sale-c">
+        <?php foreach ($goods_list as $k=>$v):?>
+            <li class="cf">
+                <p class="n1 fs14">{$k+1}</p>
+                <p class="n2">
+                    <a href="{:U('ShowFactory/goodsDetial', array('goods_id'=>$v['goods_id'], 'store_id'=>$v['store_id']))}">
+                    <img  src="<?php echo $v['goods_image']?>" width="50px" height="50px" alt="" />
+                    <?php echo $v['goods_name']?>
+                    </a>
+                </p>
+                <p class="n3 cor-red"><?php echo $v['goods_price']?></p>
+                <p class="n4"><?php echo $v['goods_storage']?></p>
+                <p class="n5"><?php echo $v['goods_salenum']?></p>
+            </li>
+        <?php endforeach;?>
+    </ul>
+</div>
+</block>

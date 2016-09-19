@@ -1,0 +1,77 @@
+<!--根据商家类型显示菜单-->
+<?php if($_SESSION['com_type'] == 2){  ?>
+    <a href="{:U('Decorate/index')}" class="home">首页</a>
+    <div class="side-nav">
+        <h3>店铺管理</h3>
+        <a href="{:U('StoreCommon/profile')}" class="<?php if(ACTION_NAME =='profile'){?>curr<?php }?>">店铺设置<i></i></a>
+    </div>
+    <div class="side-nav">
+        <h3>订单管理</h3>
+        <a href="{:U('/StoreCommon/deOrderManage')}" class="<?php if(ACTION_NAME =='deOrderManage'){?>curr<?php }?>">所有订单<i></i></a>
+    </div>
+    <div class="side-nav">
+        <h3>账户管理</h3>
+        <a href="{:U('StoreCommon/income')}" class="<?php if(ACTION_NAME=='income'){?>curr<?php }?>">我的收入<i></i></a>
+        <a href="{:U('StoreCommon/incomeDetail')}" class="<?php if(ACTION_NAME=='incomeDetail'){?>curr<?php }?>">收支明细<i></i></a>
+        <a href="{:U('StoreCommon/withdrawHistory')}" class="<?php if(ACTION_NAME=='withdrawHistory'){?>curr<?php }?>">提现记录<i></i></a>
+    </div>
+    <div class="side-nav">
+        <h3>装修公司管理</h3>
+        <a href="{:U('Decorate/solutionList')}" class="<?php if(ACTION_NAME=='solutionList'){?>curr<?php }?>">我的方案<i></i></a>
+        <a href="{:U('Decorate/decorateOperate')}" class="<?php if(ACTION_NAME=='decorateOperate'){?>curr<?php }?>">添加方案<i></i></a>
+        <a href="{:U('Decorate/effectdraw')}" class="<?php if(ACTION_NAME=='effectdraw'){?>curr<?php }?>">效果图<i></i></a>
+        <a href="{:U('Decorate/effectdrawOperate')}" class="<?php if(ACTION_NAME=='effectdrawOperate'){?>curr<?php }?>">添加效果图<i></i></a>
+    </div>
+<?php }else if($_SESSION['com_type'] == 1){ ?>
+    <a href="{:U('Vendor/index')}" class="home">首页</a>
+    <div class="side-nav">
+    	<h3>店铺管理</h3>
+    	<a href="{:U('StoreCommon/profile')}" class="<?php if(ACTION_NAME =='profile'){?>curr<?php }?>">店铺设置<i></i></a>
+        <a href="{:U('StoreCommon/advManage')}" class="<?php if(ACTION_NAME=='advManage' ){?>curr<?php }?>">广告管理<i></i></a>
+    </div>
+    <div class="side-nav">
+    	<h3>商品管理</h3>
+        <a href="{:U('StoreCommon/goodsPub')}" target="_blank">发布商品<i></i></a>
+        <a href="{:U('Vendor/goodsInCloud')}" class="<?php if(ACTION_NAME =='goodsInCloud'){?>curr<?php }?>">云端市场<i></i></a>
+        <a href="{:U('Vendor/supplier')}" class="<?php if(ACTION_NAME=='supplier'){?>curr<?php }?>">供货商管理<i></i></a>
+        <a href="{:U('StoreCommon/getGoodsList',array('type'=>sale))}" class="<?php if(ACTION_NAME =='getGoodsList' && $_GET['type']=='sale'&&!$_GET['is_offline']){?>curr<?php }?>">在售中的商品<i></i></a>
+        <a href="{:U('StoreCommon/getGoodsList',array('type'=>inventory))}" class="<?php if(ACTION_NAME=='getGoodsList' && $_GET['type']=='inventory'&&!$_GET['is_offline']){?>curr<?php }?>">仓库中的商品<i></i></a>
+    </div>
+    <div class="side-nav">
+    	<h3>订单管理</h3>
+        <a href="{:U('/shop/storeCommon/ordermanage')}" class="<?php if(ACTION_NAME =='ordermanage'){?>curr<?php }?>">买家订单<i></i></a>
+    	<a href="{:U('/shop/Vendor/supplierorder')}" class="<?php if(ACTION_NAME =='supplierorder'){?>curr<?php }?>">工厂订单<i></i></a>
+        <!--<a href="{:U('StoreCommon/transportManage')}" class="<?php if(ACTION_NAME =='transportManage'){?>curr<?php }?>">物流工具<i></i></a>-->
+    </div>
+    <div class="side-nav">
+    	<h3>资金管理</h3>
+        <a href="{:U('StoreCommon/income')}" class="<?php if(ACTION_NAME=='income'){?>curr<?php }?>">我的收入<i></i></a>
+        <a href="{:U('StoreCommon/incomeDetail')}" class="<?php if(ACTION_NAME=='incomeDetail'){?>curr<?php }?>">收支明细<i></i></a>
+        <a href="{:U('StoreCommon/withdrawHistory')}" class="<?php if(ACTION_NAME=='withdrawHistory'){?>curr<?php }?>">提现记录<i></i></a>
+    </div>
+<?php }else if($_SESSION['com_type'] == 3){ ?>
+    <a href="{:U('Factory/index')}" class="home">首页</a>
+    <div class="side-nav">
+        <h3>店铺管理</h3>
+    	<a href="{:U('StoreCommon/profile')}" class="<?php if(ACTION_NAME =='profile'){?>curr<?php }?>">店铺设置<i></i></a>
+        <a href="{:U('StoreCommon/advManage')}" class="<?php if(ACTION_NAME=='advManage' ){?>curr<?php }?>">广告管理<i></i></a>
+        <a href="{:U('Factory/vendor')}" class="<?php if(ACTION_NAME=='vendor' || ACTION_NAME=='vendorEdit'){?>curr<?php }?>">经销商管理<i></i></a>
+    </div>
+    <div class="side-nav">
+        <h3>商品管理</h3>
+        <a href="{:U('StoreCommon/goodsPub')}" target="_blank">发布商品<i></i></a>
+        <a href="{:U('StoreCommon/getGoodsList',array('type'=>sale))}" class="<?php if(ACTION_NAME =='getGoodsList' && $_GET['type']=='sale'&&!$_GET['is_offline']){?>curr<?php }?>">在售中的商品<i></i></a>
+        <a href="{:U('StoreCommon/getGoodsList',array('type'=>inventory))}" class="<?php if(ACTION_NAME=='getGoodsList' && $_GET['type']=='inventory'&&!$_GET['is_offline']){?>curr<?php }?>">仓库中的商品<i></i></a>
+    </div>
+    <div class="side-nav">
+        <h3>订单管理</h3>
+        <a href="{:U('/shop/factory/factoryorder')}" class="<?php if(ACTION_NAME =='factoryorder'){?>curr<?php }?>">所有订单<i></i></a>
+        <!--<a href="{:U('StoreCommon/transportManage')}" class="<?php if(ACTION_NAME =='transportManage'){?>curr<?php }?>">物流工具<i></i></a>-->
+    </div>
+    <div class="side-nav">
+        <h3>资金管理</h3>
+        <a href="{:U('StoreCommon/income')}" class="<?php if(ACTION_NAME=='income'){?>curr<?php }?>">我的收入<i></i></a>
+        <a href="{:U('StoreCommon/incomeDetail')}" class="<?php if(ACTION_NAME=='incomeDetail'){?>curr<?php }?>">收支明细<i></i></a>
+        <a href="{:U('StoreCommon/withdrawHistory')}" class="<?php if(ACTION_NAME=='withdrawHistory'){?>curr<?php }?>">提现记录<i></i></a>
+    </div>
+<?php } ?>

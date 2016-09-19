@@ -1,0 +1,66 @@
+<extend name="Layouts:seller" />
+<block name="title"><title>首页-<?php if($_SESSION['com_type'] == 3){?>供货中心<?php } else{?>卖家中心<?php } ?>-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="seller-top cf">
+	<div class="store-logo fl">
+    	<a href="" >
+            <img width="200" height="80" src="{$store_info.store_label}" alt="{$store_info.store_name}"/>
+        	<h3>{$store_info.store_name}</h3>
+        </a>
+      
+    </div>
+    <div class="trade fl">
+    	<p class="cf">
+        	<cite>昨日交易额：</cite>
+        	<span class="cor-red fs24">¥{$yesterday_money}</span>
+        </p>
+        <p class="mt10 cf">
+        	<cite>可提现金额：</cite>
+        	<span class="cor-red fs24" ><a class='cor-red fs24' href="">¥ {$store_info.deposit_avaiable}</a></span>
+        </p>
+    </div>
+    <a href="{:U('StoreCommon/goodsPub')}" class="publish-btn fl" target="_black">发布商品</a>
+    <a href="" class="visit-btn" target="_black">访问店铺</a>
+</div>
+<div class="order-bar mt10 cf">
+	<a href="/" class="nobor">
+    	<p class="cor-red fs24">{$no_delivery}</p>
+        <p>等发货订单</p>
+    </a>
+    <a href="" class="first" style="display: none;">
+    	<p class="cor-red fs24">0</p>
+        <p>维权订单</p>
+    </a>
+    <a href="" class="first">
+    	<p class="cor-red fs24">{$yesterday_count}</p>
+        <p>昨日下单笔数</p>
+    </a>
+</div>
+<div class="sales-volume mt10">
+	<h2>商品销量TOP5</h2>
+    <p class="sale-t fs16 cf">
+    	<span class="n1">排名</span>
+        <span class="n2">商品</span>
+        <span class="n3">单价</span>
+        <span class="n4">库存</span>
+        <span class="n5">销量</span>
+    </p>
+    <ul class="sale-c">
+       <foreach name="goods_list" item="v" key="k" >
+            <li class="cf">
+                <p class="n1 fs14">{$k+1}</p>
+                <p class="n2">
+                    <a href="/">
+                    <img  src="{$v.goods_image}" width="50px" height="50px" alt="" />
+                    {$v.goods_name}
+                    </a>
+                </p>
+                <p class="n3 cor-red">{$v.goods_price}</p>
+                <p class="n4">{$v.goods_storage}</p>
+                <p class="n5">{$v.goods_salenum}</p>
+            </li>
+        </foreach>
+    </ul>
+</div>
+</block>

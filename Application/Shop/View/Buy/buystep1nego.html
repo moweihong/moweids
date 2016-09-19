@@ -1,0 +1,103 @@
+<extend name="Layouts:home" />
+<block name="title"><title>结算页-{:C('site_name')}</title></block>
+<block name="head_css">
+<link href="__CSS__/buy.css" rel="stylesheet" type="text/css">
+</block>
+
+<block name="content">
+<div class="wrapper mt120">
+    <h2 class="ncc-receipt-info-title">配送信息</h2>
+    <ul class="add-address cf js-add-address">
+        <foreach name="address_info" item="add_info" >
+            <li class="js-select-address <?php if ($add_info['is_default'] == 1){?>add-default-address<?php }?>" data-id="<?php echo $add_info['address_id'];?>">
+                <p class="true-name">
+                    <em class="js-name"><?php echo $add_info['true_name'];?></em>
+                    <!-- <a href="javascript:void(0);" class="isdefault fr"><?php if ($add_info['is_default'] == 0){?>设为<?php }?>收货地址</a> -->
+                </p>
+                <p class="mt5">
+	                <span class="address js-address"><?php echo $add_info['area_info'],$add_info['address'];?></span>
+	                <span class="phone js-phone"><?php echo $add_info['mob_phone'] ? $add_info['mob_phone'] : $add_info['tel_phone'];?></span>
+                </p>
+                <p class="mt5">
+	                <a href="javascript:void(0);" class="del mr10 js-delAttr"></a>
+	                <a href="javascript:void(0);" class="bianji mr10 js-bianji"></a>
+                </p>
+                <i class="add-select"></i>
+            </li>
+        </foreach>
+        <li class="js-add-last-before">
+        	<a href="javascript:void(0);" class="add-add js-add-addr">
+        		<p class="fs48">+</p>
+        		<p class="fs14">添加新地址</p>
+        	</a>
+        </li>
+    </ul>
+    <table class="add-table" width="100%">  
+        <thead>
+            <tr>
+                <th class="pl20"><?php echo $cart_list[0]['store_name'];?></th>
+                <th>数量</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($store_cart_list as $store_id => $cart_list) {
+                foreach($cart_list as $cart_info) {
+                    $spec = unserialize($cart_info['goods_spec']) ?: [];
+                    $spec_str = '无';
+                    if (is_array($spec) && !empty($spec)) {
+                        $spec_str = '';
+                        foreach ($spec as $k3 => $v3) {
+                            $spec_str .= $v3;
+                        }
+                        if (count($spec) > 1) {
+                            $spec_str = substr($spec_str, 0, -1);
+                        }
+                    }?>
+                    <tr>
+                        <td class="pl10">
+                            <a href="<?php echo urlShop('goods','index',array('goods_id'=>$cart_info['goods_id']));?>" class="ncc-goods-thumb"><img src="<?php echo thumb($cart_info, 60);?>" alt="<?php echo $cart_info['goods_name']; ?>"></a>
+                            <dl class="ncc-goods-info tl w500" style="padding-left:10px;">
+                                <dt><a href="<?php echo urlShop('goods','index',array('goods_id'=>$cart_info['goods_id']));?>"><?php echo $cart_info['goods_name']; ?></a></dt>
+                                <dd><?php echo $spec_str;?></dd>
+                            </dl>
+                        </td>
+                        <td>
+                            <dl class="ncc-goods-info tl">
+                                <dt><?php echo $cart_info['state'] ? $cart_info['goods_num'] : ''; ?></dt>
+                            </dl>
+                        </td>
+                    </tr>
+                    <?php if ($cart_info['state'] && $cart_info['storage_state']) {?>
+                        <input type="hidden" class="js-cartidArr" value="<?php echo $cart_info['cart_id'].'|'.$cart_info['goods_num'];?>" />
+                    <?php } ?>
+                <?php }
+            }?>
+        </tbody>
+        <tfoot>
+            <tr >
+                <td class="tl">给商家留言：<textarea  name="pay_message[<?php echo $store_id;?>]" class="js-pay-message h60 w340 add-textarea" maxlength="160" style="resize: none;"></textarea></td>
+                <td>
+                    <?php if ($ifcart == 1){?>
+                    <a href="<?php echo getReferer();?>" class="cblue mr20">返回购物车</a>
+                    <?php }?>
+                    <a href="javascript:void(0);" class="btn btn-red" id='submitOrder'>提交订单</a>
+                </td>
+            </tr>
+        </tfoot>
+        <form method="post" id="order_form" name="order_form" action="javascript:void(0);">
+            <input type="hidden" name="act" value="buy" />
+            <input type="hidden" name="op" value="buy_step2" />
+            <input type="hidden" id="ttype" name="transport_types" value="2" />
+            <input type="hidden" name="goodsinfo" value="<?php echo $store_cart_list_serialize;?>" />
+            <!-- 来源于购物车标志 -->
+            <input type="hidden" name="ifcart" value="<?php echo $ifcart;?>" />
+        </form>
+    </table>
+</div>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+seajs.use("web/cart_address");
+</script>
+</block>

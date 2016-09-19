@@ -1,0 +1,73 @@
+<include file="Application/Admin/Layout/head.html" /> 
+<div class="am-cf admin-main">
+<include file="Application/Admin/Layout/left.html" /> 
+  <!-- content start -->
+  <div class="admin-content">
+    <div class="admin-content-body">
+      <div class="am-cf am-padding am-padding-bottom-0">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">增加分类</strong> / <small>Article  class add</small></div>
+      </div>
+
+      <hr/>
+
+      <div class="am-g">
+        <div class="am-u-sm-12 am-u-md-4 am-u-md-push-8">
+         
+        </div>
+
+        <div class="am-u-sm-12 am-u-md-8 am-u-md-pull-4">
+           <form id="article_class_form" method="post">
+    <input type="hidden" name="form_submit" value="ok" />
+    <table class="table tb-type2">
+      <tbody>
+        <tr class="noborder">
+          <td colspan="2" class="required"><label class="validation" for="ac_name">分类名称:</label></td>
+        </tr>
+        <tr class="noborder">
+          <td class="vatop rowform"><input type="text" value="" name="ac_name" id="ac_name" class="txt"></td>
+          <td class="vatop tips"></td>
+        </tr>
+        <tr>
+          <td colspan="2" class="required"><label for="parent_id">上级分类:</label></td>
+        </tr>
+        <tr class="noborder">
+          <td class="vatop rowform"><select name="ac_parent_id" id="ac_parent_id">
+              <option value="0">请选择...</option>
+              <?php if(!empty($output['parent_list']) && is_array($output['parent_list'])){ ?>
+              <?php foreach($output['parent_list'] as $k => $v){ ?>
+              <option <?php if($output['ac_parent_id'] == $v['ac_id']){ ?>selected='selected'<?php } ?> value="<?php echo $v['ac_id'];?>"><?php echo $v['ac_name'];?></option>
+              <?php } ?>
+              <?php } ?>
+            </select></td>
+          <td class="vatop tips">如果选择上级分类，那么新增的分类则为被选择上级分类的子分类</td>
+          
+        </tr>
+        <tr>
+          <td colspan="2" class="required"><label for="ac_sort">排序:</label></td>
+        </tr>
+        <tr class="noborder">
+          <td class="vatop rowform"><input type="text" value="255" name="ac_sort" id="ac_sort" class="txt"></td>
+          <td class="vatop tips">值越大越靠前</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr class="tfoot">
+          <td colspan="15" ><input type="submit" value="提交"></td>
+        </tr>
+      </tfoot>
+    </table>
+  </form>
+        </div>
+      </div>
+    </div>
+ 
+
+  </div>
+  <!-- content end -->
+
+</div>
+<include file="Application/Admin/View/foot.html" /> 
+<script>
+//按钮先执行验证再提交表单
+
+</script>

@@ -1,0 +1,82 @@
+<extend name="Layouts:home" />
+<block name="title"><title>品牌专区-{:C('site_name')}</title></block>
+<block name="head_css">
+	<link href="__CSS__/brand.css" rel="stylesheet" type="text/css">
+    <style type="text/css">
+    .e-banner{height:440px;}
+    </style>
+</block>
+
+<block name="content">
+<include file="Layouts:top_banner"/>
+<div class="wrapper mt60">
+    <form method="get">
+        <dl class="b-style brand-store cf" style="padding: 15px 130px 5px;">
+            <dt style="margin-top: 6px;">实体门店</dt>
+            <dd>
+            	<div class="custom_select" style="width: 118px;">
+	                <select id="bscmbProvince" name="bprovince_id" class="text" style="width: 100px;">
+	                    <option value="0">选择省份</option>
+	                </select>
+	            </div>
+	            <div class="custom_select" style="width: 118px;">
+	                <select id="bscmbCity" name="bcity_id" class="text" style="width: 100px;">
+	                    <option value="0">选择城市</option>
+	                </select>
+                </div>
+                <div class="custom_select" style="width: 118px;">
+	                <select id="bscmbArea" name="barea_id" class="text" style="width: 100px;">
+	                    <option value="0">选择地区</option>
+	                </select>
+                </div>
+            </dd>
+        </dl>
+    </form>
+    <ul class="bg-white store-addr cf" id="storeList"></ul>
+</div>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+(function($){
+	define("web/morestore",function(require, exports, module){
+		var Module = {
+			init: function(){
+				/*
+                **地区三级联动
+                */
+				seajs.use("com/adarray", function(){
+                    if($("#bscmbArea").length) addressInit("bscmbProvince", "bscmbCity", "bscmbArea");
+                });
+				Module.ajaxGetData(0,0,0);
+				$("#bscmbProvince,#bscmbCity,#bscmbArea").change(function(){
+					var province=$("#bscmbProvince").val();
+					var city=$("#bscmbCity").val();
+					var county=$("#bscmbArea").val();
+					Module.ajaxGetData(province,city,county);
+				});                
+			},
+			ajaxGetData: function(province,city,county){
+				$("#storeList").html('<div class="loading-bar"><i class="loading-big"></i></div>');
+				$.get("{:U('TBrand/morestore',array('type'=>'ajax','brand_id'=>$_GET['brand_id']))}",{
+					province: province,
+					city	: city,
+					county	: county
+				},function(data){
+					if (data == '') {
+						$("#storeList").html('<li class="no-notice">该地区暂无实体门店</li>');
+					}else{
+						$("#storeList").html(data);
+					}
+				});
+			}
+		};
+		module.exports = Module;
+	});
+	seajs.use("web/morestore", function(module){
+		module.init();
+	});
+})($);
+</script>
+</block>
+

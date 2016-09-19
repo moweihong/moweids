@@ -1,0 +1,545 @@
+<extend name="Layouts:seller" />
+<block name="title"><title>运费模板设置-<?php if($_SESSION['com_type'] == 3){?>供货中心<?php } else{?>卖家中心<?php } ?>-{:C('site_name')}</title></block>
+<block name="head_css">
+<style type="text/css">
+.hr8 {margin:8px!important;}
+/* 按钮样式 */
+a.ncsc-btn-mini { font: normal 12px/20px arial; color: #777; background-color: #F5F5F5; text-align: center; vertical-align: middle; display: inline-block; height: 20px; padding: 0 10px; margin-right: 2px; border-style: solid; border-width: 1px; border-color: #DCDCDC #DCDCDC #B3B3B3 #DCDCDC; cursor: pointer;}
+a:hover.ncsc-btn-mini { text-decoration: none; color: #333; background-color: #E6E6E6;border-color: #CFCFCF #CFCFCF #B3B3B3 #CFCFCF;}
+a.ncsc-btn { font: normal 12px/20px "microsoft yahei"; color: #777; background-color: #F5F5F5; text-align: center; vertical-align: middle; display: inline-block; height: 20px; padding: 4px 12px; border: solid 1px; border-color: #DCDCDC #DCDCDC #B3B3B3 #DCDCDC; cursor: pointer;}
+a:hover.ncsc-btn { text-decoration: none; color: #333; background-color: #E6E6E6; border-color: #CFCFCF #CFCFCF #B3B3B3 #CFCFCF;}
+a.ncsc-btn-red{color:#fff;background-color: #DA4F49; border-color: #C44742 #C44742 #A33B37 #C44742;}
+a.ncsc-btn-red:hover{color:#fff;background-color: #BD362F; border-color: #AA312A #AA312A #8E2823 #AA312A;}
+a.ncsc-btn-orange{color:#fff;background-color: #FAA732;border-style:solid; border-width: 1px; border-color: #E1962D #E1962D #BB7D25 #E1962D !important;}
+a.ncsc-btn-orange:hover{color:#fff;background-color: #F89406; border-color: #DF8505 #DF8505 #BA6F04 #DF8505;}
+
+/* 内容部分通用表格样式 */
+.ncsc-table-style { line-height:20px; width: 100%; border-collapse: collapse; clear: both;}
+.ncsc-table-style thead th { font: bold 12px/20px "microsoft yahei"; color: #666; background-color: #FAFAFA; text-align:center; height: 20px; padding: 5px 0; border-bottom: solid 1px #E6E6E6; }
+.ncsc-table-style thead td, 
+.ncsc-table-style tfoot th { background-color: #FFF; height: 22px; padding: 5px 0; border-bottom: solid 1px #E6E6E6;}
+.ncsc-table-style tfoot th { border-top: solid 1px #E6E6E6;}
+.ncsc-table-style thead td label, .ncsc-table-style tfoot th label { color: #555; display: inline; float: left; margin-right: 10px; cursor: pointer; }
+.ncsc-table-style tbody th { background-color: #FAFAFA; border: solid #E6E6E6; border-width: 1px 0; padding: 4px 0;}
+.ncsc-table-style tbody th span { display: inline-block; vertical-align: middle; margin-right: 30px;}
+.ncsc-table-style tbody th span.goods-name { text-overflow: ellipsis; white-space: nowrap; width: 240px; height: 20px; overflow: hidden;}
+.ncsc-table-style tbody td { color: #999; background-color: #FFF; text-align: center; padding: 10px 0;}
+.ncsc-table-style tbody td strong { color: #666;}
+.ncsc-table-style tfoot td { background-color: #FFF; text-align: center;}
+.ncsc-table-style td .pic-thumb { line-height: 0; background-color: #FFF; text-align: center; vertical-align: middle; display: table-cell; *display: block; width: 32px; height: 32px; border: solid 1px #F5F5F5; overflow: hidden;}
+.ncsc-table-style td .pic-thumb img { max-width: 32px; max-height: 32px; margin-top:expression(32-this.height/2); *margin-top:expression(16-this.height/2)/*IE6,7*/;}
+.ncsc-table-style td .goods-name { border: none; overflow: hidden;}
+.ncsc-table-style td .goods-name dt { font-size: 12px; line-height: 16px; color: #333; text-overflow: ellipsis; display: block; text-align: left; white-space: nowrap; max-width: 320px!important; height: 16px; padding-bottom: 4px; overflow: hidden;}
+.ncsc-table-style td .goods-name dt span { line-height: 16px; color: #FFF; background-color: #DA542E; display: inline-block; *display: inline/*IE7*/; height: 16px; padding: 1px 3px; border-radius: 2px; margin-right: 4px; zoom: 1;}
+.ncsc-table-style td .goods-name dt a { color: #005EA6;}
+.ncsc-table-style td .goods-name dt a:hover { color: #DA542E;}
+.ncsc-table-style td .goods-name dd { line-height: 16px; display: block; height: 16px;}
+.ncsc-table-style td .goods-name .sale-type { background-color: #DA542E; padding: 1px 4px;color:#FFFFFF}
+
+/*快递运费模板*/
+.ncsu-trans-type { background-color: #FFF; border: solid #DDD 1px;}
+.ncsu-trans-type .default { line-height: 30px; background-color: #E6E6E6; min-height: 30px; padding: 4px 10px;}
+.ncsu-trans-type .default .w50, .ncsc-table-style tbody td .w50{width:50px;}
+.ncsc-table-style tbody td .w80{width:80px;}
+.ncsc-table-style tbody td .w110{width:110px;}
+.postage-tpl .postage-detail { padding: 5px; margin: 5px 0; border: 1px dashed #D3E5F3;}
+.postage-tpl .express .section { margin-bottom: 8px;}
+.postage-tpl .input_readonly { background-color: #E6E6E6; border: 1px solid #CCC;}
+.postage-tpl .batch { line-height: 20px; background-color: #FAFAFA; height: 20px; padding: 5px; border-bottom: solid 1px #E6E6E6;}
+.postage-tpl .tbl-attach { background-color: #E6E6E6; height: 30px; padding: 4px 2px;}
+.postage-tpl .input-error { background-color: #FFF2F2; border: 1px solid #FF8080;}
+.postage-tpl span.msg:after { display: none;}
+.J_DefaultMessage { display: block; clear: both;}
+.J_Message { color: #F00; display: inline-block;}
+.J_Message i { vertical-align: middle; margin-right: 5px;}
+.postage-tpl span.msg { margin-right: 3px;}
+.postage-tpl span.error, .postage-tpl span.stop { display: inline-block; float: none;}
+/*运费模板选择地区弹出层*/
+.ks-ext-mask {filter:progid:DXImageTransform.Microsoft.gradient(enabled='true',startColorstr='#BFFFFFFF', endColorstr='#BFFFFFFF');background:rgba(255,255,255,0.75);}
+.dialog-areas, .dialog-batch { background-color: #FFF; width: 640px; margin-left: -320px; border: 1px solid #CCC; position: fixed; z-index: 9999; top: 25%; left: 50%;}
+.dialog-batch { top: 40%;}
+.ks-contentbox { display: block; }
+.ks-contentbox .title { font-size: 14px; line-height: 20px; font-weight: bold; color: #555; background-color: #FFF; height: 20px; padding: 10px; border-bottom: solid 1px #E6E6E6; position: relative; z-index: 1;}
+a.ks-ext-close { font: lighter 14px/20px Verdana; color: #999; text-align: center; display: block; width: 20px; height: 20px; position: absolute; z-index: 1; top: 10px; right: 10px; cursor: pointer;}
+a:hover.ks-ext-close { text-decoration: none; color: #27A9E3;}
+.dialog-areas ul { display: block; padding: 10px;}
+.dialog-areas li { display: block; width: 100%; clear: none;}
+.dialog-areas li.even {	background-color: #F7F7F7;}
+.ncsc-region { font-size: 0; *word-spacing:-1px/*IE6、7*/; overflow: visible!important;}
+.ncsc-region-title { font-size: 12px; line-height: normal!important; vertical-align: top; letter-spacing: normal; word-spacing: normal; text-align: left!important; display: inline-block; padding: 0!important; width:100px!important; }
+.ncsc-region-title span { line-height: 20px; color: #333; font-weight: bold; display: block; height: 20px; padding: 5px 0 4px 10px; }
+.ncsc-province-list { font-size: 0!important; *word-spacing:-1px/*IE6、7*/; vertical-align: top; letter-spacing: normal; word-spacing: normal; display: inline-block; width: 500px!important; padding: 0!important;}
+.ncsc-province { font-size: 12px; vertical-align: top; letter-spacing: normal; word-spacing: normal; display: inline-block; width: 100px; height: 30px; position: relative; z-index: 1;}
+.ncsc-province-tab { line-height: 20px; display: block; height: 20px; padding: 4px; margin: 1px 1px 0 1px;}
+.ncsc-province-tab input, .ncsc-province-tab label { vertical-align: middle;}
+.ncsc-province-tab .check_num { font: 12px/16px Verdana, Geneva, sans-serif; color: #28B779; letter-spacing: -1px; vertical-align: middle; padding-right: 1px;}
+.ncsc-province-tab:hover i { color: #555;}
+.showCityPop { z-index: 2;}
+.showCityPop .ncsc-province-tab { background-color: #FFFEC6; margin: 0; border-style: solid; border-width: 1px 1px 0 1px; border-color: #F7E4A5 #F7E4A5 transparent #F7E4A5;}
+.ncsc-citys-sub { background-color: #FFFEC6; white-space: normal; display: none; width: 240px; border: 1px solid #F7E4A5; position: absolute; z-index: -1; top: 28px; left: 0;}
+.showCityPop .ncsc-citys-sub  { font-size: 0; *word-spacing:-1px/*IE6、7*/; display: block;}
+.ncsc-citys-sub .areas { font-size: 12px; line-height: 20px; vertical-align: middle; letter-spacing: normal; word-spacing: normal; display: inline-block; padding: 4px; margin-right: 4px;}
+.ks-contentbox .bottom { padding: 10px;}
+.ks-contentbox .batch { line-height: 30px; background-color: #FFF; text-align: center; height: 30px; padding: 20px 0; border-bottom: solid 1px #E6E6E6;}
+.checkbox { padding: 0; vertical-align: middle;}
+.hidden { display: none;}
+.icon-angle-down{width:15px;height:15px;background:url(__IMG__/ic_member.png) no-repeat -26px -14px;vertical-align:middle; cursor: pointer;}
+</style>
+</block>
+
+<block name="content">
+<div class="wrap-in shipping-temp">
+    <h2 class="tit">运费模板设置</h2>
+    <hr/>
+    <form id="form" method="post" action="{:U('StoreCommon/createTransportAjax')}"
+          autocomplete="off">
+        <ul class="list">
+            <li class="cf">
+                <label class="handle" for="tempName"><em class="cor-red">*</em>模板名称：</label>
+                <div class="rel">
+                    <input type="text" id="tempName" name="title" class="text"
+                           value="<?php echo $transport['title']; ?>" placeholder="请填写模板名称" maxlength="40"
+                           required/>
+                    <span show="tempName.check" class="error-msg">
+                        <em class="errow-arrow"></em>
+                        请填写模板名称
+                    </span>
+                </div>
+            </li>
+            <li class="cf">
+                <label class="handle"><em class="cor-red">*</em>商品地址：</label>
+                <select id="cmbProvince" name="province_id" style="width:100px">
+                    <option value="0">选择省份</option>
+                </select>
+                <select id="cmbCity" name="city_id" class="ml10" style="width:100px">
+                    <option value="0">选择城市</option>
+                </select>
+                <select id="cmbArea" name="area_id" class="ml10" style="width:100px">
+                    <option value="0">选择地区</option>
+                </select>
+            </li>
+            <li class="cf">
+                <label class="handle"><em class="cor-red">*</em>运费类型：</label>
+                <label class="w100">
+                    <?php if ($transport['freightage_type'] == 0) { ?>
+                        <input type="radio" id="self_fee" name="freightage_type" class="v-2" value="0" checked /> 自定义运费
+                    <?php } else { ?>
+                        <input type="radio" id="self_fee" name="freightage_type" class="v-2" value="0"  /> 自定义运费
+                    <?php } ?>
+                </label>
+                <label class="w100">
+                    <?php if ($transport['freightage_type'] == 1) { ?>
+                        <input type="radio" id="seller_fee" name="freightage_type" value="1" class="v-2" checked /> 卖家承担运费
+                    <?php } else { ?>
+                        <input type="radio" id="seller_fee" name="freightage_type" value="1" class="v-2" /> 卖家承担运费
+                    <?php } ?>
+                </label>
+            </li>
+            <li class="cf" id="four_floor">
+                <label class="handle"><em class="cor-red">*</em>计价方式：</label>
+                <label class="w100">
+                    <?php if ($transport['cash_type'] == 1) { ?>
+                        <input type="radio" id="volume" name="cash_type" value='1' class="v-2" checked /> 按体积
+                    <?php } else { ?>
+                        <input type="radio" id="volume" name="cash_type" value='1' class="v-2" /> 按体积
+                    <?php } ?>
+                </label>
+                <label class="w100">
+                    <?php if ($transport['cash_type'] == 2) { ?>
+                        <input type="radio" id="weight" name="cash_type" value='2' class="v-2" checked /> 按重量
+                    <?php } else { ?>
+                        <input type="radio" id="weight" name="cash_type" value='2' class="v-2" /> 按重量
+                    <?php } ?>
+                </label>
+            </li>
+            <li class="cf" id="five_floor">
+                <label class="handle"><em class="cor-red">*</em>运送方式：</label>
+                <div class="shipping-way">
+                    <label>
+                        <?php if ($express) { ?>
+                            <input type="checkbox" id="alternately_express" class="v-2" checked /> 快递
+                        <?php } else { ?>
+                            <input type="checkbox" id="alternately_express" class="v-2" /> 快递
+                        <?php } ?>
+                    </label>
+                    <dl id="express_table" class="js-express">
+                        <dt></dt>
+                        <dd class="trans-line">
+                        </dd>
+                    </dl>
+                </div>
+                <div class="shipping-way mt20">
+                    <label>
+                        <?php if ($logistics) { ?>
+                            <input type="checkbox" id="alternately_logistics" class="v-2" checked /> 物流
+                        <?php } else { ?>
+                            <input type="checkbox" id="alternately_logistics" class="v-2" /> 物流
+                        <?php } ?>
+                    </label>
+                    <dl id="logistics_table" class="js-logistics" style="width:100%">
+                        <dt></dt>
+                        <dd class="trans-line"></dd>
+                    </dl>
+                </div>
+            </li>
+            <li class="cf">
+                <label class="handle"></label>
+                <button type="button" id="submit_tpl" class="btn btn-blue js-saveSetting">保存</button>
+                <a href="javascript:history.back();" class="btn ml20">返回</a>
+            </li>
+        </ul>
+        <input type="hidden" id="transport_type" name="transport_type" value=""/>
+        <input type="hidden" id="transport_id" name="transport_id" value="<?php echo $_REQUEST['transport_id'] ?>" />
+    </form>
+
+    <!--地区选择弹出层-->
+    <div id="dialog_areas" class="dialog-areas" style="display: none">
+        <div class="ks-contentbox">
+            <div class="title">
+            	选择区域
+                <a class="ks-ext-close" href="javascript:void(0)">X</a>
+            </div>
+            <ul id="J_CityList">
+                <include file="StoreCommon:transportArea"/>
+            </ul>
+            <div class="bottom">
+            	<a href="javascript:void(0);" class="J_Submit ncsc-btn ncsc-btn-red">确认</a>
+                <a href="javascript:void(0);" class="J_Cancel ncsc-btn ml10">取消</a>
+			</div>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="infoProvince" value="<?php echo $transport['province_id'] ?>"/>
+<input type="hidden" id="infoCity" value="<?php echo $transport['city_id'] ?>"/>
+<input type="hidden" id="infoArea" value="<?php echo $transport['area_id'] ?>"/>
+<input type="hidden" id='from_url' name="from_url" value="<?php echo $_GET['from_url'] ?>"/>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+(function ($) {
+	define("s/edittemplate", function (require, exports, module) {
+		require("jquery/layer");
+		require("com/transport");
+		require("com/adarray");
+		var Module = {
+			init: function () {
+				//快递地址初始化
+				if ($("#cmbCity").length) {
+					var infoProvince = $("#infoProvince").val() || "",
+						infoCity = $("#infoCity").val() || "",
+						infoArea = $("#infoArea").val() || "";
+					addressInit("cmbProvince", "cmbCity", "cmbArea", infoProvince, infoCity, infoArea);
+				}
+				//谁来承担运费
+				if ($('#self_fee').attr('checked') == 'checked') {
+					//买家承担运费
+					$('#four_floor').show();
+					$('#five_floor').show();
+				} else {
+					//卖家承担运费
+					//隐藏所有相关的内容
+					$('#four_floor').hide();
+					$('#five_floor').hide();
+				}
+				$('#self_fee').click(function () {
+					//买家承担运费
+					$('#four_floor').show();
+					$('#five_floor').show();
+				});
+				$('#seller_fee').click(function () {
+					//卖家承担运费
+					$('#four_floor').hide();
+					$('#five_floor').hide();
+
+					//将物流和快递的事件取消
+					if ($('#alternately_express').attr('checked') == 'checked') {
+						$('#alternately_express').click();
+					}
+					if ($('#alternately_logistics').attr('checked') == 'checked') {
+						$('#alternately_logistics').click();
+					}
+				});
+
+				//快递模块初始化判断
+				if ($('#alternately_express').attr('checked') == 'checked') {
+					initM1();
+					$('#express_table').show();
+					//判断已经存在的值,通过改值对快递和物流的参数进行控制
+				} else {
+					$('#express_table').hide();
+				}
+				//物流模块初始化判断
+				if ($('#alternately_logistics').attr('checked') == 'checked') {
+					initM2();
+					$('#logistics_table').show();
+				} else {
+					$('#logistics_table').hide();
+				}
+
+				//快递方式
+				$('#alternately_express').click(function () {
+					if ($('#alternately_express').attr('checked') == 'checked') {
+						   initM1();
+						//是按照体积还是重量
+						var type=$('input[name="cash_type"]:checked').val();
+						//体积
+						if(type=="1"){
+							$('.tiji').text("m³内");
+						}else{
+							$('.tiji').text("KG内");
+						}
+						$('#express_table').show();
+					} else {
+						$('#express_table').hide();
+						$(".js-express .trans-line").children().remove();
+					}
+
+				});
+				//物流方式
+				$('#alternately_logistics').click(function () {
+					if ($('#alternately_logistics').attr('checked') == 'checked') {
+							initM2();
+						//是按照体积还是重量
+						var type=$('input[name="cash_type"]:checked').val();
+						//体积
+						if(type=="1"){
+							$('.tiji').text("m³内");
+						}else{
+							$('.tiji').text("KG内");
+						}
+						$('#logistics_table').show();
+					} else {
+						$('#logistics_table').hide();
+						$(".js-logistics .trans-line").children().remove();
+
+					}
+				});
+
+				//体积或者重量初始化
+				if ($('#volume').attr('checked') == 'checked') {
+					//按体积的方式
+					$('.f_pre').html("首体积(m<sup>3</sup>)");
+					$('.f_extend').html("续体积(m<sup>3</sup>)")
+					$('.d-pre').html("m<sup>3</sup>");
+					$('.d-extend').html("m<sup>3</sup>");
+				} else {
+					//按重量的方式
+					$('.f_pre').html("首重KG");
+					$('.f_extend').html("续重KG")
+					$('.d-pre').html('KG');
+					$('.d-extend').html('KG');
+				}
+				//按体积,按照重量点击事件交互
+				$('#volume').click(function () {
+					//按体积的方式
+					$('.f_pre').html("首体积(m<sup>3</sup>)");
+					$('.f_extend').html("续体积(m<sup>3</sup>)")
+					$('.d-pre').html("m<sup>3</sup>");
+					$('.d-extend').html("m<sup>3</sup>");
+					$('.tiji').text("m³内");
+					$('.shoutiji').text("首体积(m³)");
+					$('.xutiji').text("续体积(m³)");
+				});
+				$('#weight').click(function () {
+					//按体积的方式
+					$('.f_pre').html("首重KG");
+					$('.f_extend').html("续重KG")
+					$('.d-pre').html('KG');
+					$('.d-extend').html('KG');
+					$('.tiji').text("KG内");
+					$('.shoutiji').text("首重KG");
+					$('.xutiji').text("续重KG");
+				});
+
+				/*保存运费模板*/
+				$('#submit_tpl').on('click', function () {
+					var judge = verifyParams();//基本参数检查
+					if ($('#alternately_logistics').attr('checked') == 'checked' && $('#alternately_express').attr('checked') == 'checked') {
+						$("#transport_type").val(3);//快递和物流两种方式
+					} else if ($('#alternately_logistics').attr('checked') == 'checked') {
+						$("#transport_type").val(1);//仅仅选择物流
+					} else if ($('#alternately_express').attr('checked') == 'checked') {
+						$("#transport_type").val(2);//仅仅选择快递
+					} else {
+						if($("#seller_fee").attr('checked') != 'checked') {
+							//两种运送方式都没有选择
+							layer.msg('请选择运送方式!');
+							return false;
+						}else{
+							url = "<?php echo urlShop('seller_center', 'create_transport_ajax');?>";
+							l_url = "<?php echo urlShop('seller_center', 'shipping_template')?>";
+							$.ajax({
+								type: "POST",
+								url: url,
+								data: $("#form").serialize(),
+								dataType: 'json',
+								success: function (data) {
+									if (data.code == 1) {
+										if ($("#from_url").val()!= 'goods') {
+											window.location.href = l_url;
+											return;
+										}
+										if($("#from_url").val()=='goods') {
+											var title = data.resultText.data.title;
+											var id = data.resultText.data.id;
+											var s1 = '<label><input type="radio" name="freight" class="v-2" value="' + id + '" checked=checked>' + title + '</label>';
+											var ls = $(".js-addLogistics", opener.document);
+											ls.append(s1);
+											ls.children('#freigh_title').val(title);//修改transport_title
+											window.close();
+										}
+									}
+									else {
+										alyer.msg(data.resultText.message);
+									}
+								},
+								error: function () {
+									layer.msg('请求失败,请重试!');
+								}
+							});
+							return false;
+						}
+					}
+					if (judge == true) {
+						//校验通过,发送请求到后台
+						url = "<?php echo U('StoreCommon/createTransportAjax');?>";
+						l_url = "<?php echo U('StoreCommon/transportManage')?>";
+						$.ajax({
+							type: "POST",
+							url: url,
+							data: $("#form").serialize(),
+							dataType: 'json',
+							success: function (data) {
+								if (data.code == 1) {
+									if ($("#from_url").val()!= 'goods') {
+										window.location.href = l_url;
+										return;
+									}
+									if($("#from_url").val()=='goods'){
+									var title = data.resultText.data.title;
+									var id = data.resultText.data.id;
+									var s1 = '<label><input type="radio" name="freight" class="v-2" value="' + id + '" checked=checked>' + title + '</label>';
+									var ls = $(".add-logistics", opener.document);
+									ls.append(s1);
+									ls.children('#freigh_title').val(title);//修改transport_title
+									window.close()
+									}
+								}
+								else {
+									alyer.msg(data.resultText.message);
+								}
+							},
+							error: function () {
+								layer.msg('请求失败,请重试!');
+							}
+						});
+					}
+				});
+
+				/*	删除一行运费规则*/
+				$('.trans-line').on('click', '.J_DeleteRule', function () {
+					curDelNum = $(this).attr('ncNum');
+					layer.confirm('确认删除吗？', {
+						btn: ['确认', '取消'] //按钮
+					}, function () {
+						curTransType = 'kd';
+						obj_parent = $('tr[data-group="' + curDelNum + '"]').parent();
+						$('tr[data-group="' + curDelNum + '"]').remove();
+						if ($(obj_parent).find('tr').html() == null) {
+							$(obj_parent).parent().parent().parent().find('.batch').css('display', 'none');
+							$(obj_parent).parent().parent().parent().find('.J_ToggleBatch').css('display', 'none');
+							$(obj_parent).parent().parent().parent().find('.batch').next().find('span').css('display', 'none');
+						} else {
+							//如果该配送方式，地区都不为空，隐藏地区的提示层
+							isRemove = true;
+							$('div[data-delivery="' + curTransType + '"]').find('input[type="hidden"]').each(function () {
+								if ($(this).val() == '') {
+									isRemove = false;
+									return false;
+								}
+							});
+							if (isRemove == true) {
+								$('div[data-delivery="' + curTransType + '"]').find('span[error_type="area"]').css('display', 'none');
+							}
+						}
+						layer.msg('删除成功', {icon: 1});
+					}, function () {
+					});
+				});
+				//体积和重量刷新
+				if($("input[type='radio'][name='cash_type']:checked").val()==1){
+					//按体积刷新
+					$('#volume').click();
+				}
+				if($("input[type='radio'][name='cash_type']:checked").val()==2){
+					//按重量刷新
+					$('#weight').click();
+				}
+			}
+		}
+		module.exports = Module;
+	});
+	seajs.use("s/edittemplate", function (module) {
+		module.init();
+	});
+})($);
+function initM1(){
+	//初始化地址选取弹窗
+	$('.js-express .trans-line').append(TransTpl.replace(/TRANSTYPE/g, 'kd'));
+	$('.js-express .tbl-except').append(RuleHead);
+	<?php if (is_array($transport_extend)){?>
+		<?php foreach ($transport_extend as $value){?>
+			<?php if ($value['is_default'] == 1 && $value['transport_type'] == 2){?>
+				var cur_tr = $('.js-express .tbl-except').prev();
+				$(cur_tr).find('input[data-field="start"]').val('<?php echo $value['snum'];?>');
+				$(cur_tr).find('input[data-field="postage"]').val('<?php echo $value['sprice'];?>');
+				$(cur_tr).find('input[data-field="plus"]').val('<?php echo $value['xnum'];?>');
+				$(cur_tr).find('input[data-field="postageplus"]').val('<?php echo $value['xprice'];?>');
+			<?php }elseif($value['transport_type'] == 2){?>
+				StartNum += 1;
+				cell = RuleCell.replace(/CurNum/g, StartNum);
+				cell = cell.replace(/TRANSTYPE/g, 'kd');
+				$('.js-express .tbl-except').find('table').append(cell);
+				$('.js-express .tbl-attach').find('.J_ToggleBatch').css('display', '').html('<?php echo $lang['transport_tpl_pl_op'];?>');
+				var cur_tr = $('.js-express .tbl-except').find('table').find('tr:last');
+				$(cur_tr).find('.area-group>p').html('<?php echo $value['area_name'];?>');
+				$(cur_tr).find('input[type="hidden"]').val('<?php echo trim($value['area_id'], ',');?>|||<?php echo $value['area_name'];?>');
+				$(cur_tr).find('input[data-field="start"]').val('<?php echo $value['snum'];?>');
+				$(cur_tr).find('input[data-field="postage"]').val('<?php echo $value['sprice'];?>');
+				$(cur_tr).find('input[data-field="plus"]').val('<?php echo $value['xnum'];?>');
+				$(cur_tr).find('input[data-field="postageplus"]').val('<?php echo $value['xprice'];?>');
+			<?php }?>
+		<?php }?>
+	<?php }?>
+}
+function initM2(){
+	$('.js-logistics .trans-line').append(TransTpl.replace(/TRANSTYPE/g, 'wl'));
+	$('.js-logistics .tbl-except').append(RuleHead);
+	<?php if (is_array($transport_extend)){?>
+		<?php foreach ($transport_extend as $value){?>
+			<?php if ($value['is_default'] == 1 && $value['transport_type'] == 1){?>
+				var cur_tr = $('.js-logistics .tbl-except').prev();
+				$(cur_tr).find('input[data-field="start"]').val('<?php echo $value['snum'];?>');
+				$(cur_tr).find('input[data-field="postage"]').val('<?php echo $value['sprice'];?>');
+				$(cur_tr).find('input[data-field="plus"]').val('<?php echo $value['xnum'];?>');
+				$(cur_tr).find('input[data-field="postageplus"]').val('<?php echo $value['xprice'];?>');
+			<?php }elseif($value['transport_type'] == 1){?>
+				StartNum += 1;
+				cell = RuleCell.replace(/CurNum/g, StartNum);
+				cell = cell.replace(/TRANSTYPE/g, 'wl');
+				$('.js-logistics .tbl-except').find('table').append(cell);
+				$('.js-logistics .tbl-attach').find('.J_ToggleBatch').css('display', '').html('<?php echo $lang['transport_tpl_pl_op'];?>');
+				var cur_tr = $('.js-logistics .tbl-except').find('table').find('tr:last');
+				$(cur_tr).find('.area-group>p').html('<?php echo $value['area_name'];?>');
+				$(cur_tr).find('input[type="hidden"]').val('<?php echo trim($value['area_id'], ',');?>|||<?php echo $value['area_name'];?>');
+				$(cur_tr).find('input[data-field="start"]').val('<?php echo $value['snum'];?>');
+				$(cur_tr).find('input[data-field="postage"]').val('<?php echo $value['sprice'];?>');
+				$(cur_tr).find('input[data-field="plus"]').val('<?php echo $value['xnum'];?>');
+				$(cur_tr).find('input[data-field="postageplus"]').val('<?php echo $value['xprice'];?>');
+			<?php }?>
+		<?php }?>
+	<?php }?>
+}
+</script>
+</block>

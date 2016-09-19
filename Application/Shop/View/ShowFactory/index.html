@@ -1,0 +1,27 @@
+<extend name="Layouts:store_factory" />
+<block name="title"><title>工厂店铺页-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="factory-banner mt15"><img src="<?php echo getStoreLogo($store_info['store_banner']);?>" alt="<?php echo $store_info['store_name']; ?>" title="<?php echo $store_info['store_name']; ?>" /></div>
+<div class="factory-list wrapper">
+    <div class="title">
+    	<span class="line"></span>
+        <a href="{:U('ShowFactory/goodsSearch',array('store_id'=>$_GET['store_id']))}" class="more">更多 &gt;&gt;</a>
+        <h2 class="fl">店长推荐</h2>
+    </div>
+    <ul class="factory-goods-list cf">
+        <?php foreach ($list as $val):?>
+            <li>
+                <a href="{:U('ShowFactory/goodsDetial',array('goods_id'=>$val['goods_id'],'store_id'=>$_GET['store_id']))}" class="thumb"><img src="<?php echo thumb($val, 260)?>" title="<?php echo $val['goods_name'];?>" width="240" height="240" alt="<?php echo $val['goods_name'];?>" /></a>
+                <p class="name"><a href="{:U('ShowFactory/goodsDetial',array('goods_id'=>$val['goods_id'],'store_id'=>$_GET['store_id']))}"><?php echo $val['goods_name'];?></a></p>
+                <p class="price">
+                	出厂价
+                    <span class="cor-red fs12 ml10">¥</span>
+                    <em class="cor-red fs18"><?php echo $val['goods_price'];?></em>
+                </p>
+            </li>
+        <?php endforeach;?>
+    </ul>
+    <div id="jspage" class="jspage"><?php echo $page; ?></div>
+</div>
+</block>

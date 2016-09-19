@@ -1,0 +1,83 @@
+<extend name="Layouts:home" />
+<block name="title"><title>全部分类-{:C('site_name')}</title></block>
+<block name="head_css">
+<style>
+    .article-banner{height:150px;padding-top:90px;background: url(__IMG__/articlebanner.jpg) center bottom no-repeat;}
+	.all-category{width: 1280px; margin: auto;padding: 60px 0 0; overflow: hidden;}
+	.all-category-content{background: #fff;margin-right: 8px;padding: 30px;margin-bottom: 8px;}
+	.all-category-left{ width: 640px; float: left}
+	.all-category-list{color: #000; font-size: 20px; margin-bottom: 16px;}
+	.all-category dl{ margin-top: 10px;height:auto;overflow: hidden;}
+	.all-category dl dt{font-size: 12px; color: #666666; width: 70px; text-align: left;float: left;line-height: 26px}
+	.all-category dl dd{margin-left: 70px;line-height: 26px}
+	.all-category dl dd a{margin-right: 40px;font-size: 12px; color:#000000; display: inline-block}
+	.all-category dl dd a:hover{text-decoration: none; color: #fabe00;}
+	.all-category-right{width: 640px;float: left;}
+    .all-category-right .all-category-content{margin-right: 0;}
+</style>
+</block>
+
+<block name="content">
+<div class="article-banner"></div>
+<div class="all-category cf">
+    <div class="all-category-left">
+        <div class="all-category-content">
+            <div class="all-category-list">精品家具</div>
+            <volist name='furniture' id='v'>
+                <notempty name='v.class3'>
+                    <dl>                
+                        <dt>{$v.gc_name}：</dt>
+                        <dd>
+                            <volist name='v.class3' id='v2'>
+                                <a href="{:U('search/index',array('cate_id'=>$v2['gc_id']))}">{$v2.gc_name}</a>
+                            </volist> 
+                        </dd>               
+                    </dl>
+                </notempty>    
+            </volist>   
+        </div>
+    </div>
+    <div class="all-category-right">
+        <div class="all-category-content">
+            <div class="all-category-list">家居饰品</div>
+            <volist name='homedecoration' id='v'>
+            <dl>             
+                <dt>{$v.gc_name}：</dt>
+                <dd>
+                    <volist name='v.class3' id='v2'>
+                        <a href="{:U('search/index',array('cate_id'=>$v2['gc_id']))}">{$v2.gc_name}</a>
+                    </volist> 
+                </dd>               
+            </dl>
+            </volist> 
+        </div>
+        <div class="all-category-content">
+            <div class="all-category-list">装修设计</div>
+            <volist name='homedesign' id='v'>
+            <dl>             
+                <dt>{$v.gc_name}：</dt>
+                <dd>
+                    <volist name='v.class3' id='v2'>
+                        <a href="{:U('search/index',array('cate_id'=>$v2['gc_id']))}">{$v2.gc_name}</a>
+                    </volist> 
+                </dd>               
+            </dl>
+            </volist> 
+        </div>
+        <div class="all-category-content">
+            <div class="all-category-list">装修材料</div>
+            <volist name='material' id='v'>
+            <dl>             
+                <dt>{$v.gc_name}：</dt>
+                <dd>
+                    <volist name='v.class3' id='v2'>
+                        <a href="{:U('search/index',array('cate_id'=>$v2['gc_id']))}">{$v2.gc_name}</a>
+                    </volist> 
+                </dd>               
+            </dl>
+            </volist> 
+        </div>
+    </div>
+</div>
+</block>
+

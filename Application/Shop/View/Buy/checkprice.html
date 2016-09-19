@@ -1,0 +1,182 @@
+<extend name="Layouts:home" />
+<block name="title"><title>订单支付-{:C('site_name')}</title></block>
+<block name="head_css">
+<link href="__CSS__/buy.css" rel="stylesheet" type="text/css">
+</block>
+
+<block name="content">
+<div class="pay-title wrapper mt120">
+	<form action="{:U('Shop/Payment')}" method="POST" id="buy_form">
+		<input type="hidden" name="pay_sn" value="<?php echo $pay_info['pay_sn'];?>">
+		<input type="hidden" id="payment_code" name="payment_code" value="">
+		<input type="hidden" name="order_type" value="product_buy">
+		<input type="hidden" name="period" value="0">
+		<h3 class="pay-main">订单支付</h3>
+		<ul class="mb20">
+			<foreach name="order_goods_list" item="item">
+                <li class="mt20">
+                    <span class="cor-black h20 w400 o-h dis-in-block">{$item['goods_name']}</span>
+                    <span class="ml140 h20 cor-black dis-in-block">X{$item['goods_num']}</span>
+                    <span class="ml140 h20 cor-black dis-in-block">￥{$item['goods_pay_price']}</span>
+                </li>
+            </foreach>
+		</ul>
+		<h3 class="pay-main">支付方式</h3>
+		<ul class="js-pay-meth pay-meth cf mb20">
+			<?php if ($order_info['order_amount'] >= 1000){?>
+			<li payment_code="easypay">分期支付</li>
+			<?php }?>
+			<li payment_code="laji">其它支付方式</li>
+		</ul>
+		<ul class="js-pay-meth js-pay-zhifu pay-meth cf mb20" style="display:none;">
+            <foreach name="payment_list" item="item">
+				<li payment_code="<?php echo $item['payment_code']; ?>"><?php echo $item['payment_name'];?></li>
+            </foreach>
+		</ul>
+		<?php if ($_SESSION['easypay_credit_status'] == 0){?>
+			<dl class="pay-fenqi cf js-pay-fenqi">
+				<dt>&nbsp;</dt>
+				<dd style="width:80%;">
+					您当前还未开通分期支付功能，
+						<?php if($_SESSION['is_activate'] == 1){?>
+							<a href="<?php echo U('shop/easypay/easypayafterlezhuang');?>" class="cor-blue">立即开通</a>
+							<?php }else{ ?>
+							<a href="<?php echo U('shop/easypay'); ?>" class="cor-blue">立即开通</a>
+						<?php }?>
+				</dd>
+			</dl>
+        <?php }elseif($_SESSION['is_activate'] == 0){?>
+            <!-- 未激活  -->
+            <dl class="pay-fenqi cf js-pay-fenqi">
+                <dt>&nbsp;</dt>
+                <dd style="width:80%;">
+                    您当前可用额度 <?php echo session('easypay_credit_total'); ?>  元尚未激活，请<a href="<?php echo U('/shop/easypay/activate');?>" class="cor-blue">立即激活</a>
+                </dd>
+            </dl>
+		<?php }elseif($_SESSION['easypay_credit_status'] == 5){?>
+			<dl class="pay-fenqi js-pay-fenqi cf">
+				<dt>乐购分期<em class="lg-bgimg"></em></dt>
+				<dd>
+					可用额度：<span><?php echo $_SESSION['easypay_credit_available'];?></span>元
+				</dd>
+				<dd class="mt30 mb30">
+					<ul class="cf">
+						<foreach name="easypay" item="item">
+								<li data-factorage="<?php echo $item['factorage'];?>" data-factorage-rate="<?php echo $item['factorage_rate'] * 100;?>" data-goods-price="{$order_info['order_amount']}" data-easypay-amount="{$order_info['easypay_amount']}" data-pay-fq-num="<?php echo $item['period'];?>">
+									<span><?php echo $item['period'];?></span>期 | 
+									<label><?php echo $item['principal_interest'] + $item['factorage'];?></label>元/期
+								</li>
+						</foreach>
+						<c class="pay-fqmoney">分<span class="js-pay-fq-num"></span>期支付<em class="fs36 cor-red js-pay-fq-money"></em>元</c>
+					</ul>
+				</dd>
+				<dd>
+					已选择分<span class="js-pay-fq-num"></span>期 | 每期含分期服务费<span class="js-pay-factorage"></span>元 | 分期服务费率<span class="js-pay-factorage_rate"></span>%/月
+					<?php if ($fill_easypay_price > 0){?>
+					<c class="pay-fqmoney2">还需支付<em class="fs36 cor-red pay-fq-money2"><?php echo $fill_easypay_price;?></em>元</c>
+					<?php }?>
+				</dd>
+			</dl>
+		<?php }?>
+		<h3 class="pay-main pay-main2">收货人
+			<span class="ml190"><?php echo $receive_info['reciver_name'];?></span>
+			<span class="ml10"><?php echo $receive_info['reciver_info']['address'];?></span>
+			<span class="ml10"><?php echo $receive_info['reciver_info']['phone'];?></span>
+		</h3>
+		<h3 class="pay-main pay-main2 mt30">配送方式
+			<span class="ml170">如需要特别指定，请联系卖家确认，否则由卖家自行确定。</span>
+		</h3>
+		<div class="tl mt30 pay-xieyi">
+			<input type="checkbox" id="isAffirm" class="v-2 js-ck" />
+            <label for="isAffirm" class="cor-black">本人已同意</label>
+			<a href="<?php echo U('/shop/contract');?>" class="cor-blue" target="_blank">《购销合同》</a>、
+            <a href="<?php echo U('/shop/contract#1');?>" class="cor-blue" target="_blank">《发标协议》</a>、
+			<a href="<?php echo U('/shop/contract#2');?>" class="cor-blue" target="_blank">《借款协议》</a>
+		</div>
+			<a href="javascript:void(0);" class="btn-submit mt30" id="next_button">立即支付</a>
+	</form>
+</div>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+(function($){
+    define("m/checkprice",function(require, exports, module){
+    	require("jquery/layer");
+    	var manage = require("com/manage");
+		var Module = {
+			init: function(){
+				/**
+				 * @author longwei
+				 * @data:2016-8-25
+				 */
+               	/*
+               	 *支付方式
+               	 */
+				$('.js-pay-meth li').on('click',function(){ 
+					if($(this).attr('payment_code') =='easypay'){ //如果是分期购就将分期详情显示出来，如不是则隐藏
+						$(this).addClass('payment-is-easypay') //加这个样式给下面的提交做判断
+						$('.js-pay-zhifu').hide(1000);
+						$('.js-pay-fenqi').show(1000);
+						$('.pay-xieyi').show(1000);
+					}else{
+						$(this).siblings().removeClass('payment-is-easypay')//选择其他的将这个清除掉，以免选中了分期在选其他的，分期的判断样式还在
+					    $('.js-pay-zhifu').show(1000);
+					    $('.pay-xieyi').hide(1000);
+						$('.js-pay-fenqi').hide(1000);
+					}
+					$(this).addClass('pay-select-meth');
+					$(this).siblings().removeClass('pay-select-meth');
+					$('#payment_code').val($(this).attr('payment_code'));
+				});
+				$('.js-pay-zhifu li').on('click',function(){ 
+					$(this).addClass('pay-select-meth pay-select-meth2');
+					$(this).siblings().removeClass('pay-select-meth pay-select-meth2');
+				})
+				/*
+				 *分期购
+				 */
+				$('.js-pay-fenqi li').on('click',function(){ 
+					$(this).addClass('pay-select-fenqi');
+					$(this).siblings().removeClass('pay-select-fenqi');
+					var me=$(this)
+						fwf  = me.data('factorage'),
+						fwfl = me.data('factorage-rate'),
+						moneysum  = me.data('easypay-amount'),
+						paydata = me.data('pay-fq-num');
+					$('.js-pay-fq-num').text(paydata);//日期
+					$('input[name="period"]').val(paydata);//分多少期传给后端
+					$('.js-pay-factorage').text(fwf);//服务费
+					$('.js-pay-factorage_rate').text(fwfl);//商品价
+					$('.js-pay-fq-money').text(moneysum);//总价格
+				});
+				/*
+				 * 提交
+				 */
+				$('#next_button').on('click',function(){
+					if(!$('.pay-select-meth').length){ //判断选没选中支付方式
+						 $.wrongMsg('请选择支付方式')
+					}else if($('.js-pay-meth li').hasClass('payment-is-easypay')){ //选择了支付方式的话就判断选择的方式是不是分期支付
+						 if(!$('.pay-select-fenqi').length){ //如果选择了分期支付就得让他选择分多少期
+						 	$.wrongMsg('请选择分期期数');
+						 }else if($('.js-ck').prop('checked')==false){
+						 	$.wrongMsg('请查看并同意协议');
+						 }else{
+							 $('#buy_form').submit();
+						 };
+					}else if($('.js-pay-zhifu li').hasClass('pay-select-meth2')==false){ //如果没选分期就判断有没有选其它的支付方式
+						$.wrongMsg('请选择支付方式')
+					}else{ //验证都通过的话就给他过
+						$('#buy_form').submit();
+					}
+				});	
+			}
+        }
+        module.exports = Module;
+    });
+    seajs.use("m/checkprice", function(module){
+        module.init();
+    });
+})($);	
+</script>
+</block>

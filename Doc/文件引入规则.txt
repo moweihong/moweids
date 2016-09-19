@@ -1,0 +1,7 @@
+__ROOT__     网站根目录
+__APP__      当前应用的URL 
+__JS__       对应 /Public/js
+__CSS__      对应 /Public/css
+__IMG__      对应 /Public/images
+__UPLOAD__   对应 /Public/data/upload
+__HOST__     网站域名

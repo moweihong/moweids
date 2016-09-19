@@ -1,0 +1,38 @@
+<extend name="Layouts:home" />
+<block name="title"><title>家装设计-{:C('site_name')}</title></block>
+<block name="head_css">
+	<link href="__CSS__/homedesign.css" rel="stylesheet" type="text/css">
+</block>
+<block name="content">
+	<include file="Layouts:top_banner"/>
+	<div class="wrapper">
+        <h2 class="main-tit">
+            <span>装修公司</span>
+            <span class="letter">DECORATION COMPANY</span>
+        </h2>
+        <ul class="company-logo cf">
+           <volist name='decoration_company' id='v'>  
+            <li><a href="http://{$v.adv_content.adv_pic_url}"><img src="{:advImg($v['adv_content']['adv_pic'])}" /></a></li>
+            </volist> 
+        </ul>
+    </div>
+    
+    <div class="wrapper floor-template thome-design">
+        <h1 class="main-tit"><span>效果图</span><span class="letter">RENDERINGS</span></h1> 
+        <ul class="pro-list cf">
+            <volist name='decoration_pic' id='v'> 
+            <li>
+            	<a href="http://{$v.adv_content.adv_pic_url}" title="">
+                    <div class="goods-pic">
+                        <img src="{:advImg($v['adv_content']['adv_pic'])}" alt="" />
+                    </div>
+                    <div class="goods-info">
+                        <p class="cor-black">{$v['adv_title']}</p>
+                    </div>
+                </a>
+            </li>
+            </volist> 
+        </ul>
+    </div>
+</block>
+

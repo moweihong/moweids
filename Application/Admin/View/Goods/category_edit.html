@@ -1,0 +1,294 @@
+<include file="Application/Common/Layout/head.html" /> 
+<div class="am-cf admin-main">
+<include file="Application/Common/Layout/left.html" /> 
+  <!-- content start -->
+  <div class="admin-content">
+    <div class="admin-content-body">
+      <div class="am-cf am-padding am-padding-bottom-0">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">分类编辑</strong> / <small>Category Edit</small></div>
+      </div>
+
+      <hr/>
+
+      <div class="am-g">
+        <div class="am-u-sm-12 am-u-md-4 am-u-md-push-8">
+         
+        </div>
+
+        <div class="am-u-sm-12 am-u-md-8 am-u-md-pull-4">
+          <form class="am-form am-form-horizontal" action="" method="post" id='form1' enctype="multipart/form-data">
+            <div class="am-form-group">
+              <label for="user-name" class="am-u-sm-3 am-form-label">分类名称</label>
+              <div class="am-u-sm-9">
+                <input type="text" id="gc_name" name="gc_name" value="{$gc.gc_name}" placeholder="请输入分类名称">
+                <input type="hidden" id="old_gc_name" name="old_gc_name" value="{$gc.gc_name}" >
+              </div>
+            </div>
+			<div class="am-form-group">
+              <label for="user-name" class="am-u-sm-3 am-form-label">上级分类</label>
+              <div class="am-u-sm-9">
+				<select name="gc_parent_id">
+					<option value="0">一级分类</option>
+					<volist name="cate" id="c">
+						<?php if($c['gc_id']!=$_GET['id']){?>
+							<option value="<?php echo $c['gc_id'];?>" <?php if($gc['gc_parent_id']==$c['gc_id']){echo 'selected';} ?>><?php echo str_repeat('+',$c['level']*6),'</span>'; ?>{$c.gc_name}</option>	
+						<?php } ?>
+					</volist>
+				</select>
+              </div>
+            </div>
+			<div class="am-form-group">
+              <label for="user-name" class="am-u-sm-3 am-form-label">分类图片</label>
+              <div class="am-u-sm-9">
+                <input type="file" name="gc_img" value="{$gc.img}" >
+				<small>注：仅支持jpg格式</small>
+				<br/>
+				<?php if($cimg==1){  ?>
+					<img src="/data/upload/shop/common/category-pic-{$Think.get.id}.jpg" style="border:3px solid #ccc;border-radius:2px;width:300px">
+				<?php } ?>	
+			 </div>
+            </div>
+			
+			<!--<div class="am-form-group">
+              <label for="user-name" class="am-u-sm-3 am-form-label">品牌关联</label>
+              <div class="am-u-sm-9">
+                <volist name="brand" id="b">
+					<div class="adminCheckbox" title="{$b.brand_name}"><input type="checkbox" name="brand[]" value="{$b.brand_id}" <?php if(in_array($b['brand_id'],$brand2)){echo 'checked';} ?> > {$b.brand_name}</div>
+                </volist>
+				<?php /*
+					$nth  = count($brand);
+					$nth2 = $nth-1;
+					$nth0 = $nth-2;
+					if($nth%3==1){
+						echo '<div class="adminCheckbox btcc">&nbsp;</div><div class="adminCheckbox btcc">&nbsp;</div>';
+						echo "<style>.adminCheckbox:nth-child($nth){border-bottom:1px solid #ccc}</style>";
+					}elseif(count($brand)%3==2){
+						echo '<div class="adminCheckbox btcc">&nbsp;</div>';
+						echo "<style>.adminCheckbox:nth-child($nth),.adminCheckbox:nth-child($nth2){border-bottom:1px solid #ccc}</style>";
+					}else{
+						echo "<style>.adminCheckbox:nth-child($nth),.adminCheckbox:nth-child($nth2),.adminCheckbox:nth-child($nth0){border-bottom:1px solid #ccc}</style>";
+					} */
+				?>
+				<small>注：如果不勾选任何品牌则自动继承上级品牌（一级分类除外）</small>
+			 </div>
+            </div>-->
+			
+			<div class="am-form-group">
+              <label for="user-name" class="am-u-sm-3 am-form-label">规格关联</label>
+              <div class="am-u-sm-9">
+                <volist name="spec" id="s">
+					<div class="adminCheckbox_s" title="{$s.sp_name}"><input type="radio" name="spec[]" value="{$s.sp_id}" <?php if(in_array($s['sp_id'],$spec2)){echo 'checked';} ?>> {$s.sp_name}</div>
+                </volist>
+				<?php 
+					$nth  = count($spec);
+					$nth2 = $nth-1;
+					$nth0 = $nth-2;
+					if($nth%3==1){ 
+						echo '<div class="adminCheckbox_s btcc">&nbsp;</div><div class="adminCheckbox_s btcc">&nbsp;</div>';
+						echo "<style>.adminCheckbox_s:nth-child($nth){border-bottom:1px solid #ccc}</style>";
+					}elseif($nth%3==2){
+						echo '<div class="adminCheckbox_s btcc">&nbsp;</div>';
+						echo "<style>.adminCheckbox_s:nth-child($nth),.adminCheckbox_s:nth-child($nth2){border-bottom:1px solid #ccc}</style>";
+					}else{
+						echo "<style>.adminCheckbox_s:nth-child($nth),.adminCheckbox_s:nth-child($nth2),.adminCheckbox_s:nth-child($nth0){border-bottom:1px solid #ccc}</style>";
+					}
+				?>
+				<small>注：如果不勾选任何规格则自动继承上级规格（一级分类除外）</small>
+			 </div>
+            </div>
+			
+			<div class="am-form-group">
+              <label for="user-name" class="am-u-sm-3 am-form-label">属性组</label>       
+              <div class="am-u-sm-9">
+                <volist name="attr_father" id="at">
+					<div class="adminCheckbox_attr" title="{$at.attr_name}"><input type="checkbox" data-name="{$at.attr_name}" name="aid[][{$at.attr_id}]" class="attr_father" id="{$at.attr_id}" value="{$at.attr_name}" <?php if(in_array($at['attr_id'],$attr_father2)){echo 'checked';} ?>> {$at.attr_name}</div>
+                </volist>
+				<?php 
+					$nth  = count($attr_father);
+					$nth2 = $nth-1;
+					$nth0 = $nth-2;
+					if($nth%3==1){ 
+						echo '<div class="adminCheckbox_attr btcc">&nbsp;</div><div class="adminCheckbox_attr btcc">&nbsp;</div>';
+						echo "<style>.adminCheckbox_attr:nth-child($nth){border-bottom:1px solid #ccc}</style>";
+					}elseif($nth%3==2){
+						echo '<div class="adminCheckbox_attr btcc">&nbsp;</div>';
+						echo "<style>.adminCheckbox_attr:nth-child($nth),.adminCheckbox_attr:nth-child($nth2){border-bottom:1px solid #ccc}</style>";
+					}else{
+						echo "<style>.adminCheckbox_attr:nth-child($nth),.adminCheckbox_attr:nth-child($nth2),.adminCheckbox_attr:nth-child($nth0){border-bottom:1px solid #ccc}</style>";
+					}
+				?>
+				<small>注：如果不勾选任何属性组则自动继承上级属性组及属性值，如果勾选了属性组则必须选择要关联的属性值（一级分类除外）</small>
+			 </div>
+            </div>
+ 
+			<div class="am-form-group" id="attrValue" style="display:none">
+              <label for="user-name" class="am-u-sm-3 am-form-label">&nbsp;</label>
+			  
+              <div class="am-u-sm-9" style="border:none" id="attr_values" >
+				<!--数据填充-->
+			</div>
+            </div>
+			
+			<!--edit页面加载时展示-->
+			<div class="am-form-group" >
+			  <?php 
+			  if($attr_def){   
+			  foreach($attr_def as $k=>$att){  ?>
+			  <div class="av{$att[0].attr_id}">
+			  <label for="user-name" class="am-u-sm-3 am-form-label">&nbsp;</label>
+			  <div style='color:#0E90D2;font-weight:bold'>&nbsp;&nbsp;&nbsp;&nbsp;请选择属性组<span style="color:red"><?php echo $k ?></span>下要关联的属性值</div>
+              <div class="am-u-sm-9" style="border:none" id="attr_values" >
+				<?php  
+					foreach($att as $atk=>$at){  
+				?>
+					<div class='admin_attrValues'  title="{$at.attr_value_name}">
+						<input type='checkbox' name="attr[{$at.attr_id}][{$at.attr_value_name}]" data-name="{$at.attr_value_name}" value="{$at.attr_value_id}" <?php if(in_array($at['attr_value_id'],$attr[$at['attr_id']])){echo 'checked';} ?>   ><?php echo $at['attr_value_name']; ?>
+					</div>
+				<?php } ?> 
+			</div>
+			</div>
+			<?php }} ?>
+			</div>
+             
+			<!--end 页面加载展示-->
+			
+			<input type='hidden' name="act" value="{$Think.get.act}">
+            <div class="am-form-group">
+              <div class="am-u-sm-9 am-u-sm-push-3">
+                <input type="submit" value="提交" class="am-btn am-btn-primary">
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+ 
+
+  </div>
+  <!-- content end -->
+
+</div>
+
+<include file="Application/Common/Layout/foot.html" /> 
+
+
+
+<script>
+$(document).ready(function(){
+	$("#gc_name").blur(function(){
+		var cateName  = $(this).val(); 
+		var cateName2 = $('#old_gc_name').val(); 
+		if(cateName==cateName2) return;
+		$.ajax({
+			type: 'get',
+			cache:false,
+			url:'/Admin/Goods/ajax_check_duplicate',
+			data:{
+				type :'goodsCate',
+				value:cateName
+			},
+			success: function(data){
+				if(data=='1'){
+					alert('分类名已存在！');
+					$(this).focus();
+				} 
+			},
+			dataType:'json'
+		});
+	});
+	
+	var attr_father2 = "{$attr_father2}";
+	var attr_value   = '{$gc.attr}';   
+	
+	//页面加载时默认处理
+//	if(attr_father2!=''){ 
+		//$('#attrValueOnload').show();
+		//var attrname = $("#"+attr_father2).attr('data-name');
+		//$('#attr_father_name2').text(attrname);
+	//	getAttrValue('',1945); alert(43);
+	//}
+	//页面加载时默认处理END
+ 
+	 
+	$('.attr_father').on('click',function(){
+		var attr_father_name = $(this).attr('data-name');
+		var attr_id          =  $(this).attr('id');
+		//if(attr_id==attr_father2){  
+			//$('#attrValue').hide();
+			//$('#attrValueNone').hide();
+			//$('#attrValueOnload').show();
+			//$('#attr_father_name2').text(attr_father_name);
+		//}else{
+			//$('#attrValueOnload').hide();
+			//getAttrValue(attr_father_name,attr_id);	
+		//}
+		if($(this).attr('checked')){
+			getAttrValue(attr_father_name,attr_id);
+		}else{
+			$(".av"+attr_id).hide();
+		}
+		
+		
+	});
+	
+	function getAttrValue(attr_father_name,attr_id){  
+		$.ajax({
+			type: 'get',
+			cache:false,
+			url:'/Admin/Goods/get_attr_value',
+			data:{
+				attr_id : attr_id,
+			},
+			success: function(data){
+				if(data['status']=='1'){
+					//$('#attrValueNone').hide();
+					$('#attrValue').show();
+					//$('#attr_father_name').text(attr_father_name);
+					//组装数据
+					//$('#attr_values').html('');
+					data = data.attr_value;  
+					html ="<div class='av"+attr_id+"'><div style='color:#0E90D2;font-weight:bold'>请选择属性组<span style='color:red'>"+attr_father_name+"</span>下要关联的属性值</div>";
+					//html+="<input type='hidden' name='aid[]["+attr_id+"]' value="+attr_father_name+">";
+					for(var d in data){   
+						html+="<div class='admin_attrValues' title='"+data[d].attr_value_name+"'><input type='checkbox' name='attr["+attr_id+"]["+data[d].attr_value_name+"]' value='"+data[d].attr_value_id+"'   >"+data[d].attr_value_name+" </div>";
+					}   
+					html+='<div style="clear:both;">&nbsp;</div></div>';
+					$('#attr_values').append(html); 
+				}else{
+					//$('#attrValue').hide();
+					//$('#attrValueNone').show();
+					alert('该属性组下没有属性！');
+					$("#"+attr_id).attr('disabled',true);
+				}
+				
+			},
+			dataType:'json'
+		});
+	}
+	
+ 
+	$('#form1').submit(function(){
+		var gcnameval = $("#gc_name").val();
+		if(gcnameval==''){
+			alert('分类名不能为空！');
+			return false;
+		}
+	});
+		
+ 
+	
+	
+});
+	
+ 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</script>

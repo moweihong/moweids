@@ -1,0 +1,183 @@
+<extend name="Layouts:member" />
+<block name="title"><title>我的订单-买家中心-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="tit-bar"><h2>我的订单</h2></div>
+<form action="javascript:void(0);" class="search-bar mt10 cf" id="searchform" autocomplete="off" >
+    <input type="text" class="text ml10 fl js-searchText" name='kword' value="<?php echo $output['kword'];?>" placeholder="商品名称 / 店铺名称" />
+    <button href="javascript:void(0);" class="btn btn-info btn-small js-searchBtn">订单搜索</button>
+</form>
+<div class="order-box mt10 js-order">
+    <p class="order-tab-t cf js-tabT">
+        <a href="/index.php?c=member&a=myorder" <?php if($output['curr'] == -1){ echo 'class="curr"';} ?>>全部</a>
+        <a href="/index.php?c=member&a=myorder&order_state=<?php echo ORDER_STATE_MAKEPRICE;?>" <?php if($output['curr'] ==ORDER_STATE_MAKEPRICE){ echo 'class="curr"';} ?>>待定价</a>
+        <a href="/index.php?c=member&a=myorder&order_state=<?php echo ORDER_STATE_NEW;?>" <?php if($output['curr'] ==ORDER_STATE_NEW){ echo 'class="curr"';} ?>>待付款</a>
+        <a href="/index.php?c=member&a=myorder&order_state=<?php echo ORDER_STATE_PAY;?>" <?php if($output['curr'] ==ORDER_STATE_PAY){ echo 'class="curr"';} ?>>已完成</a>
+        <!--<a href="/index.php?c=member&a=myOrder&order_state=<?php echo ORDER_STATE_NEW;?>" <?php if($output['curr'] ==1){ echo 'class="curr"';} ?>>退款中</a>-->
+        
+    </p>
+    <table class="order-table" width="100%">
+        <colgroup>
+            <col width="32%">
+            <col width="10%">
+            <col width="7%">
+            <col width="10%">
+            <col width="11%">
+            <col width="10%">
+            <col width="10%">
+            <col width="">
+        </colgroup>
+        <thead>
+            <tr>
+                <th class="n1">商品</th>
+                <th>单价</th>
+                <th>数量</th>
+                <th><a href="javascript:void(0);" class="cor-blue" id="paytime">下单时间<i class="ic <?php if ($output['sortby'] == 'desc'){echo 'ic-down-arrow';}else{echo 'ic-up-arrow';}?>"></i></a></th>
+                <th>订单状态</th>
+                <th>实付金额</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <!-- 遍历订单数据 -->
+        <?php foreach ($output['order_list'] as $key => $value) { ?>
+            <tbody data-id="<?php echo $value['order_id']; ?>">
+                <tr class="gap"><td colspan="8"></td></tr>
+                <tr class="hd">
+                    <td colspan="8">
+                        <span>订单号：<?php echo $value['order_sn'] ?></span>
+                        <span class="pay"><?php echo $value['payment_name']; ?></span>
+                        <span><?php echo $value['store_name']?></span>
+                        <p class="r">
+                            <a href="<?php echo SHOP_SITE_URL;?>/index.php?c=member&a=order_detail&order_id=<?php echo $value['order_id']; ?>" class="cor-blue" target="_blank">查看详情</a>
+                            <!--
+                            <a href="javascript:void(0);" class="cor-blue js-remark">备注</a>
+                            -->
+                        </p>
+                    </td>
+                </tr>
+                <?php foreach ($value['extend_order_goods'] as $key1 => $value1) { ?>
+                    <tr>
+                        <td>
+                            <div class="goods-td cf">
+                                <a href="<?php echo urlShop('goods', 'index', array('goods_id' => $value1['goods_id'])); ?>" class="pic" ><img src="<?php echo thumb($value1, 240);?>" width="80px" height="80px" alt="" /></a>
+                                <p class="name"><a href="<?php echo urlShop('goods', 'index', array('goods_id' => $value1['goods_id'])); ?>" class="cor-blue" ><?php echo $value1['goods_name']; ?></a></p>
+                                <p class="norms">规格：<?php echo $value1['goods_spec']?></p>
+                                <?php if($value['order_type'] == 2){?><p class="mt2"><span class="tag-green">乐购</span></p><?php }?>
+                                <?php if($value['order_type'] == 3){?><p class="mt2"><span class="tag-green">乐装</span></p><?php }?>
+                                <?php if($value['order_type'] == 1){?><p class="mt2"><span class="tag-green">普通</span></p><?php }?>
+                                <?php if($value['order_type'] == 4){?><p class="mt2"><span class="tag-green">工厂订单</span></p><?php }?>
+                            </div>
+                        </td>
+                        <td><?php if($value['order_state'] != 1){?>¥ <?php echo $value1['goods_pay_price']; ?><?php }else{echo '定价中';}?></td>
+                        <td>x <?php echo $value1['goods_num']; ?></td>
+                        <!-- 维权操作栏 -->
+                           
+                        <!-- 维权操作区分发货前和发货后，分开处理 -->
+                        
+
+
+                        <?php if($key1 == 0){ ?>
+                            <!--下单时间-->
+                            <td rowspan="<?php echo sizeof($value['extend_order_goods']); ?>" class="word-nor"><?php echo date('Y-m-d H:i:s', $value['add_time']);?></td>
+                            <!--订单状态-->
+                            <td rowspan="<?php echo sizeof($value['extend_order_goods']); ?>">
+
+                                <?php  if($value['order_state'] == 0){ 
+                                    echo '已关闭';
+                                }elseif($value['order_state'] == 1){
+                                     echo '待定价'; 
+                                }elseif($value['order_state'] == 10){ 
+                                    echo '待付款';
+                                }elseif($value['order_state'] == 20){ 
+                                    echo '已完成';
+                                }elseif($value['order_state'] == 30){ 
+                                    echo '已发货';
+                                }elseif($value['order_state'] == 40){ 
+                                    echo '已收货';
+                                }elseif($value['order_state'] == 50){ 
+                                    echo '平台处理中';
+                                }
+
+                                if ($value['order_state'] > ORDER_STATE_PAY && $value['order_state'] != ORDER_STATE_HANDLING){ ?>
+
+                                    <div class="shipping-middle rel mt10"><a href="javascript:void(0);" class="cor-blue dis-block js-shipping" data-id="<?php echo $value['order_id']; ?>" data-sn="<?php echo $value['order_sn']; ?>">查看物流</a></div>
+                                <?php } ?>
+                            </td>
+                        <?php } ?>
+
+
+                        <!-- 订单金额 -->
+                        <?php if($key1 ==0 ){ ?>
+                            <td rowspan="<?php echo sizeof($value['extend_order_goods']); ?>">¥ <?php   if($value['order_state'] != 1){echo $value['order_amount'];}else{echo '定价中'; }?></td> 
+                        <?php } ?>
+                        <!-- 操作栏 -->
+                        <!--
+                        共5总状态
+                        已关闭  ORDER_STATE_CANCEL 0
+                        待定价  ORDER_STATE_MAKEPRICE 1
+                        待付款  ORDER_STATE_NEW 10
+                        已完成  ORDER_STATE_PAY 20
+                        处理总  ORDER_STATE_HANDLING 50
+                        -->
+                        <?php if($key1 == 0){ ?>
+                            <td rowspan="<?php echo sizeof($value['extend_order_goods']); ?>">
+                                <?php if(!$value['if_lock']){
+                                    if($value['order_state'] == ORDER_STATE_NEW) { ?>
+                                        <a href="<?php echo urlShop('buy', 'checkprice', array('pay_sn' => $value['pay_sn'])); ?>" class="red-bor" ><?php echo "付款"; ?></a>
+                                        <a href="javascript:void(0);" class="black-bor js-cancel">取消</a>
+                                    <?php }else if($value['order_state'] == ORDER_STATE_MAKEPRICE){  ?>
+                                        <!--待定价，显示取消按钮-->
+                                        <a href="javascript:void(0);" class="black-bor js-cancel">取消</a>
+                                    <?php }else if($value['order_state'] == ORDER_STATE_PAY){  ?>
+                                        <!--已付款-->
+                                    <?php }else if($value['order_state'] == ORDER_STATE_HANDLING){  ?>
+                                    
+                                    <?php }else if($value['order_state'] == ORDER_STATE_CANCEL){  ?>
+                                    <?php }else{ ?>
+                                    <?php }
+                                }else{ ?>
+                                    <!--<p class="cor-red">lock</p>-->
+                                <?php } ?>
+                            </td>
+                        <?php } ?>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        <?php } ?>  
+    </table>
+    <div id="jspage" class="jspage">
+       <?php echo $page; ?>
+    </div>
+</div>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+(function($){
+	seajs.use("m/orderlist", function(Orderlist){
+		/*
+		**搜索
+		*/
+		$('.js-searchBtn').click(function(){
+			var base_url = window.location.href + "&" + $("#searchform").serialize();
+			window.location.href = base_url;
+		});
+		/*
+		**下单时间排序
+		*/
+		$('#paytime').click(function(){
+			var sortby = "";
+			if($("i", this).hasClass("ic-down-arrow")){
+				$("i", this).removeClass("ic-down-arrow").addClass("ic-up-arrow");
+				sortby = "asc";
+			}else{
+				$("i", this).removeClass("ic-up-arrow").addClass("ic-down-arrow");
+				sortby = "desc";
+			}
+			var base_url = window.location.href + "&" + $("#searchform").serialize() + "&sortby=" + sortby;
+			window.location.href = base_url;
+		});
+	});
+})($);	
+</script>
+</block>

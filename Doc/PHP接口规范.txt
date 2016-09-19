@@ -1,0 +1,21 @@
+接口说明标准
+
+url:调用接口url
+type:调用方法  (GET/POST),
+data: {
+        key1:value1,
+        key2:value2,
+        ..
+        keyn:valuen
+    },
+dataType:json,
+return:
+
+
+
+返回示例：{resultText:{message:"返回消息",param1:"",param2:""},code:1/0}
+
+code值及其说明  1 成功
+                0 失败
+             -404 接口没有响应
+             -500 接口抛出异常

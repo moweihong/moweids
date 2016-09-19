@@ -1,0 +1,13 @@
+/*
+************ author: linsiting
+************ 定制专区
+*/
+.customerize{color: #fff; }
+.customerize-floor1{background: url("../images/customerize/index1.jpg") 50% 50%;height: 1200px; position: relative; }
+.customerize-floor2{background: url("../images/customerize/index2.jpg") 50% 50%;height: 1200px; position: relative;}
+.customerize-floor3{background: url("../images/customerize/index3.jpg") 50% 50%;height: 1200px; position: relative;}
+.customerize-floor4{background: url("../images/customerize/index4.jpg") 50% 50%;height: 1200px; position: relative;}
+.floor-content{text-align: center; width: 100%; position: absolute; top:50%; margin-top: -120px;}
+.floor-content dl dt{font-size: 72px; font-weight: bolder; letter-spacing:7px; }
+.floor-content dl dt span{ line-height:120px; border-bottom: 1px solid #fff;}
+.floor-content dl dd{font-size: 28px; margin-top: 20px;}

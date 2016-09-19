@@ -1,0 +1,87 @@
+<extend name="Layouts:home" />
+<block name="title"><title>确认订单信息-家装设计-{:C('site_name')}</title></block>
+<block name="head_css">
+	<link href="__CSS__/homedesign.css" rel="stylesheet" type="text/css">
+</block>
+
+<block name="content">
+	<div class="h-buy">
+		<h2>请确认信息</h2>
+		<p class="p-text1">
+			装修款：<span class="money-big"><em class="h-mark">￥</em>{$plan_info['cost']}</span>
+		</p>
+		<p class="p-text2">
+			使用乐购分期支付：
+			<span class="money-big"><em class="h-mark">￥</em>{$easy_deco['principal_interest']+$easy_deco['factorage']}<em class="h-periodization"> × {$easy_deco['period']}期</em></span>
+			<span class="periodization-info">含手续费￥{$easy_deco['factorage']} × {$easy_deco['period']}期  &nbsp; 利息￥{$easy_deco['interest_total']
+			}</span>
+		</p>
+		<p class="p-text3">
+			<input type="checkbox" class="agreement js-agreement" checked /> 
+			<span>本人已阅读 <a href="{:U('/shop/Contract/fbxy')}" target="_blank">《发标协议》</a>、<a href="{:U('/shop/Contract/jkxy')}" target="_blank">《借款协议》</a>，并理解协议中内容，对协议中的条款愿意承担相关责任。</span>
+		</p>
+		<p class="p-text4">
+			<a href="javascript:void(0);" class="js-submitBtn">提交订单</a>
+			<input type="hidden" value="{$more_material_id}" name="material_id" id="material_id" />
+			<input type="hidden" value="{$plan_id}" name="plan_id"  id="plan_id"/>
+			<input type="hidden" value="{$period}" name="period" id="period"/>
+		</p>
+	</div>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+(function($){
+	define("homedesign/check",function(require, exports, module){
+		require("jquery/layer");
+		var manage = require("com/manage");
+		var param = manage.getParam();
+		var order_id = param.order_id || "";
+		var plan_id = $('#plan_id').val();
+		var period = $('#period').val();
+		var more_material_id = $('#material_id').val();
+
+		var Module = {
+			init: function(){
+				$("body").on("change", ".js-agreement", function(){
+					if($(this).is(":checked")){
+						$(".js-submitBtn").removeClass("disabled");
+					}else{
+						$(".js-submitBtn").addClass("disabled");
+					}
+				});
+				$(".js-submitBtn").click(function(){
+					var me = $(this);
+					if(me.hasClass("disabled")){
+						$.wrongMsg("请勾选协议");
+						return;		
+					}
+					var pid = parent.layer.load(360);
+					manage.ajax({
+						url: gConfig.apiurl + "{:U('/shop/THomedesign/createorders')}",
+						data: {
+							plan_id	: plan_id,
+							period	: period,
+							material_id:more_material_id
+						},
+						success: function (result) {
+							parent.layer.close(pid);
+							var resultText = result.resultText || {};
+							if(result.code == 1) {
+								window.location = gConfig.apiurl + "/index.php?m=shop&c=THomedesign&a=checksuccess";
+							}else{
+								$.wrongMsg(resultText.message || "订单提交失败");
+							}
+						}
+					});
+				});
+			}
+		}
+		module.exports = Module;
+	});
+	seajs.use("homedesign/check", function(module){
+		module.init();
+	});
+})($);
+</script>
+</block>

@@ -1,0 +1,45 @@
+<extend name="Layouts:home" />
+<block name="title"><title>文章-{:C('site_name')}</title></block>
+<block name="head_css"><link href="__CSS__/article.css" rel="stylesheet" type="text/css"></block>
+
+<block name="content">
+<div class="article-banner"></div>
+<div class="wrapper">
+	<div class="art-nav cf">
+		<?php foreach($footlist as $v){?>
+			<a href="/index.php?m=shop&c=article&ac_id=<?php echo $v['ac_id']; ?>" <?php if($v['ac_id']==$ac_id){?> class="curr" <?php }?> ><?php echo $v['ac_name'];?></a>
+		<?php }?>
+	</div>
+	<div class="art-con cf">
+		<div class="art-con-left">
+			<h3><?php echo $articlelist['ac_name']?></h3>
+			<div class="art-sidenav js-art-sidenav">
+				<?php foreach($articlelist as $k=>$val){?>
+					<?php if(isset($val['ac_id'])){?>
+						<a href="javascript:void 0;" <?php if($k==0){?> class="curr" <?php }?> ><?php echo $val['article_title'];?></a>
+					<?php }
+                }?>
+			</div>
+		</div>
+		<?php foreach($articlelist as $key=>$vv){?>
+            <?php if(isset($vv['ac_id'])){?>
+                <div class="art-con-right js-art-content" <?php if($key==0){ ?> style="display: block;" <?php }else{ ?> style="display: none;" <?php }?>>
+                    <h2><?php echo $vv['article_title'];?></h2>
+                    <p><?php echo $vv['article_content'];?></p>
+                </div>
+			<?php }
+        } ?>	
+	</div>
+</div>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+$(".js-art-sidenav a").click(function(){
+	var me = $(this),
+		n = me.index();
+	me.addClass("curr").siblings("a").removeClass("curr");
+	$(".js-art-content:eq(" + n + ")").show().siblings(".js-art-content").hide();
+})
+</script>
+</block>

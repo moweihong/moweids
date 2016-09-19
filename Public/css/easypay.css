@@ -1,0 +1,59 @@
+/*
+************ author: xiaokupeng 
+************ 我的额度
+*/
+/* ---- 特速分期 ---- */ 
+.credit-operating{z-index:5;position:absolute;left:50%;top:220px;width:330px;height:364px;margin-left:-640px;overflow:hidden;background-color:#fff;}
+.credit-operating .title{margin-top:30px;text-align:center;font:20px/40px lighter;color:#333;}
+.credit-operating a{display:inline-block;width:150px;height:40px;font:20px/40px lighter;color:#fff;text-decoration:none;text-align:center;}
+.credit-operating a:hover{background-color:#be3030;}
+
+.credit-operating .one, .credit-operating .two, .credit-operating .three{width:330px;height:294px;text-align:center;}
+.credit-operating .one .info{height:160px;padding:12px;overflow:hidden;}
+.credit-operating .one .info em{ display:block;font-style:normal;line-height:44px;color:#333;}
+.credit-operating .one a{background-color:#e56a68;}
+
+.credit-operating .two .info{height:160px;padding:12px;overflow:hidden;}
+.credit-operating .two .info em{display:block;font-style:normal;line-height:44px;color:#333;margin-top:40px;}
+.credit-operating .two .progress{position:relative;width:150px;height:15px;margin:0 auto;border-radius:4px;border:1px solid #eae9ea;background-color:#fff;overflow:hidden;}
+.credit-operating .two .progress span{position:absolute;top:0px;left:0;height:15px;border-radius:4px;background-color:#e56a68;}
+.credit-operating .two a,.credit-operating .two a:hover{background-color:#bdbcbc;cursor:not-allowed;}
+
+.credit-operating .three .info{height:160px;padding:12px;overflow:hidden;}
+.credit-operating .three .info span{display:inline-block;margin-top:40px;font:38px/44px Arial;color:#e34745;}
+.credit-operating .three .info em{ display:block;line-height:24px;font-style:normal;color:#333;}
+.credit-operating .three a{background-color:#e56a68;}
+
+.credit-operating .four .info{width:200px;margin:10px auto;padding:12px;text-align:left;overflow:hidden;}
+.credit-operating .four .info span{display:block;font:38px/44px Arial;color:#e34745;}
+.credit-operating .four em{display:block;line-height:24px;font-style:normal;color:#666;text-align:center;}
+.credit-operating .four a{margin:20px 25px 10px;background-color:#c75c5c;}
+
+/* ---- 分期须知 ---- */ 
+.credit-notice, .credit-process, .credit-protocol{margin-top:60px;}
+.credit-title{padding-bottom:30px;font:lighter 14px/24px "\5FAE\8F6F\96C5\9ED1";text-align:center;letter-spacing:2px;text-transform:uppercase;}
+.credit-title h2{font:400 28px/40px "\5FAE\8F6F\96C5\9ED1";color:#333;}
+.credit-notice .texts{padding:30px;background-color:#fff;}
+.credit-notice .texts dl{line-height:26px;color:#333;}
+.credit-notice .texts dl dt{font-size:20px;}
+.credit-notice .texts dl dd{margin:10px 0 15px;font-size:12px;overflow:hidden;}
+.credit-notice .texts dl dd.stop{height:78px;}
+
+/* ---- 申请开通流程 ---- */ 
+.credit-process .info{padding:60px 0 60px 30px;background-color:#fff;}
+.credit-process .info dl{position:relative;display:inline;float:left;width:105px;height:130px;margin:0 150px 0 20px;text-align:center;}
+.credit-process .info dl:after{position:absolute;top:10px;right:-120px;width:70px;height:90px;background: url(../images/easypay/credit_process.png) no-repeat -550px 0;content:"";}
+.credit-process .info dt{display:inline;float:left;width:110px;height:90px;background: url(../images/easypay/credit_process.png) no-repeat;overflow:hidden;}
+.credit-process .info dl.n2 dt{background-position:-110px 0;}
+.credit-process .info dl.n3 dt{background-position:-220px 0;}
+.credit-process .info dl.n4 dt{background-position:-330px 0;}
+.credit-process .info dl.n5 dt{background-position:-440px 0;}
+.credit-process .info dd{display:block;line-height:22px;padding-top:110px;font-size:14px;}
+.credit-process .info dl.n5{margin:0;}
+.credit-process .info dl.n5:after{display:none;}
+
+/* ---- 分期相关协议 ---- */ 
+.credit-protocol .info dl{float:left;width:190px;height:225px;margin-right:28px;text-align:center;background-color:#fff;cursor:pointer;}
+.credit-protocol .info dl dt{width:96px;height:90px;margin:45px auto 0;background:url(../images/easypay/credit_process.png) no-repeat -620px 0;}
+.credit-protocol .info dl dd{display:block;line-height:54px;font-size:14px;color:#333;}
+.credit-protocol .info dl.last{margin:0;}

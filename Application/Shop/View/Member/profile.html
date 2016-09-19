@@ -1,0 +1,88 @@
+<extend name="Layouts:member" />
+<block name="title"><title>我的资料-买家中心-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="profile-box h700 bg-white">
+    <div class="tit-line">
+        <h2>我的资料</h2>
+    </div>
+    <form action="javascript:void(0);" id="form" class="ml10 mt20" method="post" autocomplete="off">
+        <ul class="list">
+            <li class="cf">
+                <label class="handle">全木行账号：</label>
+                <span class="js-account"><?php echo $output['member_info']['mobile'];?></span>
+                <a href="javascript:void(0);" class="cor-blue ml30 js-modifyPassword">修改密码</a>
+            </li>
+            <li class="cf">
+                <label class="handle" for="nickname">昵称：</label>
+                <input type="text" id="nickname" name="member_name" class="text" value="<?php echo empty($output['member_info']['member_name'])? '':$output['member_info']['member_name'];?>" placeholder="请填写昵称" maxlength="30" />
+            </li>
+            <li class="cf">
+                <label class="handle">头像：</label>
+                <p class="mt10">
+                <?php if($output['member_info']['member_avatar']){  ?>
+                    <img src="<?php echo $output['member_info']['member_avatar']; ?>" width="90px" height="90px" class="v-mid js-avatar" />
+                <?php }else{ ?>
+                    <img src="/data/upload/shop/common/default_user_portrait.png" width="90px" height="90px" class="v-mid js-avatar" />
+                <?php } ?>
+                    
+                    <a href="javascript:void(0);" id="filePicker" class="cor-blue rel v-mid ml30 js-modifyAvatar">修改头像</a>
+                    <input type="hidden" id="imgSrc" name="member_avatar" value="<?php echo $output['member_info']['member_avatar']; ?>" />
+                </p>
+            </li>
+            <li class="cf">
+                <label class="handle">性别：</label>
+                <label>
+                	<input type="radio" name="member_sex" class="v-2" value="1" <?php if($output['member_info']['member_sex']==1) { ?>checked="checked"<?php } ?> />
+                    男
+                </label>
+                <label class="ml20">
+                	<input type="radio" name="member_sex" class="v-2" value="2" <?php if($output['member_info']['member_sex']==2) { ?>checked="checked"<?php } ?> />
+                    女
+                </label>
+                <label class="ml20">
+                	<input type="radio" name="member_sex" class="v-2" value="3" <?php if($output['member_info']['member_sex']==3 or ($output['member_info']['member_sex']!=2 and $output['member_info']['member_sex']!=1)) { ?>checked="checked"<?php } ?> />
+                    保密
+                </label>
+            </li>
+            <li class="cf">
+                <label class="handle" for="memberQQ">QQ：</label>
+                <input type="text" id="memberQQ" name="member_qq" class="text" value="<?php echo $output['member_info']['member_qq']; ?>" placeholder="请填写QQ" maxlength="10" />
+            </li>
+            <li class="cf">
+                <label class="handle" for="qianming">个性签名：</label>
+                <textarea id="qianming" name="qianming" placeholder="最多可输入150字" maxlength="150"><?php echo $output['member_info']['qianming']; ?></textarea>
+                <p class="mt10">
+                	<button class="btn btn-info js-saveBtn">保存</button>
+                </p>
+            </li>
+        </ul>
+    </form>
+</div>
+<div class="avatar-pop js-cropperWrap dis-none">
+	<div class="cf mt30">
+        <div class="img-container fl js-imgContainer">
+            <img src="" alt="" />
+        </div>
+        <div class="preview-img fr">
+            <h3>头像预览</h3>
+            <p class="mt30">
+                <span class="img-side js-imgSide"></span>
+                <span class="img-round ml30 js-imgRound"></span>
+            </p>
+            <p class="cor-9 mt20">图片不允许涉及政治敏感与色情</p>
+            <p class="cor-9">图片大小不可大于1M</p>
+        </div>
+    </div>
+    <p class="pop-btn-control mt30">
+    	<a class="btn btn-info js-uploadBtn">生成头像</a>
+    </p>
+</div>
+<input type="hidden" id="uploadCropper" />
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+	seajs.use("m/profile");
+</script>
+</block>

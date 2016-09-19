@@ -1,0 +1,143 @@
+<!-- sidebar start -->
+<div class="admin-sidebar am-offcanvas" id="admin-offcanvas">
+  <div class="am-offcanvas-bar admin-offcanvas-bar">
+    <ul class="am-list admin-sidebar-list">
+      <li><a href="{:U('/Admin/index')}"><span class="am-icon-home"></span> 首页</a></li>
+      <li class="admin-parent"> <a class="am-cf am-collapsed" data-am-collapse="{target: '#setting-nav'}"><span class="am-icon-sun-o"></span> 基本设置<span class="am-icon-angle-right am-fr am-margin-right"></span></a>
+        <ul class="am-list am-collapse admin-sidebar-sub" id="setting-nav">
+          <li><a href="{:U('Setting/index')}" id="setting_index" class="am-cf"><span class="am-icon-support"></span> 基本设置</a></li>
+          <li><a href="{:U('Setting/banklist')}" id="banklist" class="am-cf"><span class="am-icon-support"></span> 银行配置</a></li>
+          <li><a href="{:U('Setting/expresslist')}" id="expresslist" class="am-cf"><span class="am-icon-support"></span> 物流配置</a></li>
+          <li><a href="{:U('Setting/paymentlist')}" id="paymentlist" class="am-cf"><span class="am-icon-support"></span> 支付配置</a></li>
+        </ul>
+      </li>
+      <li class="admin-parent"> <a class="am-cf am-collapsed" data-am-collapse="{target: '#collapse-nav'}"><span class="am-icon-shopping-cart"></span> 商品管理 <span class="am-icon-angle-right am-fr am-margin-right"></span></a>
+        <ul class="am-list am-collapse admin-sidebar-sub" id="collapse-nav">
+          <li><a href="/Admin/Goods/category" id="category" class="am-cf"><span class="am-icon-sitemap"></span> 分类管理</a></li>
+          <li><a href="/Admin/Goods/brand" id="brand"><span class="am-icon-puzzle-piece"></span> 品牌管理</a></li>
+          <li><a href="/Admin/Goods/goods" id="goods"><span  class="am-icon-th"></span> 商品管理</a></li>
+          <li><a href="/Admin/Goods/specifications" id="specifications"><span class="am-icon-calendar"></span> 规格管理</a></li>
+          <li><a href="/Admin/Goods/attribute" id="attribute"><span class="am-icon-bug"></span> 属性管理</a></li>
+          <li><a href="/Admin/Goods/brand_style" id="brand_style" ><span class="am-icon-amazon"></span> 品牌风格</a></li>
+        </ul>
+      </li>
+
+      <li class="admin-parent"> <a class="am-cf am-collapsed" data-am-collapse="{target: '#member-nav'}"><span class="am-icon-user-plus"></span> 会员 <span class="am-icon-angle-right am-fr am-margin-right"></span></a>
+        <ul class="am-list am-collapse admin-sidebar-sub " id="member-nav">
+          <li><a href="{:U('Member/membermanager')}" id="membermanager" class="am-cf"><span class="am-icon-user"></span> 会员管理</a></li>
+          <li><a href="/Admin/Predeposit/predeposit?yck" id="yck" class="am-cf"><span class="am-icon-money"></span> 预存款</a></li>
+        </ul>
+      </li>
+      <li class="admin-parent"> <a class="am-cf am-collapsed" data-am-collapse="{target: '#store-nav'}"><span class="am-icon-university"></span> 店铺 <span class="am-icon-angle-right am-fr am-margin-right"></span></a>
+        <ul class="am-list am-collapse admin-sidebar-sub" id="store-nav">
+          <li><a href="{:U('Store/shopmanager')}" id="shopmanager" class="am-cf"><span class="am-icon-shopping-bag"></span> 店铺管理</a></li>
+          <li><a href="{:U('Store/mortageBuy')}" id="mortageBuy" class="am-cf"><span class="am-icon-shopping-bag"></span> 分期购</a></li>
+          <li><a href="{:U('Store/effectdrawType')}" id="effectdrawType" class="am-cf"><span class="am-icon-shopping-bag"></span> 装修公司效果风格</a></li>
+        </ul>
+      </li>
+      
+      <li class="admin-parent"> <a class="am-cf am-collapsed" data-am-collapse="{target: '#web-nav'}"><span class="am-icon-edge"></span> 网站 <span class="am-icon-angle-right am-fr am-margin-right"></span></a>
+        <ul class="am-list am-collapse admin-sidebar-sub " id="web-nav">
+          <li><a href="{:U('Adv/apmanage')}" id="apmanage" class="am-cf"><span class="am-icon-tv"></span> 广告管理</a></li>
+          <li><a href="{:U('Slide/index')}" id="slide_index" class="am-cf"><span class="am-icon-tv"></span> 幻灯片管理</a></li>
+          <li><a href="{:U('article/articleclass')}" id="articleclass" class="am-cf"><span class="am-icon-tv"></span> 文章分类</a></li>
+          <li><a href="{:U('article/articlemanage')}" id="articlemanage" class="am-cf"><span class="am-icon-tv"></span> 文章管理</a></li>
+          <li><a href="{:U('article/articlesys')}" id="articlesys" class="am-cf"><span class="am-icon-tv"></span> 系统文章</a></li>
+        </ul>
+      </li>
+      <li class="admin-parent"> <a class="am-cf am-collapsed" data-am-collapse="{target: '#finance-nav'}"><span class="am-icon-calculator"></span> 财务模块<span class="am-icon-angle-right am-fr am-margin-right"></span></a>
+        <ul class="am-list am-collapse admin-sidebar-sub " id="finance-nav">
+          <li><a href="{:U('Predeposit/pdaccountset')}" id="pdaccountset" class="am-cf"><span class="am-icon-tv"></span>汇出账户设置</a></li>
+          <li><a href="{:U('Predeposit/settlement')}" id="settlement" class="am-cf"><span class="am-icon-tv"></span>订单管理</a></li>
+          <li><a href="{:U('Predeposit/settlementstore')}" id="settlementstore"  class="am-cf"><span class="am-icon-tv"></span>店铺收支</a></li>
+          <li><a href="{:U('Predeposit/predeposit')}" id="czgl" class="am-cf"><span class="am-icon-tv"></span>充值管理</a></li>
+          <li><a href="{:U('Predeposit/pdcashlist')}" id="pdcashlist" class="am-cf"><span class="am-icon-tv"></span>提现管理</a></li>
+          <li><a href="{:U('Predeposit/pdloglist')}" id="pdloglist" class="am-cf"><span class="am-icon-tv"></span>预存款管理</a></li>
+        </ul>
+      </li>
+      <li class="admin-parent"> <a class="am-cf am-collapsed" data-am-collapse="{target: '#self-nav'}"><span class="am-icon-calculator"></span> 自检<span class="am-icon-angle-right am-fr am-margin-right"></span></a>
+        <ul class="am-list am-collapse admin-sidebar-sub " id="self-nav">
+          <li><a href="{:U('Coor/index')}" id="gc_id" class="am-cf"><span class="am-icon-tv"></span>自检说明</a></li>
+          <li><a href="{:U('Coor/goodsgcid')}" id="gc_id" class="am-cf"><span class="am-icon-tv"></span>gc_id不同步</a></li>
+          <li><a href="{:U('Coor/checkgcname')}" id="gc_id" class="am-cf"><span class="am-icon-tv"></span>gc_name不同步</a></li>
+          <li><a href="{:U('Coor/goodsnotexist')}" id="gc_id" class="am-cf"><span class="am-icon-tv"></span>goods 不存在</a></li>
+          <li><a href="{:U('Coor/memberuniquemobile')}" id="gc_id" class="am-cf"><span class="am-icon-tv"></span>手机号唯一</a></li>
+          <li><a href="{:U('Coor/memberuniquename')}" id="gc_id" class="am-cf"><span class="am-icon-tv"></span>注册名唯一</a></li>
+          <li><a href="{:U('Coor/memberuniquemid')}" id="gc_id" class="am-cf"><span class="am-icon-tv"></span>mid唯一</a></li>
+          <li><a href="{:U('Coor/sellerstore')}" id="gc_id" class="am-cf"><span class="am-icon-tv"></span>有seller没有store</a></li>
+          <li><a href="{:U('Coor/storeseller')}" id="gc_id" class="am-cf"><span class="am-icon-tv"></span>有store没有seller</a></li>
+          <li><a href="{:U('Coor/openstoresucc')}" id="gc_id" class="am-cf"><span class="am-icon-tv"></span>开店成功但是没有seller</a></li>
+
+          <li><a href="{:U('Coor/goodsglassnotexist')}" id="gc_id" class="am-cf"><span class="am-icon-tv"></span>挂靠分类不存在</a></li>
+          <li><a href="{:U('Coor/accountcorr')}" id="gc_id" class="am-cf"><span class="am-icon-tv"></span>财务结算</a></li>
+          <li><a href="{:U('Coor/isoffline')}" id="gc_id" class="am-cf"><span class="am-icon-tv"></span>isOffline一致检测</a></li>
+          <li><a href="{:U('Coor/goodsstate')}" id="gc_id" class="am-cf"><span class="am-icon-tv"></span>goodsstate一致检测</a></li>
+          <li><a href="{:U('Coor/goodsverify')}" id="gc_id" class="am-cf"><span class="am-icon-tv"></span>goodsVerify一致检测</a></li>
+          <li><a href="{:U('Coor/goodsstorenotmatch')}" id="gc_id" class="am-cf"><span class="am-icon-tv"></span>店铺类型和商品类型一致检测</a></li>
+          <li><a href="{:U('Coor/goodscommonstorenotmatch')}" id="gc_id" class="am-cf"><span class="am-icon-tv"></span>店铺(common)类型和商品类型一致检测</a></li>
+          <li><a href="{:U('Coor/provincecityarea')}" id="gc_id" class="am-cf"><span class="am-icon-tv"></span>省市区一致检测</a></li>
+        
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
+<!-- sidebar end --> 
+
+<script> 
+	var pathname  = window.location.pathname;
+	var urlserach = window.location.search;
+	var curLabel = '<span class="am-icon-star am-fr am-margin-right admin-icon-yellow"></span>';
+	//alert(window.location.search);
+	if(pathname.substring(7,14)=='Setting'){
+		$('#setting-nav').addClass('am-in');
+			if(pathname.substring(15,20)=='index') $('#setting_index').append(curLabel);
+			else if(pathname.substring(15,23)=='banklist') $('#banklist').append(curLabel);
+			else if(pathname.substring(15,26)=='expresslist') $('#expresslist').append(curLabel);
+			else if(pathname.substring(15,26)=='paymentlist') $('#paymentlist').append(curLabel);	
+	}else if(pathname.substring(7,12)=='Goods'){
+		$('#collapse-nav').addClass('am-in');
+			if(pathname.substring(13,21)=='category') $('#category').append(curLabel);
+			else if(pathname.substring(13,18)=='goods') $('#goods').append(curLabel);
+			else if(pathname.substring(13,27)=='specifications') $('#specifications').append(curLabel);
+			else if(pathname.substring(13,22)=='attribute') $('#attribute').append(curLabel);
+			else if(pathname.substring(13,24)=='brand_style') $('#brand_style').append(curLabel);
+			else if(pathname.substring(13,18)=='brand') $('#brand').append(curLabel);
+	}else if(pathname.substring(7,13)=='Member' || urlserach=='?yck'){
+		$('#member-nav').addClass('am-in');
+			if(pathname.substring(14,27)=='membermanager') $('#membermanager').append(curLabel);
+			else if(urlserach=='?yck') $('#yck').append(curLabel);
+	}else if(pathname.substring(7,12)=='Store'){ 
+		$('#store-nav').addClass('am-in');
+			if(pathname.substring(13,24)=='shopmanager') $('#shopmanager').append(curLabel);
+			else if(pathname.substring(13,23)=='mortageBuy') $('#mortageBuy').append(curLabel);
+			else if(pathname.substring(13,27)=='effectdrawType') $('#effectdrawType').append(curLabel);
+	}else if(pathname.substring(7,10)=='Adv' || pathname.substring(7,12)=='Slide' || pathname.substring(7,14)=='article'){
+		$('#web-nav').addClass('am-in'); 
+			if(pathname.substring(11,19)=='apmanage') $('#apmanage').append(curLabel);
+			else if(pathname.substring(13,18)=='index') $('#slide_index').append(curLabel); 
+			else if(pathname.substring(15,27)=='articleclass') $('#articleclass').append(curLabel);
+			else if(pathname.substring(15,28)=='articlemanage') $('#articlemanage').append(curLabel);
+			else if(pathname.substring(15,25)=='articlesys') $('#articlesys').append(curLabel);
+	}else if(pathname.substring(7,17)=='Predeposit' && urlserach!='?yck'){  
+		$('#finance-nav').addClass('am-in');
+			if(pathname.substring(18,30)=='pdaccountset') $('#pdaccountset').append(curLabel);	
+			else if(pathname.substring(18,33)=='settlementstore') $('#settlementstore').append(curLabel); 
+			else if(pathname.substring(18,28)=='settlement') $('#settlement').append(curLabel); 
+			else if(pathname.substring(18,28)=='predeposit') $('#czgl').append(curLabel); 
+			else if(pathname.substring(18,28)=='pdcashlist') $('#pdcashlist').append(curLabel); 
+			else if(pathname.substring(18,27)=='pdloglist') $('#pdloglist').append(curLabel); 
+	}
+</script>
+
+
+
+
+
+
+
+
+
+
+
+

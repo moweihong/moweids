@@ -1,0 +1,116 @@
+<extend name="Layouts:member" />
+<block name="title"><title>收货地址-买家中心-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="address-box pb20 h700 bg-white">
+    <div class="tit-line">
+        <h2>收货地址</h2>
+    </div>
+    <h3 class="fs16 cor-black mt20 ml30">新增收货地址</h3>
+    <form action="javascript:void(0);" id="form" class="mt10" method="post" autocomplete="off">
+        <ul class="list">
+            <li class="cf">
+                <label class="handle"><em class="cor-red">*</em>所在地区：</label>
+                <select id="cmbProvince" name="province_id" style="width:100px">
+                    <option value="0">选择省份</option>
+                </select>
+                <select id="cmbCity" name="city_id" class="ml10" style="width:100px">
+                    <option value="0">选择城市</option>
+                </select>
+                <select id="cmbArea" name="area_id" class="ml10" style="width:100px">
+                    <option value="0">选择地区</option>
+                </select>
+            </li>
+            <li class="cf">
+                <label class="handle" for="address"><em class="cor-red">*</em>详细地址：</label>
+                <textarea id="address" name="address" placeholder="建议您如实填写详细收货地址，如街道名称，门牌号，楼层和房间号等信息" maxlength="80"></textarea>
+            </li>
+            <li class="cf">
+                <label class="handle" for="zipCode">邮政编码：</label>
+                <input type="text" id="zipCode" name="zip_code" class="text js-number" placeholder="请输入邮政编码" maxlength="10" />
+            </li>
+            <li class="cf">
+                <label class="handle" for="consignee"><em class="cor-red">*</em>收货人姓名：</label>
+                <div class="rel">
+                    <input type="text" id="consignee " name="true_name" class="text" placeholder="请输入收货人姓名" maxlength="30" required />
+                    <span show="true_name.check" class="error-msg">
+                        <em class="errow-arrow"></em>
+                        请输入收货人姓名
+                    </span>
+                </div>
+            </li>
+            <li class="cf">
+            	<label class="handle" for="tel"><em class="cor-red">*</em>手机号码：</label>
+                <div class="rel">
+                    <input type="text" id="tel" name="mob_phone" class="text js-number" placeholder="请输入手机号码" maxlength="11" required check-phone />
+                    <span show="mob_phone.check" class="error-msg">
+                        <em class="errow-arrow"></em>
+                        请输入正确的手机号码
+                    </span>
+                </div>
+            </li>
+            <li class="cf">
+                <label class="handle">电话号码：</label>
+                <input type="text" class="text js-codes js-number" style="width:60px;" maxlength="6" />
+                <span class="cor-gray mr5 ml5">——</span>
+                <input type="text" class="text js-phone js-number" style="width:200px;" maxlength="10" />
+                <p class="mt10">
+                    <label><input type="checkbox" class="v-2 js-isDefault" /> 设置为默认地址</label>
+                </p>
+                <p class="mt10">
+                    <button class="btn btn-info js-saveBtn">保存</button>
+                </p>
+            </li>
+        </ul>
+    </form>
+    <div class="mt10">
+        <table class="table" width="90%">
+        	<colgroup>
+                <col width="10%" />
+                <col width="18%" />
+                <col width="30%" />
+                <col width="12%" />
+                <col width="12%" />
+                <col width="" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>收货人</th>
+                    <th>所在区域</th>
+                    <th>详细地址</th>
+                    <th>邮政编码</th>
+                    <th>手机/电话</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php  foreach ($output['address_list'] as $key => $value) {  ?>
+                <tr data-id="<?php echo $value['address_id'] ?>">
+                    <td><?php echo $value['true_name'] ?></td>
+                    <td><?php echo $value['area_info'] ?></td>
+                    <td><?php echo $value['address'] ?></td>
+                    <td><?php echo $value['zip_code'] ?></td>
+                    <td><?php echo $value['mob_phone'] ?></td>
+                    <td>
+                        <a href="javascript:void(0);" class="cor-blue js-del">删除</a> -
+                        <a href="javascript:void(0);" class="cor-blue js-edit">修改</a> -
+                        <?php if(!$value['is_default']){ ?>
+                            <a href="javascript:void(0);" class="cor-blue js-set">设为默认</a>
+                        <?php }else{?>
+                            <a href="javascript:void(0);" class="disable js-set">默认地址</a>
+                        <?php }?>
+                    </td>
+                </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+<input type="hidden" id="deleteUrl" value="/index.php?c=member&a=delete_address" data-isreload="no" data-msg="收货地址" />
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+	seajs.use("m/address");
+</script>
+</block>

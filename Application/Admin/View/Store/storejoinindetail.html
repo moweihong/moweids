@@ -1,0 +1,223 @@
+<include file="Application/Common/Layout/head.html" />
+<style>
+  table td{font-size: 14px}
+  .servise-input{width:100px; margin-right: 5px}
+</style>
+<div class="am-cf admin-main">
+<include file="Application/Common/Layout/left.html" /> 
+<!-- content start -->
+<div class="admin-content">
+  <div class="admin-content-body">
+    <div class="am-cf am-padding am-padding-bottom-0">
+      <div class="am-fl am-cf">
+        <strong class="am-text-primary am-text-lg">店铺管理2</strong> /
+        <small>审核</small>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="am-tabs am-margin">
+
+        <div class="am-tab-panel am-fade am-in am-active" id="tab1">
+          <!--公司及联系人信息 start-->
+          <table class="am-table am-table-bordered">
+            <tr>
+              <th class="bg-ebebeb" colspan="2">公司及联系人信息</th>
+            </tr>
+            <tr>
+              <td class="width-10">公司名称：</td>
+              <td>{$joinin_detail.company_name}</td>
+            </tr>
+            <tr>
+              <td>公司所在地：</td>
+              <td>{$joinin_detail.company_address}</td>
+            </tr>
+            <tr>
+              <td>公司详细地址：</td>
+              <td>{$joinin_detail.company_address_detail}</td>
+            </tr>
+            <tr>
+              <td>公司电话：</td>
+              <td>{$joinin_detail.company_phone}</td>
+            </tr>
+          </table>
+          <!--公司及联系人信息 end-->
+
+          <!--营业执照信息（副本） start-->
+          <table class="am-table am-table-bordered">
+            <tr>
+              <th class="bg-ebebeb" colspan="2">营业执照信息（副本）</th>
+            </tr>
+            <tr>
+              <td class="width-10">营业执照号：</td>
+              <td>{$joinin_detail.business_licence_number}</td>
+            </tr>
+            <tr>
+              <td>营业执照号电子版：</td>
+              <td>
+                <a class="fancybox" href="__UPLOAD__/shop/store_joinin/{$joinin_detail.business_licence_number_electronic}" data-fancybox-group="gallery" title="营业执照号电子版"><img class="am-radius" src="__UPLOAD__/shop/store_joinin/{$joinin_detail.business_licence_number_electronic}" width="100px" alt="营业执照号电子版" /></a>
+              </td>
+            </tr>
+          </table>
+          <!--营业执照信息（副本） end-->
+
+          <!--只有企业类型才需要显示组织机构代码证-->
+          <if condition="$joinin_detail.business_type eq '1'">
+          <!--组织机构代码证 start-->
+            <table class="am-table am-table-bordered">
+              <tr>
+                <th class="bg-ebebeb" colspan="2">组织机构代码证</th>
+              </tr>
+              <tr>
+                <td class="width-10">组织机构代码：</td>
+                <td>{$joinin_detail.organization_code}</td>
+              </tr>
+              <tr>
+                <td>组织机构代码证电子版：</td>
+                <td>
+                  <a class="fancybox" href="__UPLOAD__/shop/store_joinin/{$joinin_detail.organization_code_electronic}" data-fancybox-group="gallery" title="组织机构代码证电子版"><img src="__UPLOAD__/shop/store_joinin/{$joinin_detail.organization_code_electronic}" width="100px" alt="组织机构代码证电子版" /></a>
+                </td>
+              </tr>
+            </table>
+          </if>
+          <!--组织机构代码证 end-->
+
+          <!--法人身份证 start-->
+          <table class="am-table am-table-bordered">
+            <tr>
+              <th class="bg-ebebeb" colspan="2">法人身份证</th>
+            </tr>
+            <tr>
+              <td class="width-10">身份证正面照：</td>
+              <td>
+                <a class="fancybox" href="__UPLOAD__/shop/store_joinin/{$joinin_detail.representive_id_front_electronic}" data-fancybox-group="gallery" title="身份证正面照"><img src="__UPLOAD__/shop/store_joinin/{$joinin_detail.representive_id_front_electronic}" width="100px" alt="身份证正面照" /></a>
+              </td>
+            </tr>
+            <tr>
+              <td>身份证反面照：</td>
+              <td>
+                <a class="fancybox" href="__UPLOAD__/shop/store_joinin/{$joinin_detail.representive_id_back_electronic}" data-fancybox-group="gallery" title="身份证反面照"><img src="__UPLOAD__/shop/store_joinin/{$joinin_detail.representive_id_back_electronic}" width="100px" alt="身份证反面照" /></a>
+              </td>
+            </tr>
+          </table>
+          <!--法人身份证 end-->
+
+          <!--开户银行信息 start-->
+          <!-- <table class="am-table am-table-bordered">
+            <tr>
+              <th class="bg-ebebeb" colspan="2">开户银行信息</th>
+            </tr>
+            <tr>
+              <td class="width-10">银行开户名：</td>
+              <td>{$joinin_detail.bank_account_name}</td>
+            </tr>
+            <tr>
+              <td>公司银行账号：</td>
+              <td>{$joinin_detail.bank_account_number}</td>
+            </tr>
+            <tr>
+              <td>开户银行支行名称：</td>
+              <td>{$joinin_detail.bank_name}</td>
+            </tr>
+            <tr>
+              <td>开户银行所在地：</td>
+              <td>{$joinin_detail.bank_address}</td>
+            </tr>
+          </table> -->
+          <!--开户银行信息 end-->
+
+
+          <!--店铺经营信息 start-->
+          <form id="form_store_verify" action="__CONTROLLER__/storeJoinInVerify" method="post">
+            <input id="verify_type" name="verify_type" value='' type="hidden" />
+            <input name="member_id" type="hidden" value="{$joinin_detail.member_id}" />
+
+            <table class="am-table am-table-bordered">
+              <tr>
+                <th class="bg-ebebeb" colspan="2">店铺经营信息</th>
+              </tr>
+              <tr>
+                <td class="width-10">卖家帐号：</td>
+                <td>{$joinin_detail.seller_name}</td>
+              </tr>
+              <tr>
+                <td>店铺名称：</td>
+                <td>{$joinin_detail.store_name}</td>
+              </tr>
+              <tr>
+                <td>分期设置：</td>
+                <td>
+                  <input type="radio" value="1" name="is_discount" <if condition="$joinin_detail.is_discount eq 1">checked='checked'</if>>贴息
+                  <input type="radio" value="0" name="is_discount" <if condition="$joinin_detail.is_discount eq 0">checked='checked'</if>>不贴息
+                </td>
+              </tr>
+              <tr>
+                <td>服务费设置：</td>
+                <td><input type="text" class="b-input servise-input" name="ser_charge" value="{$joinin_detail.ser_charge}" />%</td>
+              </tr>
+              <if condition="in_array(intval($joinin_detail['joinin_state']), array(STORE_JOIN_STATE_NEW, STORE_JOIN_STATE_PAY, STORE_JOIN_STATE_VERIFYING))">
+                <tr>
+                  <td>审核意见：</td>
+                  <td><textarea id="joinin_message"  name="joinin_message" class="audit-opinion"></textarea></td>
+                </tr>
+              </if>
+            </table>
+          </form>
+          <!--店铺经营信息 end-->
+        </div>
+    </div>
+    <if condition="in_array(intval($joinin_detail['joinin_state']), array(STORE_JOIN_STATE_NEW, STORE_JOIN_STATE_PAY, STORE_JOIN_STATE_VERIFYING, STORE_JOIN_STATE_VERIFYING))">
+    <div class="am-margin">
+      <button type="button" id="btn_pass" class="am-btn am-btn-primary am-btn-xs verify-submit" style="width:10rem; height: 36px; margin-right: 1.2rem">通过</button>
+      <button type="button" id="btn_fail" class="am-btn am-btn-primary am-btn-xs verify-refuse" style="width:10rem; height: 36px">拒绝</button>
+    </div>
+    </if>
+  </div>
+
+  <footer class="admin-content-footer">
+    <hr>
+    <p class="am-padding-left">© 2014 AllMobilize, Inc. Licensed under MIT license.</p>
+  </footer>
+</div>
+<!-- content end -->
+
+</div>
+
+<include file="Application/Common/Layout/foot.html" />
+<script>
+  $(document).ready(function() {
+    $('#btn_fail').on('click', function() {
+      if($('#joinin_message').val() == '') {
+        alert('请输入审核意见');
+        return false;
+      } else {
+        $('#validation_message').hide();
+      }
+      if(confirm('确认拒绝申请？')) {
+        $('#verify_type').val('fail');
+        $('#form_store_verify').submit();
+      }
+    });
+    $('#btn_pass').on('click', function() {
+      var valid = true;
+      ser_charge = Number($('input[name="ser_charge"]').val());
+      if(isNaN(ser_charge) || ser_charge <= 0 || ser_charge >= 100) {
+        alert('服务费填写错误');
+        valid = false;
+        return false;
+      }
+      if(valid) {
+        $('#validation_message').hide();
+        if(confirm('确认通过申请？')) {
+          $('#verify_type').val('pass');
+          $('#form_store_verify').submit();
+        }
+      } else {
+        $('#validation_message').text('请正确填写分佣比例');
+        $('#validation_message').show();
+      }
+    });
+
+  });
+</script>

@@ -1,0 +1,185 @@
+<extend name="Layouts:home" />
+<block name="title"><title>店铺详情页-家装设计-{:C('site_name')}</title></block>
+<block name="head_css">
+<link href="__CSS__/homedesign.css" rel="stylesheet" type="text/css">
+</block>
+
+<block name="content">
+	<div class="content detail-content">
+		<div class="company-info">
+			<img src="{$decorate_info['store_label']}" class="compony-logo">
+			<div class="company-info-text">
+				<p class="detail-logo">
+					<span>{$decorate_info['store_name']}</span>
+				</p>
+				<p class="info-text">
+					{$decorate_info['description']}
+				</p>
+				<p class="company-addr">
+					{$decorate_info['store_address']}
+				</p>
+				<p class="company-addr">
+					联系方式：{$decorate_info['store_tel']}
+				</p>
+			</div>
+		</div>
+
+		<div class="detail-show">
+			<div class="detail-show-tit">
+				<a href="{:U('/shop/THomedesign/storedetail', array('id' =>$store_id ,'type' => 1))}"><span  class=" <?php if($type_id == '1') echo 'detail-show-now'; ?>">效果图</span></a>
+				<a href="{:U('/shop/THomedesign/storedetail', array('id' =>$store_id ,'type' => 2))}"><span  class=" <?php if($type_id == '2') echo 'detail-show-now'; ?>">最新合作方案</span></a>
+			</div>
+
+
+		<div class="show-left js-showLeft">
+			<ul class="cf">
+				<?php if ($_GET['type'] == 1){?>
+				<?php
+				if (!empty($effectdraw_list)){
+				foreach ($effectdraw_list as $draw){
+					$pic = unserialize($draw['pic']);
+					?>
+				<li>
+					<img src="<?php echo $pic['m_pic'];?>"  class="show-img js-show-img">
+					<p class="img-name">
+						<span><?php echo $draw['title'];?></span>
+					</p>
+					<input type="hidden" value="<?php echo $draw['draw_list_id'];?>">
+				</li>
+				<?php }}?>
+			<?php }else{?>
+				<?php
+				if (!empty($decorate_list)){
+					foreach ($decorate_list as $plan){
+						$coverpage = unserialize($plan['coverpage']);
+				?>
+					<li data-id="<?php echo $plan['de_plan_id'];?>" data-herf="<?php echo urlShop('THomedesign', 'plandetail', array('id' => $plan['de_plan_id'])); ?>">
+						<div class="jsimg-a">
+							<img src="<?php echo $coverpage['m_pic'];?>" class="show-img">
+							<div class="black-bg">
+								<!--<span class="black-bg-img-num">共10张图</span>-->
+								<p class="s-input">
+									<input type="text" placeholder="请输入访问密码" class="show-pw js-pwd" />
+									<input type="button" value="确定" class="show-btn js-showBtn" />
+								</p>
+								<p class="show-message">提示：私有设计方案仅业主可见，如忘记访问密码请联系装修公司。</p>
+							</div>
+						</div>
+						<p class="img-name">
+							<span><?php echo $plan['title'];?></span>
+							<span class="specification"><?php echo $plan['house_type'];?> | <?php echo $plan['area'];?>平米</span>
+							<span class="houseprice">造价：<em>￥<?php echo $plan['cost'];?></em></span>
+						</p>
+					</li>
+				<?php }}}?>
+			</ul>
+		</div>
+		</div>
+		<div class="clear"></div>
+		<input type="hidden" value={$store_id} id='store_id' name='store_id' />
+		<input type="hidden" value={$type_id} id='store_id' name='type_id' />
+	</div>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+(function($){
+	define("homedesign/storedetail",function(require, exports, module){
+		var manage = require("com/manage");
+		var Module = {
+			init: function(){
+				/*
+				**访问密码
+				*/
+				$(".js-showLeft").on("click", ".js-showBtn", function(){
+					var me = $(this),
+						$li = me.closest("li"),
+						id = $li.data("id"),
+						visit_pwd = $.trim($(".js-pwd", $li).val()),
+						herf = $li.data("herf");
+					if(!visit_pwd){
+						$.wrongTip(me, "请输入访问密码")
+						return;
+					}
+					var pid = parent.layer.load(360);
+					manage.ajax({
+						url: gConfig.apiurl + "{:U('/shop/THomedesign/inputpwd')}",
+						data: {
+							id: id,
+							visit_pwd: visit_pwd
+						},
+						success:function(result){
+							parent.layer.close(pid);
+							var resultText = result.resultText || {};
+							if(result.code == 1){
+								window.location.href = herf;
+							}else{
+								$.wrongMsg(resultText.message || "操作失败");				
+							}
+						}
+					});
+				});
+				/*
+				**查看图片
+				*/
+				$(".js-showLeft").on("click", ".js-show-img", function(){
+					var me = $(this),
+						$li = me.closest("li");
+					var data = {
+						id: $li.find('input').val()
+					};
+					manage.getApi("/index.php?m=shop&c=THomedesign&a=broadcastPic", data, function(resultText){
+						var totle_pic = resultText.pic_list.length;
+						var html_con = "";
+						for(var i = 0; i < totle_pic; i++){
+							html_con += "<img src='" + resultText.pic_list[i].m_pic + "' class='" + (i+1) +"'>";
+						}
+						layer.open({
+							type: 1,
+							title: false,
+							area: ['600px', '600px'],
+							content: '<div class="h-imgbox"><div class="img-con">' + html_con + '</div><p class="look-btn"><span class="pre-btn">上一张</span><span class="next-btn">下一张</span></p></div>'
+						});
+						var index = 1;
+						$('.pre-btn').click(function(){
+							if(index == 2){
+								index--;
+								$('.' + index).css('display' ,'block').siblings('img').css('display' ,'none');
+								$(this).css('background-color', '#ccc');
+								$('.next-btn').css('background-color', '#f2a344');
+								
+							}else if(index == 1){
+
+							}else{
+								index--;
+								$('.' + index).css('display' ,'block').siblings('img').css('display' ,'none');
+								$('.next-btn').css('background-color', '#f2a344');
+							}
+						});
+						$('.next-btn').click(function(){
+							if(index == totle_pic - 1){
+								index++;
+								$('.' + index).css('display' ,'block').siblings('img').css('display' ,'none');
+								$(this).css('background-color', '#ccc');
+								$('.pre-btn').css('background-color', '#f2a344');
+
+							}else if(index == totle_pic){
+
+							}else{
+								index++;
+								$('.' + index).css('display' ,'block').siblings('img').css('display' ,'none');
+								$('.pre-btn').css('background-color', '#f2a344');
+							}
+						});
+					});
+				});
+			}
+		}
+		module.exports = Module;
+	});
+	seajs.use("homedesign/storedetail", function(module){
+		module.init();
+	});
+})($);
+</script>
+</block>

@@ -1,0 +1,158 @@
+<include file="Application/Common/Layout/head.html" />
+<div class="am-cf admin-main">
+	<include file="Application/Common/Layout/left.html" />
+	<!-- content start -->
+	<div class="admin-content">
+		<div class="admin-content-body">
+			<div class="am-cf am-padding am-padding-bottom-0">
+				<div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">站点设置</strong> / <small>Site Setting</small></div>
+			</div>
+			<hr/>
+
+			<div class="am-g">
+				<div class="am-u-sm-12 am-u-md-4 am-u-md-push-8">
+
+				</div>
+
+				<div class="am-u-sm-12 am-u-md-8 am-u-md-pull-4">
+					<form class="am-form am-form-horizontal" action="" method="post" enctype="multipart/form-data">
+						<div class="am-form-group">
+							<label for="user-name" class="am-u-sm-3 am-form-label">网站名称</label>
+							<div class="am-u-sm-9">
+								<input type="text" name="site_name" value="{$setInfo.site_name}" placeholder="请输入网站名称">
+							</div>
+						</div>
+						<div class="am-form-group">
+							<label for="user-name" class="am-u-sm-3 am-form-label">ICP证书号</label>
+							<div class="am-u-sm-9">
+								<input type="text" name="icp_number" value="{$setInfo.icp_number}" placeholder="ICP证书号">
+							</div>
+						</div>
+						<div class="am-form-group">
+							<label for="user-name" class="am-u-sm-3 am-form-label">平台客服电话</label>
+							<div class="am-u-sm-9">
+								<input type="text" name="site_phone" value="{$setInfo.site_phone}" placeholder="平台客服电话">
+							</div>
+						</div>
+						<hr>
+
+						<div class="am-form-group">
+							<label for="user-name" class="am-u-sm-3 am-form-label">站点LOGO</label>
+							<div class="am-u-sm-9">
+								<input type="file" name="site_logo" value="{$setInfo.site_logo}" >
+								<small>注：153 × 55px，支持格式gif,jpg,png</small>
+								<br/>
+								<if condition="$setInfo.site_logo neq ''">
+									<img src="/data/upload/shop/common/{$setInfo.site_logo}" class="brandInfoPic">
+								</if>
+							</div>
+						</div>
+						<hr>
+
+						<div class="am-form-group">
+							<label for="user-name" class="am-u-sm-3 am-form-label">会员中心logo</label>
+							<div class="am-u-sm-9">
+								<input type="file" name="member_logo" value="{$setInfo.member_logo}" >
+								<small>注：支持格式gif,jpg,png</small>
+								<br/>
+								<if condition="$setInfo.member_logo neq ''">
+									<img src="/data/upload/shop/common/{$setInfo.member_logo}" class="brandInfoPic">
+								</if>
+							</div>
+						</div>
+						<hr>
+
+						<div class="am-form-group">
+							<label for="user-name" class="am-u-sm-3 am-form-label">会员中心默认头像</label>
+							<div class="am-u-sm-9">
+								<input type="file" name="default_user_portrait" value="{$setInfo.default_user_portrait}" >
+								<small>注：仅支持png格式</small>
+								<br/>
+								<if condition="$setInfo.default_user_portrait neq ''">
+									<img src="/data/upload/shop/common/{$setInfo.default_user_portrait}" class="brandInfoPic">
+								</if>
+							</div>
+						</div>
+						<hr>
+
+						<div class="am-form-group">
+							<label for="user-name" class="am-u-sm-3 am-form-label">卖家中心默认logo</label>
+							<div class="am-u-sm-9">
+								<input type="file" name="seller_center_logo" value="{$setInfo. }" >
+								<small>注：支持格式gif,jpg,png</small>
+								<br/>
+								<if condition="$setInfo.seller_center_logo neq ''">
+									<img src="/data/upload/shop/common/{$setInfo.seller_center_logo}" class="brandInfoPic">
+								</if>
+							</div>
+						</div>
+						<hr>
+
+						<div class="am-form-group">
+							<label for="user-name" class="am-u-sm-3 am-form-label">卖家中心默认横幅</label>
+							<div class="am-u-sm-9">
+								<input type="file" name="seller_center_banner" value="{$setInfo.seller_center_banner}" >
+								<br/>
+								<if condition="$setInfo.seller_center_banner neq ''">
+									<img src="/data/upload/shop/common/{$setInfo.seller_center_banner}" class="brandInfoPic">
+								</if>
+							</div>
+						</div>
+						<hr>
+		
+						<div class="am-form-group">
+							<label for="user-name" class="am-u-sm-3 am-form-label">商品默认图</label>
+							<div class="am-u-sm-9">
+								<input type="file" name="default_goods_image" value="{$setInfo.default_goods_image}" >
+								<br/>
+								<if condition="$setInfo.default_goods_image neq ''">
+									<img src="/data/upload/shop/common/{$setInfo.default_goods_image}" class="brandInfoPic">
+								</if>
+							</div>
+						</div>
+						<hr>
+
+
+
+						<input type='hidden' name="act" value="{$Think.get.act}">
+						<div class="am-form-group">
+							<div class="am-u-sm-9 am-u-sm-push-3">
+								<input type="submit" class="am-btn am-btn-primary">
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+	<!-- content end -->
+
+</div>
+
+<include file="Application/Common/Layout/foot.html" />
+
+<script>
+	$("#brand_name").blur(function(){
+		var cateName  = $(this).val();
+		var cateName2 = $('#old_brand_name').val();
+		if(cateName==cateName2) return;
+		$.ajax({
+			type: 'get',
+			cache:false,
+			url:'/Admin/Goods/ajax_check_duplicate',
+			data:{
+				type :'brand_name',
+				value:cateName
+			},
+			success: function(data){
+				if(data=='1'){
+					alert('品牌名已存在！');
+					$(this).focus();
+				}
+			},
+			dataType:'json'
+		});
+	});
+</script>

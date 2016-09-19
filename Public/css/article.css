@@ -1,0 +1,15 @@
+/*
+************ author: yanyali
+************ 文章页
+*/
+.article-banner{height:150px;padding-top:90px;background: url(../images/articlebanner.jpg) center bottom no-repeat;}
+.art-nav{margin:50px 0 30px;padding:20px;text-align:right;background-color: #fff;}
+.art-nav a{margin:0 20px;}
+.art-nav .curr{color:#ffa800;}
+.art-con .art-con-left{float:left;width:250px;background-color:#fff;}
+.art-con .art-con-left h3{line-height:30px;padding:25px 30px;font-size:18px;}
+.art-sidenav{padding-bottom:50px;}
+.art-sidenav a{display:block;line-height:40px;padding-left:30px;}
+.art-sidenav .curr{color:#fff;background-color:#ffa800;}
+.art-con .art-con-right{float:right;width:920px;min-height:300px;padding:50px;background-color:#fff;}
+.art-con .art-con-right h2{line-height:50px;text-align:center;color:#333;}

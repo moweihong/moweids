@@ -1,0 +1,276 @@
+
+<extend name="Layouts:home" />
+<block name="title"><title>品牌专区-{:C('site_name')}</title></block>
+<block name="head_css">
+	<link href="__CSS__/brand.css" rel="stylesheet" type="text/css">
+    <style type="text/css">
+    .e-banner{height:440px;}
+    </style>
+</block>
+
+<block name="content">
+<include file="Layouts:top_banner"/>
+<style>
+    .choose{  color: #fff;border: 1px solid #ffa800;background-color: #ffa800;}
+    .no_goods{margin:auto;text-align: center;}
+</style>
+<div class="wrapper floor-template brand-furniture">
+    <h2 class="main-tit">
+        <span>所有家具</span>
+        <span class="letter">ALL FURNITURE</span>
+    </h2>
+     
+    <if condition="($goods_list)||($Think.get.bprovince_id neq '')">
+     <?php if($_GET['cate_id']||$_GET['attr_value_id']||$_GET['bprovince_id']){?>   
+     <dl class="b-style cf"><dt><a href="<?php echo U('TBrand/morefurniture',array('brand_id'=>$_GET['brand_id']))?>">显示全部</a></dt></dl>  
+     <?php }?>
+    <notempty name='cate_list'>   
+    <dl class="b-style cf goodsClass">
+        <dt>商品类别：</dt>
+        <dd class="fname js-fname" ismultiple="no">		
+            <volist name='cate_list' id='v'>  
+            <a href="{:U('TBrand/morefurniture',array('brand_id'=>$_GET['brand_id'],'cate_id'=>$v['gc_id'],'attr_value_id'=>$_GET['attr_value_id'],'bprovince_id'=>$_GET['bprovince_id'],'bcity_id'=>$_GET['bcity_id'],'barea_id'=>$_GET['barea_id'],'orderBy'=>$_GET['orderBy']))}" <?php if($_GET['cate_id']==$v['gc_id']||in_array($v['gc_id'],$arr_strCid)) echo "class='choose'";?> data-cid="{$v['gc_id']}"><i></i>{$v.gc_name}</a>
+            </volist>  
+        </dd>
+        
+        <form method="get" name="brandForm" action="{:U('TBrand/morefurniture',array('brand_id'=>$_GET['brand_id']))}">
+            <input type="hidden" name="strCid" class="js-strCid" />
+            <input type="hidden" name="cateFormSubmit" value="ok"/>
+        <dd class="s-btn cf js-sBtn">
+            <a href="javascript:void(0)" class="choose-ok js-choose-ok">确定</a>
+            <a href="javascript:void(0)" class="choose-cancel ml10 js-choose-cancel">取消</a>
+        </dd>
+        </form>
+        <dd class="fmore fr">
+            <a href="javascript:void(0)" class="choose-more js-choose-more">多选</a>
+            <a href="javascript:void(0)" class="mores js-mores">更多<i></i></a>
+        </dd>
+    </dl>      
+    </notempty>  
+   <volist name='attr_list' id='v'>
+    <dl class="b-style cf">
+    <dt>{$v['attr_name']}：</dt>
+        <dd class=" js-fname" ismultiple="no">
+          <volist name='v.attr_value' id='av'>  
+              <a href="{:U('TBrand/morefurniture',array('brand_id'=>$_GET['brand_id'],'cate_id'=>$_GET['cate_id'],'attr_value_id'=>$av['attr_value_id'],'bprovince_id'=>$_GET['bprovince_id'],'bcity_id'=>$_GET['bcity_id'],'barea_id'=>$_GET['barea_id'],'orderBy'=>$_GET['orderBy']))}" <?php if($_GET['attr_value_id']==$av['attr_value_id']) echo "class='choose'";?>><i></i> {$av.attr_value_name}</a>
+          </volist>  
+        </dd>
+    </dl> 
+    </volist>     
+    <dl class="b-style cf" style="padding: 15px 130px 0;">
+        <dt style=" margin-top: 3px;">商品所在地：</dt>
+        <dd>
+            <form  action="{:U('TBrand/morefurniture')}" method="get" class="fl">
+                <?php if($_GET['brand_id']){?>
+                <input type="hidden" name="brand_id" value="<?php echo $_GET['brand_id'];?>">
+                <?php }?>
+                <?php if($_GET['cate_id']){?>
+                <input type="hidden" name="cate_id" value="<?php echo $_GET['cate_id'];?>">
+                <?php }?>
+                <?php if($_GET['attr_value_id']){?>
+                <input type="hidden" name="attr_value_id" value="<?php echo $_GET['attr_value_id'];?>">
+                <?php }?>
+                <?php if($_GET['orderBy']){?>
+                <input type="hidden" name="orderBy" value="<?php echo $_GET['orderBy'];?>">
+                <?php }?>
+                <div class="custom_select" style="width: 118px;">
+                    <select id="bcmbProvince" name="bprovince_id" class="text" style="width: 100px;">
+                        <option value="0">选择省份</option>
+                    </select>
+                </div>
+                <div class="custom_select" style="width: 118px;">
+                    <select id="bcmbCity" name="bcity_id" class="text" style="width: 100px;">
+                        <option value="0">选择城市</option>
+                    </select>
+                </div>
+                <div class="custom_select" style="width: 118px;">
+                    <select id="bcmbArea" name="barea_id" class="text" style="width: 100px;">
+                        <option value="0">选择地区</option>
+                    </select>
+                </div>
+            </form>
+        </dd>
+    </dl>
+    <dl class="b-style mt30 cf">
+        <dt>综合排序：</dd>
+        <dd class="b-sort">
+            <a href="{:U('TBrand/morefurniture', array('brand_id'=>$_GET['brand_id'],'cate_id'=>$_GET['cate_id'],'attr_value_id'=>$_GET['attr_value_id'],
+               'bprovince_id'=>$_GET['bprovince_id'],'bcity_id'=>$_GET['bcity_id'],'barea_id'=>$_GET['barea_id'],'orderBy'=>'salenum_asc'))}" title="点击按销量从高到低排序" class="js-salenum" id="sale">销量<i class="desc"></i>
+            </a>
+            <a href="{:U('TBrand/morefurniture', array('brand_id'=>$_GET['brand_id'],'cate_id'=>$_GET['cate_id'],'attr_value_id'=>$_GET['attr_value_id'],
+		'bprovince_id'=>$_GET['bprovince_id'],'bcity_id'=>$_GET['bcity_id'],'barea_id'=>$_GET['barea_id'],'orderBy'=>'goods_click_asc'))}" title="点击按人气从高到低排序" class="js-popularity" id='goods_click'>人气<i></i>
+            </a>
+            <a href="{:U('TBrand/morefurniture', array('brand_id'=>$_GET['brand_id'],'cate_id'=>$_GET['cate_id'],'attr_value_id'=>$_GET['attr_value_id'],
+		'bprovince_id'=>$_GET['bprovince_id'],'bcity_id'=>$_GET['bcity_id'],'barea_id'=>$_GET['barea_id'],'orderBy'=>'goods_time_asc'))}" title="点击按价格从高到低排序" class="js-price" id='goods_time'>上新<i class="desc"></i>
+            </a>
+        </dd>
+    </dl>
+
+    <ul class="pro-list mt30 cf">
+        <volist name='goods_list' id='k'>
+            <li>
+                <a href="/index.php?m=shop&c=goods&a=index&goods_id=<?php echo $k['goods_id']; ?>" title="">
+                    <div class="goods-pic">             
+                        <img src="{:thumb($k, 240);}" alt="" />
+                    </div>
+                    <div class="goods-info">
+                        <p class="name">{$k['goods_name']}</p>
+                        <p class="cor-9">分期</p>
+                    </div>
+                </a>
+            </li>
+        </volist>
+    </ul>
+    <input type='hidden' id="sort_url" value="{:U('TBrand/morefurniture', array('brand_id'=>$_GET['brand_id'],'cate_id'=>$_GET['cate_id'],'attr_value_id'=>$_GET['attr_value_id'],
+           'bprovince_id'=>$_GET['bprovince_id'],'bcity_id'=>$_GET['bcity_id'],'barea_id'=>$_GET['barea_id']))}">
+    <div id="jspage" class="jspage">
+        <?php echo $page ?>
+    </div>
+    <else/>
+    <div class="no_goods cf">
+        <div class="no_goods_left">
+            <h2>对不起！</h2>
+            <p>OH! sorry!</p>
+            <p>很抱歉，没有找到您要的商品。</p>
+            <p class="go_back_p">
+                <a href="javascript:history.back();">返回上一页</a>
+                <a href="/">返回首页</a>
+            </p>
+        </div>
+        <div class="no_goods_right">
+            <img src="__IMG__/noresult.png">
+        </div>
+    </div>
+    </if>  
+</div>
+<input type="hidden" id="bprovince_id" value="<?php echo $_GET['bprovince_id']?>" />
+<input type="hidden" id="bcity_id" value="<?php echo $_GET['bcity_id']?>" />
+<input type="hidden" id="barea_id" value="<?php echo $_GET['barea_id']?>" />
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+(function($){
+	define("web/morefurniture",function(require, exports, module){
+		var sort_url=$("#sort_url").val();
+		var manage = require("com/manage");
+		var Module = {
+			init: function(){
+				/*
+                **地区三级联动
+                */
+                seajs.use("com/adarray", function() {
+                    addressInit("bcmbProvince", "bcmbCity", "bcmbArea", $('#bprovince_id').val(), $('#bcity_id').val(), $('#barea_id').val());
+                });
+                /**更多
+                */
+                $(".js-mores").click(function(){
+					var me = $(this),
+						$dl = me.closest("dl"),
+						$fname = $(".js-fname", $dl);
+					if(me.hasClass("pack")){
+						me.removeClass("pack").html("更多<i></i>");
+						$fname.css("height", "30px");
+					}else{
+						me.addClass("pack").html("收起<i></i>");
+						$fname.css("height", "auto");
+					}
+				});
+                
+                 /*
+                **多选
+                */
+                $(".js-choose-more").click(function(){
+					var me = $(this),
+						$dl = me.closest("dl"),
+						$fname = $(".js-fname", $dl);
+                    me.addClass("choose-more-active");
+					$fname.css("height", "auto").attr("ismultiple", "yes").find("i").addClass("iactive1");
+					$(".js-mores", $dl).addClass("pack").html("收起<i></i>");
+                    $(".js-sBtn", $dl).show();
+                    if($(".goodsClass").find('a').hasClass('choose')){
+                        $(".goodsClass").find('a').removeClass('choose');
+                    }
+                });
+                $(".js-fname a").click(function(){
+                    var me = $(this),
+                        $dd = me.closest("dd");
+                    if($dd.attr("ismultiple") == "yes"){
+                        if($("i", this).hasClass("iactive2")){
+                            $("i", this).removeClass("iactive2");
+                        }else{
+                            $("i", this).addClass("iactive2");
+                        }
+                        return false;
+                    }else{
+                       // window.location = $(this).attr("href");
+                    }
+                });
+                /*
+                **确定
+                */
+                $('.js-choose-ok').click(function(){
+                    var me = $(this),
+                        $dl = me.closest("dl"),
+                        msg = $("dt", $dl).text().replace("：", ""),
+                        arr = [];
+                        $(".js-fname a", $dl).each(function(){
+                            if($("i", this).hasClass("iactive2")){
+                                var cid = $(this).data("cid");
+                                arr.push(cid);
+                            }
+                       });
+                       $(".js-strCid", $dl).val(arr.join(","))
+                       if(arr.length == 0){
+                            $.wrongMsg("请选择" + msg);
+                            return false;
+                       }
+                       $("form", $dl).submit();
+                });
+				/*
+                **取消
+                */
+                $(".js-choose-cancel").click(function(){
+					var me = $(this),
+						$dl = me.closest("dl"),
+						$fname = $(".js-fname", $dl);
+					$fname.css("height", "30px").attr("ismultiple", "no").find("i").removeClass("iactive1 iactive2");
+					$(".js-mores", $dl).removeClass("pack").html("更多<i></i>");
+					$(".js-sBtn", $dl).hide();
+					$(".js-choose-more", $dl).removeClass('choose-more-active');
+                });
+                
+				/*
+                **排序
+                */
+                var orderBy="<?php echo $_GET['orderBy']?>";
+                order('sale','salenum_asc','salenum_desc');
+                order('goods_click','goods_click_asc','goods_click_desc');
+                order('goods_time','goods_time_asc','goods_time_desc');
+                function order(a,asc,desc){
+                    var sale=$("#"+a);
+                    var order="<?php echo $_GET['orderBy']?>";
+                    if(order==asc){
+                        sale.find('i').addClass("asc");
+                        sale.attr("href",sort_url+"&orderBy="+desc);
+                    }else{
+                        sale.find('i').addClass("desc");
+                        sale.attr("href",sort_url+"&orderBy="+asc);
+                    }
+                }
+                /*
+                **商品所在地
+                */
+                $("#bcmbProvince,#bcmbCity,#bcmbArea").change(function(){
+					$("form").submit();
+                });                                  
+			}
+		};
+		module.exports = Module;
+	});
+	seajs.use("web/morefurniture", function(module){
+		module.init();
+	});
+})($);
+</script>
+</block>

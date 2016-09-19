@@ -1,0 +1,140 @@
+<extend name="Layouts:home" />
+<block name="title"><title>方案详情页-家装设计-{:C('site_name')}</title></block>
+<block name="head_css">
+<link href="__CSS__/homedesign.css" rel="stylesheet" type="text/css">
+</block>
+
+<block name="content">
+<div class="content detail-content">
+    <div class="house-type-info">
+        <img src="{$cover}" class="compony-img">
+        <div class="house-type">
+            <h2>{$decorate_info['title']}</h2>
+            <p class="p-house-price"><span>造 价</span> <span class="house-price">￥<em class="js-goodsAmount">{$decorate_info['cost']}</em></span></p>
+            <p>方案地址：<span>{$decorate_info['house_address']}</span></p>
+            <p>户型：<span>{$decorate_info['house_type']}</span></p>
+            <?php if (!empty($easypay)){?>
+                <div class="h-mortgate cf js-mortgate">
+                    <lable class="mortgate-lable">分期：</lable>
+                    <?php foreach ($easypay as $key => $value){?>
+                        <span class="easypay-slice js-easypaySlice">¥<label><?php echo $value['principal_interest']+$value['factorage'] . ' '; ?></label> *<label class="js-period"><?php echo $value ['period']; ?></label>期
+                            <div class="goods-fqg-information">
+                                <p>
+                                    含手续费：费率
+                                    <label class="goods-fqg-fl js-rate"><?php echo ' ' . $value['factorage_rate']*100;?></label>%， ¥<label class="goods-fqg-money"><?php echo $value['factorage']; ?></label>*<label class="goods-fqg-stage"><?php echo $value['period']; ?></label>期
+                                </p>
+                            </div>
+                        </span>
+                    <?php }?>
+                </div>
+            <?php }?>
+            <p class="go-buy"><a href="javascript:void(0);" class="js-easypayBtn">立即分期</a></p>
+        </div>
+    </div>
+    <div class="decoration-detail">
+        <div class="decoration-detail-left">
+            <h3>公司信息</h3>
+            <table border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="50px">名称：</td>
+                    <td>{$store_info['store_name']}</td>
+                </tr>
+                <tr>
+                    <td>地址：</td>
+                    <td>{$store_info['address']}</td>
+                </tr>
+                <tr>
+                    <td>电话：</td>
+                    <td><span>{$store_info['store_tel']}</span></td>
+                </tr>
+            </table>
+        </div>
+        <div class="decoration-detail-right">
+            <h3>装修详情</h3>
+            <h4>装修合同</h4>
+            <div class="img-box">
+                <?php if ($decorate_info['contract_pic']){
+                    foreach ($decorate_info['contract_pic'] as $item){ ?>
+                        <img src="<?php echo $item['m_pic'];?>">
+                    <?php }
+                }?>
+            </div>
+            <h4>设计方案</h4>
+            <div class="img-box">
+                <?php echo htmlspecialchars_decode($decorate_info['description']);?>
+            </div>
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>
+<input type="hidden" id="login_user" value="<?php echo $_SESSION['member_id'];?>" />
+<input type="hidden" id="plan_id" value="<?php echo $_GET['id']; ?>" />
+<input type='hidden' id='status' value = "<?php echo $credit_status; ?>" />
+<input type='hidden' id='is_active' value = "<?php echo $is_active; ?>" />
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+(function($){
+    define("homedesign/plandetail",function(require, exports, module){
+        var Module = {
+            init: function(){
+                /*
+                **选择分期
+                */
+                $(".js-easypaySlice").click(function(){
+                    $(this).addClass("using").siblings(".js-easypaySlice").removeClass("using");
+                });
+
+                /*
+                **立即分期按钮
+                */
+                $(".js-easypayBtn").on("click", function (){
+                    var status = $("#status").val() ||  0;
+                    var is_active = $("#is_active").val() || 0;
+                    if(!$("#login_user").val()){ //未登录
+                        window.location = "<?php echo urlShop('login', 'index'); ?>";
+                    }else if((is_active == 0)&&(status < 5)){ //到开通页面
+                        //区分小白  is_active = 0 status = 
+                        window.location = "<?php echo U('/shop/easypay/index', array('credit_type' => 1)); ?>";
+                    }else if(is_active == 0){ //到审核
+                        //未申请乐装申请乐购未激活
+                        window.location = "<?php echo U('/shop/easypay/activate', array('credit_type' => 1)); ?>";
+                    }else if(is_active == 1){
+                        //未申请申请乐购已激活
+                        //补充资料
+                        var $using = $(".js-mortgate .using");
+                        if(!$using.length){
+                            $.wrongMsg("请选择分期");
+                            return; 
+                        }
+                        var plan_id = $("#plan_id").val(),
+                        period = $(".js-period", $using).text();
+                        window.location = "/index.php?m=shop&c=easypay&a=moreMaterial&credit_type=1&plan_id="+plan_id+"&period="+period;
+                    }else{ //确认信息
+                        var $using = $(".js-mortgate .using");
+                        if(!$using.length){
+                            $.wrongMsg("请选择分期");
+                            return; 
+                        }
+                        var plan_id = $("#plan_id").val(),
+                            period = $(".js-period", $using).text();
+                        var links = {
+                            act             : "t_homedesign",
+                            op              : "buy",
+                            plan_id         : plan_id, //方案id
+                            period          : period //期数
+                        }
+                        window.location = gConfig.apiurl + "/index.php?" + $.param(links);
+                    }
+                });
+            }
+        }
+        module.exports = Module;
+    });
+    seajs.use("homedesign/plandetail", function(module){
+        module.init();
+    });
+})($);
+</script>
+</block>

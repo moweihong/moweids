@@ -1,0 +1,106 @@
+/*
+************ author: zhouquan
+************ 登录
+*/
+input:-webkit-autofill{-webkit-box-shadow:0 0 0px 1000px white inset;}
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,code,form,input,p,iframe{margin:0;padding:0;word-break:break-all;word-wrap:break-word;}
+html{background-color:#fff;}
+body{position:relative;min-height:100%;font:12px/20px '\5FAE\8F6F\96C5\9ED1','\5b8b\4f53',arial,tahoma, Srial, helvetica, sans-serif;color:#666;}
+h1,h2,h3{font-weight:normal;}
+img{border:0;vertical-align:top;}
+a{text-decoration:none;color:#3da3ea;transition:color,background-color .2s ease-in-out;}
+a:hover{text-decoration:underline;transition:color .2s ease-in-out;}
+a, button, input, :focus, :visited, :active{outline:none;}
+li{list-style:none;}
+.v-2{vertical-align:-2px;}
+.rel{position:relative;}
+.fl{display:inline;float:left;}
+.fr{display:inline;float:right;}
+.dis-none{display:none;}
+.cf{*zoom:1;}
+.cf:after, .cf:before{display:block;height:0;line-height:0;font-size: 0;clear:both;visibility:hidden;content:".";}
+.mt5{margin-top:5px;}
+.mt10{margin-top:10px;}
+.mt50{margin-top:50px;}
+.tc{text-align:center;}
+.fs14{font-size:14px;}
+.fs20{font-size:20px;}
+.cor-9{color:#999;}
+.cor-orange{color:#ffa800;}
+.wrapper{width:1280px;margin:0 auto;}
+
+/*错误提示*/
+.error-msg{display:none;z-index:2;position:absolute;left:30px;top:60px;line-height:20px;padding:1px 5px;color:#fff;font-size:12px;font-weight:normal;font-style:normal;text-decoration:none;text-align:center;border-radius:3px;border:1px solid #ff8400;box-shadow:1px 1px 3px rgba(0, 0, 0, 0.3);background-color:#ff9900;}
+.errow-arrow{position:absolute;left:20px;top:-12px;width:0;height:0;border:6px solid transparent;border-width:5px 2px 6px 6px;border-bottom-color:#ff9900;}
+
+/*头部*/
+.header-wrap{padding:20px 0;}
+
+/*底部*/
+.foot-faq{display:none;}
+.footer{color:#575352;text-align:center;padding:30px 0;background:#dcdcdc;overflow: hidden;}
+.footer p{word-spacing:5px;padding-bottom:10px;}
+.footer a{color:#666;}
+
+/*按钮*/
+.red-btn{width:135px;height:46px;line-height:45px;font-size:18px;color:#fff;text-align:center;border-radius:6px;background-color:#f13755;}
+.red-btn:hover{text-decoration:none;background-color:#cc102e;}
+.orange-btn{display:block;width:100%;height:26px;padding:10px 0;color:#fff;font:22px/24px '\5FAE\8F6F\96C5\9ED1','\5b8b\4f53',arial,tahoma, Srial, helvetica, sans-serif;text-align:center;border-radius:10px;border:none 0;box-shadow:0 1px 1px #b28835;background-color:#ffaa00;cursor:pointer;}
+.orange-btn:hover{text-decoration:none;background-color:#de9503;}
+.disable-btn, .disable-btn:hover{color:#fff;background-color:#808080;cursor:not-allowed;box-shadow:none;}
+input.orange-btn{height:46px;}
+
+/*
+*******登录页
+*/
+.login-bg{background-color:#f4af29;}
+.login-banner{position:relative;height:610px;background:url(../images/bg_login.png) no-repeat center center #f4af29;}
+.login-from{position:absolute;right:120px;top:65px;width:345px;height:450px;padding:20px 24px;border-radius:10px;box-shadow:0 6px 5px rgba(0,0,0,.2);background-color:#fdefd4;}
+.login-from h2{line-height:40px;margin-bottom:30px;font-size:22px;color:#333;}
+.inp-box .line{position:relative;padding:7px 0;}
+.inp-box .line .text{width:100%;height:18px;padding:12px 0;font:14px/18px '\5FAE\8F6F\96C5\9ED1','\5b8b\4f53',arial,tahoma, Srial, helvetica, sans-serif;border:none;background-color:transparent;}
+.inp-box .long-inp, .inp-box .short-inp{display:inline-block;width:288px;height:44px;padding:0 10px 0 45px;border-radius:5px;border:solid 1px #dedede;background-image:url(../images/ic_login.png);background-repeat:no-repeat;background-color:#fff;}
+.inp-box .short-inp{width:125px;}
+.ic-username{background-position:0 -178px;}
+.ic-password{background-position:0 -218px;}
+.ic-vcode{background-position:0 -258px;}
+
+.net-cooperation{padding-top:50px;}
+.show-text{height:20px;margin-bottom:20px;border-top:solid 2px #999;}
+.show-text span{position: relative;top:-12px;left:110px;display:inline-block;width:130px;color:#999;text-align:center;background-color:#fdefd4;}
+.account-list a{display:inline-block;width:50px;height:50px;line-height:0;font-size:0;margin:0 15px;background-image:url(../images/ic_login.png);background-repeat:no-repeat;vertical-align:middle;}
+.ic-qq{background-position:0 0;}
+.ic-wx{background-position:0 -60px;}
+.ic-sina{background-position:0 -120px;}
+
+/*
+*******注册页
+*/
+.register-box, .find-password-box{padding:40px;border-top:1px solid #dedede;}
+.reg-title{height:45px;line-height:40px;text-align:center}
+.reg-title span{display:inline-block;width:145px;margin:0 20px;font-size:18px;}
+.reg-title span em{display:inline-block;width:18px;height:18px;margin-right:5px;line-height:18px;font-style:normal;color:#fff;font-size:12px;border-radius:50%;background-color:#dedede;vertical-align:middle;}
+.reg-title .cur{color:#ffaa00;border-bottom:solid 3px #ffaa00;}
+.reg-title .cur em{background-color:#ffaa00;}
+.reg-section{width:880px;min-height:510px;margin:-4px auto 95px auto;border-top:2px solid #dedede;border-bottom:1px solid #dedede;}
+.reg-form{width:450px;margin:0 auto;padding:40px 0;}
+.reg-form .inp-box .line{padding:15px 0;}
+.reg-form .inp-box .long-inp{width:393px;}
+.reg-form .inp-box .short-inp{width:200px;}
+.reg-form .inp-box .red-btn{width:170px;}
+.ic-phone{background-position:0 -306px;}
+.ic-newpasswd{background-position:0 -350px;}
+
+.reg-succ{padding-top:80px;text-align:center;}
+.reg-succ h3{line-height:40px;font-size:22px;color:#333333;}
+.reg-succ .orange-btn{width:380px;margin:50px auto 30px;}
+
+/*
+*******找回密码
+*/
+.notice{width:430px;padding:8px 10px;margin:70px 0 10px 220px;border:solid 1px #ffd06e;background-color:#fffff0;}
+.ic-succ{display:inline-block;width:20px;height:20px;margin-right:5px;background:url(../images/ic_member.png) no-repeat -60px -392px;vertical-align:middle;}
+.reset-ul li{padding:15px 0 15px 220px;}
+.reset-ul .handle{display:inline;float:left;width:220px;line-height:40px;margin-left:-220px;font-size:14px;text-align:right;}
+.reset-ul .text{width:410px;height:44px;padding:0px 20px;font:14px/18px '\5FAE\8F6F\96C5\9ED1','\5b8b\4f53',arial,tahoma, Srial, helvetica, sans-serif;border:none;border-radius:5px;border:solid 1px #dedede;background-color:transparent;}
+.reset-ul .orange-btn{width:450px;}

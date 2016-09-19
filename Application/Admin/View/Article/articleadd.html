@@ -1,0 +1,52 @@
+<include file="Application/Common/Layout/head.html" /> 
+<div class="am-cf admin-main">
+<include file="Application/Common/Layout/left.html" />
+  <!-- content start -->
+  <div class="admin-content">
+    <div class="admin-content-body">
+      <div class="am-cf am-padding am-padding-bottom-0">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">文章管理</strong> / <small>Article  class add</small></div>
+      </div>
+
+      <hr/>
+
+      <div class="am-g">
+        <div class="am-u-sm-12 am-u-md-4 am-u-md-push-8">
+         
+        </div>
+		
+        <div class="am-u-sm-12 am-u-md-8 am-u-md-pull-4">
+        	<form action="" method="post">
+        	标题：<input type="text" name="article_title" value="<?php echo $article_array['article_title'];?>"><br />
+        	所属分类：<select name="search_ac_id" id="search_ac_id" class="">
+              <option value="">请选择...</option>
+              <?php if(!empty($output['parent_list']) && is_array($output['parent_list'])){ ?>
+              <?php foreach($output['parent_list'] as $k => $v){ ?>
+              <option <?php if($article_array['ac_id'] == $v['ac_id']){ ?>selected='selected'<?php } ?> value="<?php echo $v['ac_id'];?>"><?php echo $v['ac_name'];?></option>
+              <?php } ?>
+              <?php } ?>
+            </select><br />
+         	 链接：<input type="text" name="article_url" value="<?php echo $article_array['article_url'];?>"><br />
+         	显示：<input type="radio" <?php if($article_array['article_show']==1){ ?> checked='checked'<?php }?> value="1" name="article_show">是<input type="radio"  <?php if($article_array['article_show']==0){ ?> checked='checked'<?php }?> value="0" name="article_show">否<br />
+         	排序：<input type="text" name="article_sort" value="255"><br />
+        	<input type="hidden" name="act" value="<?php echo $act;?>">
+        	<?php if(isset($article_id)){?>
+        	<input type="hidden" name="article_id" value="<?php echo $article_id;?>">
+        	<?php } ?>
+        	<script id="editor" type="text/plain" name='article_content'><?php echo $article_array['article_content'];?></script>
+        	<input type="submit" value="提交">
+    			</form>
+        </div>
+      </div>
+    </div>
+ 
+
+  </div>
+  <!-- content end -->
+
+</div>
+<include file="Application/Admin/View/foot.html" /> 
+<script>
+var ue=UE.getEditor('editor')
+
+</script>

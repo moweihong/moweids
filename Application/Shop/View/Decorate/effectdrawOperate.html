@@ -1,0 +1,170 @@
+<extend name="Layouts:seller" />
+<block name="title"><title><?php if ($_GET['id'] > 0 ){?>编辑<?php }else{?>添加<?php }?>效果图-卖家中心-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="content-wrap" style="padding:10px 0;">
+	<div class="tit-line">
+		<h2><?php if ($_GET['id'] > 0 ){?>编辑<?php }else{?>添加<?php }?>效果图</h2>
+	</div>
+	<form action="javascript:void(0);" id="form" class="mt20" method="post" autocomplete="off">
+		<input type="hidden" id="decorateID" name="id" value="<?php echo $decorate_effectdraw_info['draw_list_id'];?>"/>
+		<ul class="list">
+			<li class="cf">
+				<label class="handle" for="title"><em class="cor-red">*</em>标题：</label>
+				<div class="rel">
+					<input type="text" id="title" name="title" class="text" placeholder="请输入标题" maxlength="30" value="<?php echo $decorate_effectdraw_info['title'];?>" required />
+					<span show="title.check" class="error-msg">
+                        <em class="errow-arrow"></em>
+                        请输入标题
+                    </span>
+				</div>
+			</li>
+			<li class="cf">
+				<label class="handle" for="title"><em class="cor-red">*</em>风格：</label>
+				<div class="rel">
+					<?php if (!empty($type_list)){
+						foreach ($type_list as $type){ ?>
+							<label class="mr20">
+								<input type="radio" value="<?php echo $type['id'];?>" name="type_id" <?php if ($decorate_effectdraw_info['type_id'] == $type['id']){echo 'checked';}?>>
+								<?php echo $type['type_name'];?>
+							</label>
+						<?php }
+					}?>
+				</div>
+			</li>
+			<li class="cf">
+				<label class="handle"><em class="cor-red">*</em>效果图：</label>
+				<div class="h30 cf">
+					<a href="javascript:void(0);" id="coverFileBtn" class="btn fl">上传图片</a>
+					<span class="cor-9 ml10 fl">(图片格式GIF、JPG、JPEG、PNG，大小200K以内，建议尺寸594px*474px)</span>
+				</div>
+				<div id="coverFileList" class="cf">
+					<?php if (!empty($decorate_effectdraw_info['pic_list'])){
+						$coverpage = $decorate_effectdraw_info['pic_list'];
+						foreach ($coverpage as $item){
+							?>
+							<div class="file-item thumbnail upload-state-done">
+								<p class="file-panel" style="height: 0px;">
+									<a class="icon-view js-viewImg" title="预览"></a>
+									<a class="icon-cancel js-cancel" title="删除"></a>
+								</p>
+								<img src="<?php echo $item['pic_arr']['s_pic'];?>" data-rel="<?php echo $item['pic_arr']['m_pic'];?>" width="200px" height="200px" />
+								<p class="info"><label><input type="radio" value="1" class="ver-2" name="cover" <?php if ($item['is_cover'] == 1){?>checked<?php }?>/> 设为封面</label></p>
+							</div>
+						<?php }
+					}?>
+				</div>
+			</li>
+			<li class="cf mt20">
+				<label class="handle"></label>
+				<button class="btn btn-blue js-publishBtn">发布</button>
+			</li>
+		</ul>
+	</form>
+</div>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+	(function($){
+		define("design/effectdraw_operate",function(require, exports, module){
+			require("jquery/layer");
+			require("jquery/form");
+			var decorateID = $("#decorateID").val();
+			var upload = require("jquery/upload");
+			var manage = require("com/manage");
+			var Module = {
+				init: function(){
+					var form = $("#form").form();
+					/*
+					 * 封面图片上传
+					 * */
+					upload.base({
+						pickID: "coverFileBtn",
+						objID: "coverFileList",
+						storage: "solution",
+						isCover : true,
+						fileNumLimit: "300"
+					});
+					/*
+					 * 保存
+					 * */
+					$("#container").on("click", ".js-publishBtn", function(){
+						if(!form.valid()){
+							$.wrongMsg("必填项不能为空");
+							return false;
+						}
+						var	contract_pic = [],
+							data = $("#form").serialize();
+						data = manage.serializeJson(data);
+						if($("input[name=type_id]").length && $("input[name=type_id]:checked").length == 0){
+							$.wrongMsg("请选择风格");
+							return;
+						}
+						if($("#coverFileList .file-item").length < 1){
+							$.wrongMsg("请上传效果图");
+							return;
+						}
+						$("#coverFileList .file-item").each(function(){
+							var s_pic = $("img", this).attr("src") || "",
+								m_pic = $("img", this).data("rel") || "",
+								$input = $(".info input", this);
+							if($input.is(":checked")){
+								var fengmian = 1;
+							}else{
+								var fengmian = 0;
+							}
+							var contract_pic_obj = {
+								s_pic: s_pic,
+								m_pic: m_pic,
+								fengmian: fengmian
+							}
+							contract_pic.push(contract_pic_obj);
+						});
+
+						data.pic = contract_pic;
+						var pid = parent.layer.load(360);
+						manage.ajax({
+							url: gConfig.apiurl + "/Decorate/effectdrawOperate",
+							data: data,
+							success: function(result) {
+								layer.close(pid);
+								var resultText = result.resultText || {};
+								if(result.code == 1){
+									if(!decorateID){ //发布方案
+										layer.confirm('<div class="tc" style="width:350px;"><h3 class="fs16 cor-black">效果图发布成功！</h3></div>',
+											{
+												btn: ['继续发布', '我的效果图'] //按钮
+											}, function () {
+												location.reload();
+											}, function () {
+												window.location = gConfig.apiurl + "/Decorate/effectdraw";
+											}
+										);
+									}else{ //编辑方案
+										layer.confirm('<div class="tc" style="width:350px;"><h3 class="fs16 cor-black">效果图编辑成功！</h3></div>',
+											{
+												btn: ['继续编辑', '我的效果图'] //按钮
+											}, function () {
+												location.reload();
+											}, function () {
+												window.location = gConfig.apiurl + "/Decorate/effectdraw";
+											}
+										);
+									}
+								}else{
+									$.wrongMsg(resultText.message || "操作失败");
+								}
+							}
+						});
+					});
+				}
+			}
+			module.exports = Module;
+		});
+		seajs.use("design/effectdraw_operate", function(module){
+			module.init();
+		});
+	})($);
+</script>
+</block>

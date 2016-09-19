@@ -1,0 +1,97 @@
+<extend name="Layouts:seller" />
+<block name="title"><title>云端市场-卖家中心-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="content-wrap goods-in-clound">
+	<div class="tit-line cf">
+		<h2 class="fl">云端市场</h2>
+        <form id="jueryForm" action="/Vendor/goodsInCloud" method="get" class="mt5 fr">
+        	<input type="text" class="text ml10 fl js-searchText" name='kword' value="<?php echo $_GET['kword'];?>" placeholder="按品牌家具厂名称搜索" />
+            <button  class="btn btn-blue btn-small js-searchBtn" >搜索</button>
+        </form>
+	</div>
+    <ul class="goods-clound-list mt30">
+        <?php foreach ($list as $val):?>
+    	<li class="cf" data-id="<?php echo $val['store_id'];?>" data-set="<?php echo $val['dealer_verify'];?>">
+            <span class="pic fl"><img src="<?php echo $val['store_label'];?>" width="200" height="80" alt="<?php echo $val['store_name'];?>" /></span>
+            <div class="info fl">
+            	<h3><?php echo $val['store_name'];?></h3>
+                <p>
+                    在线客服：
+                    <?php if(!empty($val['store_qq'])){?>
+                        <a href="http://wpa.qq.com/msgrd?v=3&uin=<?php echo $val['store_qq'];?>&site=qq&menu=yes" title="QQ: <?php echo $val['store_qq'];?>"><img border="0" src="http://wpa.qq.com/pa?p=2:<?php echo $val['store_qq'];?>:52" style=" vertical-align: middle;"/></a>
+                    <?php }?>
+                    <?php if(!empty($val['store_ww'])){?>
+                        <a  href="http://amos.im.alisoft.com/msg.aw?v=2&amp;uid=<?php echo $val['store_ww'];?>&site=cntaobao&s=1&charset=<?php echo CHARSET;?>"><img border="0" src="http://amos.im.alisoft.com/online.aw?v=2&uid=<?php echo $val['store_ww'];?>&site=cntaobao&s=2&charset=<?php echo CHARSET;?>" style=" vertical-align: middle;"/></a>
+                    <?php }?>
+                </p>
+                <p>客服电话：<?php echo $val['store_tel'];?></p>
+            </div>
+            <div class="intro fl">
+                <p class="mt5 cf">
+                	<cite>介绍：</cite>
+                    <?php echo $val['store_description'];?>
+				</p>
+            </div>
+            <?php if (empty($val['friend'])):?>
+                <a href="javascript:void(0);" class="visit-btn fl js-applyBtn">申请经销商</a>
+            <?php elseif($val['friend']['c_type'] == 0):?>
+                <a href="javascript:void(0);" class="visit-btn btn-disable fl">审核中</a>
+            <?php elseif($val['friend']['c_type'] == 2):?>
+                <a href="javascript:void(0);" class="visit-btn fl js-applyBtn">被拒绝，再次申请</a>
+            <?php elseif($val['friend']['is_look'] == 0):?>
+            <a href="{:U('ShowFactory/index',array('store_id'=>$val['store_id']))}" class="publish-btn fl">进店看看</a>
+            <?php else:?>
+                <a href="javascript:void(0);" class="visit-btn btn-disable fl">已关闭</a>
+            <?php endif;?>
+        </li>
+        <?php endforeach;?>
+    </ul>
+    <div id="jspage" class="jspage">
+       <?php echo $page; ?>
+    </div>
+</div>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+(function($){
+	define("s/goodsInClound",function(require, exports, module){
+		require("jquery/layer");
+		var manage = require("com/manage");
+		var Module = {
+			init: function(){
+				/*
+				 * 申请经销商
+				 * */
+				$("#container").on("click", ".js-applyBtn", function(){
+					var me = $(this),
+					 	$li = me.closest("li"),
+						id = $li.data("id"),
+						set = $li.data("set");
+					layer.confirm("确定要申请成为该品牌的经销商？", function(index){
+						manage.getApi("/Vendor/dealerSendFactory", {
+							id	: id,
+							set	: set
+						}, function(){
+							if(set == 0){ //需要审核
+								me.text("审核中").addClass("btn-disable").removeClass("js-applyBtn");
+								layer.alert('您的申请已提交，请等待品牌商审核。');
+							}else{
+                                var href = gConfig.apiurl + "/index.php?m=shop&c=ShowFactory&a=index&store_id=" + id;
+								me.attr("href", href).text("进店看看").addClass("publish-btn").removeClass("visit-btn js-applyBtn");
+								layer.alert('您的申请已通过，快进店看看吧。');
+							}
+						});
+					});
+				});
+			}
+		}
+		module.exports = Module;
+	});
+	seajs.use("s/goodsInClound", function(module){
+		module.init();
+	});
+})($);
+</script>
+</block>

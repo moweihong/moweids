@@ -1,0 +1,195 @@
+<include file="Application/Common/Layout/head.html" /> 
+<STYLE>
+	.j-shop-inpbox{width:200px;}
+	.j-shop-inpbox input{width:200px}
+</STYLE>
+<div class="am-cf admin-main">
+<include file="Application/Common/Layout/left.html" /> 
+
+  <!-- content start -->
+  <div class="admin-content">
+    <div class="admin-content-body">
+      <div class="am-cf am-padding am-padding-bottom-0">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">商品管理</strong> / <small>Goods</small></div>
+      </div>
+
+      <hr>
+
+      <div class="am-g">
+        <div class="am-u-sm-12">
+          <!--<div class="am-btn-toolbar">
+            <div class="am-btn-group am-btn-group-xs">
+              <button onclick="window.location='/Admin/Goods/brand?p={$Think.get.p}&act=add'" type="button" class="am-btn am-btn-default"><span class="am-icon-plus"></span>新增</button>
+            </div>
+          </div>-->
+		  <a class="middlebt" href='/Admin/Goods/goods'>所有商品</a>
+		  <a class="middlebt" href='/Admin/Goods/goods?type=wgxj'>违规下架</a>
+	      <a class="middlebt" href='/Admin/Goods/goods?type=dsh'>等待审核</a>
+	      <a class="middlebt" href='/Admin/Goods/goods_set'>商品设置</a>
+		  <small>&nbsp;注：分类筛选许选择到具体子分类，无法按大分类筛选。</small>
+        </div>
+      </div>
+	  
+	<!--筛选条件 start-->
+	 <form method="get" name="formSearch" id="formSearch">
+      <div class="j-shop-selectwrap clearfix am-padding am-padding-bottom-0">
+          <div class="j-shop-inpbox">
+            <select data-am-selected="{btnSize: 'sm'}" name="brand">
+				<option value="0">品牌</option>
+				<volist name="brand" id='b'>
+					<option value="{$b.brand_id}" <?php if($_GET['brand']==$b['brand_id']){echo 'selected';}?>>{$b.brand_name}</option>
+				</volist>
+            </select>
+          </div><!--ok-->
+          <div class="j-shop-inpbox">
+            <select data-am-selected="{btnSize: 'sm'}" name="cate">
+            <option value="0">分类</option>
+			<volist name="cate" id='c'>
+				<option value="{$c.gc_id}" <?php if($_GET['cate']==$c['gc_id']){echo 'selected';}?>><?php echo str_repeat('+',$c['level']*6),'</span>'; ?>{$c.gc_name}</option>
+            </volist>
+            </select>
+          </div><!--ok-->
+		  
+		  <if condition="$Think.get.type eq ''">
+          <div class="j-shop-inpbox">
+            <select data-am-selected="{btnSize: 'sm'}" name="state">
+            <option value="0" selected='selected'>上架</option>
+            <option value="x0" <?php if($_GET['state']=='x0'){echo 'selected';}?>>仓库中</option>
+            <option value="1"  <?php if($_GET['state']==1){echo 'selected';}?>>出售中</option>
+            <option value="10" <?php if($_GET['state']==10){echo 'selected';}?>>违规下架</option>
+            </select>
+          </div>
+		  </if>
+		  
+		  <if condition="$Think.get.type eq ''">
+		   <div class="j-shop-inpbox">
+            <select data-am-selected="{btnSize: 'sm'}" name="verify">
+            <option value="0" selected='selected'>审核</option>
+            <option value="1"  <?php if($_GET['verify']=='1'){echo 'selected';}?>>通过</option>
+            <option value="v0" <?php if($_GET['verify']=='v0'){echo 'selected';}?>>未通过</option>
+            <option value="10" <?php if($_GET['verify']=='10'){echo 'selected';}?>>待审核</option> 
+            </select>
+          </div>
+		  </if>
+      </div>
+	  
+	   <div class="j-shop-selectwrap clearfix am-padding am-padding-bottom-0">
+		  <div class="j-shop-inpbox">
+            <input type="text" name="goods_name" value="{$Think.get.goods_name}" class="am-form-field" placeholder="商品名称" />
+          </div><!--ok-->
+		  <div class="j-shop-inpbox">
+            <input type="text" name="store" value="{$Think.get.store}" class="am-form-field" placeholder="所属店铺" />
+          </div><!--ok-->
+		  <if condition="$Think.get.type eq ''">
+		   <div class="j-shop-inpbox">
+            <input type="text" name="common" value="{$Think.get.common}"  class="am-form-field" placeholder="平台货号" />
+           </div><!--ok-->
+		  </if>
+		  <input type="hidden" name="type" value="{$Think.get.type}">
+		  <div class="j-shop-inpbox"><button class="am-btn am-btn-primary" type="submit">搜索</button></div>
+		   
+	   </div>
+    </form>
+	
+		
+	 
+	  
+	  
+      <!--筛选条件 end-->
+
+      <div class="am-g">
+        <div class="am-u-sm-12">
+ 
+            <table class="am-table am-table-striped am-table-hover table-main">
+              <thead>
+              <tr>
+                <!--<th class="table-check"><input type="checkbox" /></th>-->
+				<th class="table-id">ID</th>
+				<th class="table-title">平台货号</th>
+				<th class="table-title" width="20%">商品名称</th>
+				<th class="table-type" >分类</th>
+				<th class="table-type" >品牌</th>
+				<th class="table-type" >店铺</th>
+				<th class="table-author am-hide-sm-only">价格</th>
+				<th class="table-title">库存</th>
+				<th class="table-title">商品状态</th>
+				<th class="table-title">审核状态</th>
+				<th class="table-title">发布时间</th>
+				<th class="table-set">操作</th>
+              </tr>
+              </thead>
+              <tbody>
+			  <volist name="list" id="l">
+              <tr>
+                <!--<td><input type="checkbox" /></td>-->
+                <td>{$i}</td>
+                <td><a href="#">{$l.goods_commonid}</a></td>
+				<td>{$l.goods_name}</td>
+				<td>【{$l.gname}】{$l.gc_name}</td>
+				<td>{$l.brand_name}</td>
+				<td>{$l.store_name}</td>
+				<td>{$l.goods_price}</td>
+				<td>{$l.goods_storage}</td>
+				<td>
+					<if condition="$l.gs eq 0">
+						仓库中
+					<elseif condition="$l.gs eq 1"/>
+						出售中
+					<elseif condition="$l.gs eq 10"/>
+						违规下架
+					</if>
+				</td>
+				<td>
+					<if condition="$l.gv eq 0">
+						未通过
+					<elseif condition="$l.gv eq 1"/>
+						通过
+					<elseif condition="$l.gv eq 10"/>
+						等待审核
+					</if>
+				</td>
+                <td class="am-hide-sm-only">
+					{$l.gtime|date="Y-m-d H:i:s",###}
+				</td>
+                <td>
+                  <div class="am-btn-toolbar">
+                    <div class="am-btn-group am-btn-group-xs">
+					  <if condition="$Think.get.type eq 'dsh'">
+						<button onclick="window.location='/Admin/Goods/goods_verify?type=yes&id={$l.goods_commonid}'" class="am-btn am-btn-default am-btn-xs"><span class="am-icon-check-circle-o"></span> 审核</button>
+						<button onclick="window.location='/Admin/Goods/goods_verify?type=no&id={$l.goods_commonid}'" class="am-btn am-btn-default am-btn-xs"><span class="am-icon-remove"></span> 拒绝</button>
+					  </if>
+                      
+					  <if condition="$Think.get.type eq '' ">
+					  <button onclick="window.location='/Admin/Goods/goods_down?id={$l.goods_commonid}'" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-close"></span> 违规下架</button>
+					  </if>
+			 
+					 <a href="/index.php?a=shop&c=goods&a=index&goods_id={$l.goods_id}" target='_blank'  class="am-btn am-btn-default am-btn-xs am-text-secondary" style='background:#fff'><span class="am-icon-eye"></span> 查看</a>
+			 
+					</div>
+                  </div>
+                </td>
+              </tr>
+			</volist>
+			  
+              
+              </tbody>
+            </table>
+			
+            <div class="am-cf">
+              共 {$count} 条记录，每页显示15条记录
+              <div class="am-fr">
+                {$page} 
+              </div>
+            </div>
+            <hr />
+     
+        </div>
+
+      </div>
+    </div>
+ 
+
+  </div>
+  <!-- content end -->
+</div>
+<include file="Application/Common/Layout/foot.html" /> 

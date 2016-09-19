@@ -1,0 +1,240 @@
+<include file="Application/Common/Layout/head.html" />
+<style type="text/css">
+    label{font-weight: normal}
+    .am-form-group{ margin-bottom: 2rem;}
+    .am-form-horizontal .am-form-label{padding-top: 0.3rem}
+</style>
+<div class="am-cf admin-main">
+<include file="Application/Common/Layout/left.html" /> 
+  <!-- content start -->
+  <div class="admin-content">
+    <div class="admin-content-body">
+      <div class="am-cf am-padding am-padding-bottom-0">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">广告位2<?php echo $_GET['ap_id']?'编辑':'添加';?></strong> / <small>advertise_position <?php echo $_GET['ap_id']?'edit':'add';?></small></div>
+      </div>
+
+      <hr/>
+
+      <div class="am-g" style="margin-top: 50px;">
+        <div class="am-u-sm-12 am-u-md-4 am-u-md-push-8">
+
+        </div>
+
+        <div class="am-u-sm-12 am-u-md-8 am-u-md-pull-4">
+          <form class="am-form am-form-horizontal" action="" method="post" enctype="multipart/form-data">
+              <!--名称 start-->
+              <div class="am-form-group">
+                  <label for="ap_name" class="am-u-sm-3 am-form-label">名称:</label>
+                  <div class="am-u-sm-9">
+                      <input type="text" id="ap_name" name="ap_name" value="{$info.ap_name}" placeholder="请输入广告位名称">
+                      <input type="hidden" id="old_gc_name" name="ap_id" value="{$info.ap_id}" >
+                  </div>
+              </div>
+              <!--名称 end-->
+
+              <!--类别 start-->
+              <div class="am-form-group">
+                  <label class="am-u-sm-3 am-form-label">类别:</label>
+                  <div class="am-u-sm-9">
+                      <select name="ap_class" id="ap_class">
+                          <option value="0" <?php if($info['ap_class']==0) echo "selected";?> selected='selected'>图片</option>
+                          <option value="1" <?php if($info['ap_class']==1) echo "selected";?> >文字</option>
+                          <option value="3" <?php if($info['ap_class']==3) echo "selected";?>>Flash</option>
+                      </select>
+                  </div>
+              </div>
+              <!--类别 end-->
+
+              <!--是否启用 start-->
+              <div class="am-form-group">
+                  <label class="am-u-sm-3 am-form-label">是否启用:</label>
+                  <div class="am-u-sm-9">
+                      <input type="radio" name="is_use"  value="1" <?php if($info['is_use']!=0) echo "checked";?>> <label class="margin-right20">启用</label>
+                      <input type="radio" name="is_use" value="0" <?php if($info['is_use']==0) echo "checked";?>> <label>不启用</label>
+                  </div>
+              </div>
+              <!--是否启用 end-->
+
+              <!--展示方式 start-->
+              <div class="am-form-group">
+                  <label class="am-u-sm-3 am-form-label">展示方式:</label>
+                  <div class="am-u-sm-9">
+                      <input type="radio" name="ap_display"  value="1" <?php if($info['ap_display']==1) echo "checked";?>> <label class="margin-right20">可以发布多条广告并随机展示</label>
+                      <input type="radio" name="ap_display" value="2"  <?php if($info['ap_display']!=1) echo "checked";?>> <label> 只允许发布并展示一条广告</label>
+                  </div>
+              </div>
+              <!--展示方式 end-->
+
+              <!--宽度 start-->
+              <div class="am-form-group" id="ap_width_media">
+                  <label for="ap_width_media_input" class="am-u-sm-3 am-form-label">宽度:</label>
+                  <div class="am-u-sm-9">
+                      <input type="text" value="{$info.ap_width}" name="ap_width"  class="txt" id="ap_width_media_input" style="display: inline-block; width:100px; margin-right: 10px" /> 像素
+                  </div>
+              </div>
+              <!--宽度 end-->
+
+              <!--高度 start-->
+              <div class="am-form-group" id="ap_height">
+                  <label for="ap_height_input" class="am-u-sm-3 am-form-label">高度:</label>
+                  <div class="am-u-sm-9">
+                      <input type="text" value="{$info.ap_height}" name="ap_height" class="txt" id="ap_height_input" style="display: inline-block; width:100px; margin-right: 10px" />像素
+                  </div>
+              </div>
+              <!--高度 end-->
+
+              <!--字数 start-->
+              <div class="am-form-group" id="ap_width_word">
+                  <label for="ap_width_word_input" class="am-u-sm-3 am-form-label">字数:</label>
+                  <div class="am-u-sm-9">
+                      <input type="text"  name="ap_width_word"  class="txt" id="ap_width_word_input" value='{$info.ap_width_word}' style="display: inline-block; width:100px; margin-right: 10px" /> 个字
+                  </div>
+              </div>
+              <!--字数 end-->
+
+
+
+              <!--广告位图片 start-->
+              <div class="am-form-group" id="default_pic">
+                  <label class="am-u-sm-3 am-form-label">广告位图片:</label>
+                  <div class="am-u-sm-9">
+                      <!--上传 start-->
+                      <div class="cf">
+                          <a href="javascript:void(0);" id="defaultcontentBtn"  class="am-btn am-btn-default mr30 fl">上传图片</a>
+                          <span >(注：支持格式gif,jpg,png)</span>
+                      </div>
+                      <div id="defaultcontentList" class="cf">
+
+                              <div  class="file-item thumbnail upload-state-done" >
+                                  <p class="file-panel"><a class="icon-view js-viewImg" title="预览"></a></p>
+                                  <img  src="<?php $arr_img=explode(',',$info['default_content']);echo $arr_img[0];?>" data-rel="<?php $arr_img=explode(',',$info['default_content']);echo $arr_img[1];?>" />
+                              </div>
+
+                      </div>
+                      <!--上传 end-->
+                      <!--<input type="file" name="default_content" id="change_default_pic" size="30" hidefocus="true" nc_type="change_default_pic">-->
+                      <!--<span class="admin-tips">当没有广告可供展示时使用的默认图片,系统支持的图片格式为:gif,jpg,jpeg,png</span>-->
+                  </div>
+              </div>
+              <!--广告位图片 end-->
+
+              <!--广告位默认文字 start-->
+              <div class="am-form-group" id="default_word">
+                  <label for="user-name" class="am-u-sm-3 am-form-label">广告位默认文字:</label>
+                  <div class="am-u-sm-9">
+                      <input type="text" value="{$info.default_word}" name="default_word" style="  margin-right: 10px" class="txt" />
+                      <span class="admin-tips">当没有广告可供展示时使用的默认文字</span>
+                  </div>
+              </div>
+              <!--广告位默认文字 end-->
+
+              <!--提交按钮 start-->
+              <div class="am-form-group">
+                  <label class="am-u-sm-3 am-form-label"></label>
+                  <div class="am-u-sm-9">
+                      <input type="button" class="am-btn am-btn-primary" id='subForm' value='提交'>
+                  </div>
+              </div>
+              <!--提交按钮 end-->
+
+            <input type="hidden" name="adv_content" />
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+    <footer class="admin-content-footer">
+      <hr>
+      <p class="am-padding-left">© 2014 AllMobilize, Inc. Licensed under MIT license.</p>
+    </footer>
+
+  </div>
+  <!-- content end -->
+</div>
+
+<include file="Application/Common/Layout/foot.html" />
+
+<script type="text/javascript">
+$(function(){
+  $("#ap_width_word").hide();
+  $("#default_word").hide();
+  $("#ap_class").change(function(){
+  if($("#ap_class").val() == '1'){
+    $("#ap_height").hide();
+    $("#ap_width_media").hide();
+    $("#default_pic").hide();
+    $("#default_word").show();
+    $("#ap_width_word").show();
+    $("#ap_display").show();
+  }else if($("#ap_class").val() == '0'||$("#ap_class").val() == '3'){
+    $("#ap_height").show();
+    $("#ap_width_media").show();
+    $("#default_pic").show();
+    $("#default_word").hide();
+    $("#ap_width_word").hide();
+    $("#ap_display").show();
+  }
+  });
+  $("#subForm").click(function(){
+     var  ap_name=$("#ap_name").val().trim();
+     if(ap_name==''){
+         AMUI.dialog.alert({
+             title: ' ',
+             content: '名称不能为空!'
+         });
+         return false;
+     }
+
+     //判断是否有图片为空
+     if($("#ap_class").val() == '0'){
+        var num = $("#defaultcontentList .file-item").find('img').attr("src");
+        if(num ==""){
+            AMUI.dialog.alert({
+                title: ' ',
+                content: '图片不能为空！'
+            });
+            return;
+        }
+     }
+
+      $("input[name=adv_content]").val($("#defaultcontentList img").attr("src") + "," + $("#defaultcontentList img").data("rel"));
+
+     $("form").submit();
+     
+  })
+
+});
+</script>
+
+<script type="text/javascript">
+    (function($){
+        define("admin/memberEdit",function(require, exports, module){
+            require("jquery/layer");
+            var upload = require("jquery/upload");
+            var manage = require("com/manage");
+            var Module = {
+                init: function(){
+                    /*
+                     * 广告位图片
+                     **/
+                    upload.base({
+                        pickID: "defaultcontentBtn",
+                        objID: "defaultcontentList",
+                        isSingle: true,
+                        storage: "admin_adv"
+                    });
+
+                }
+
+            };
+            module.exports = Module;
+        });
+        seajs.use("admin/memberEdit", function(module){
+            module.init();
+        });
+    })($);
+
+
+</script>
+

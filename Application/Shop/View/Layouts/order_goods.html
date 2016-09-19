@@ -1,0 +1,125 @@
+<div class="order-goods">
+    <table class="table" width="100%">
+        <colgroup>
+            <col width="40%">
+            <col width="9%">
+            <col width="9%">
+            <!--<col width="9%">-->
+            <col width="15%">
+            <col width="9%">
+            <col width="">
+        </colgroup>
+        <thead>
+        <tr>
+            <th><p class="tl ml10">商品</p></th>
+            <th>单价（元）</th>
+            <th>数量</th>
+            <!--<th>优惠（元）</th>-->
+            <th>交易状态</th>
+            <th>小计</th>
+            <th>运费</th>
+        </tr>
+        </thead>
+        <tbody>
+            <?php if ($order_info['order_state'] >= ORDER_STATE_SEND && $order_info['order_state'] != ORDER_STATE_HANDLING) {?>
+                <tr>
+                    <td colspan="7" class="express">
+                        <div class="cf">
+                            <span class="ml10 fl"><?php echo $output['e_name'];?></span>
+                            <span class="ml50 fl">快递单号：<?php echo $order_info['shipping_code']; ?></span>
+                            <div class="rel ml20 fl"><a href="javascript:void(0);" class="cor-blue js-shipping" data-id="<?php echo $order_info['order_id']; ?>" data-sn="<?php echo $order_info['order_sn']; ?>">查看物流</a></div>
+                            <?php if ($_REQUEST['act'] == 'seller_center' && $order_info['order_state'] == ORDER_STATE_SEND) {?>
+                                <div class="rel ml20 fl"><a href="javascript:void(0);" class="btn btn-blue js-modifyExpress">修改物流</a></div>
+                            <?php } ?>
+                        </div>
+                    </td>
+                </tr>
+            <?php } ?>
+			<?php foreach($order_info['extend_order_goods'] as $key => $goods) {?>
+                <tr>
+                    <td>
+                        <div class="goods-td cf">
+                            <?php if($goods['is_offline'] == 2){?>
+                                <a href="<?php echo U('ShowFactory/goodsDetial',array('goods_id' => $goods['goods_id'], 'store_id' => $goods['store_id']));?>" class="pic" ><img src="<?php echo thumb($goods,90); ?>" width="80px" height="80px" alt="" /></a>
+                                <p><a href="<?php echo U('ShowFactory/goodsDetial',array('goods_id' => $goods['goods_id'], 'store_id' => $goods['store_id']));?>"><?php echo $goods['goods_name']; ?></a></p>
+                            <?php }elseif($goods['is_offline'] == 0){?>
+                                <a href="<?php echo U('goods/index', array('goods_id' => $goods['goods_id'])); ?>" class="pic" ><img src="<?php echo thumb($goods,90); ?>" width="80px" height="80px" alt="" /></a>
+                                <p><a href="<?php echo U('goods/index', array('goods_id' => $goods['goods_id'])); ?>" ><?php echo $goods['goods_name']; ?></a></p>
+                            <?php }?>
+                            <p>规格：<?php echo $goods['goods_spec'];?></p>
+                            <?php if(CONTROLLER_NAME == 'StoreCommon'){?>
+                                <p class="cor-9 mt5"><?php if($goods['is_offline'] == 2){echo '云端';}elseif($goods['is_offline'] == 0){echo '自营';} ?></p>
+                            <?php }?>
+                        </div>
+                    </td>
+                    <td><?php if($order_info['order_state']!=1){echo $goods['goods_pay_price'];}else{echo '定价中';} ?></td>
+                    <td><?php echo $goods['goods_num']; ?></td>
+                    <!--<td>—</td>-->
+                    <?php
+                        if($value['order_state'] == ORDER_STATE_PAY){
+                            ?>
+                            <td>
+                                <?php
+                                echo '已完成';
+                                if($goods['is_offline'] == 2){
+                                ?>
+                                    <a href="{:U('ShowFactory/goodsDetial', array('goods_id' => $goods['goods_id'], 'store_id' => $goods['store_id']))}" class="btn btn-cancel btn-middle ml20">工厂下单</a>
+                                <?php } ?>
+                            </td>
+                    <?php
+                        }else{
+                            if($key == 0) { ?>
+                                <td rowspan="<?php echo sizeof($order_info['extend_order_goods']); ?>">
+                                    <?php
+                                        if($order_info['order_state'] == ORDER_STATE_CANCEL){
+                                            echo '已关闭';
+                                        }elseif($order_info['order_state'] == ORDER_STATE_MAKEPRICE){
+                                            echo '待定价';
+                                        }elseif($order_info['order_state'] == ORDER_STATE_NEW){
+                                            echo '待付款';
+                                        }elseif($order_info['order_state'] == ORDER_STATE_PAY){
+                                            echo '已支付';
+                                        }elseif($order_info['order_state'] == ORDER_STATE_SUCCESS){
+                                            echo '已完成';
+                                        }elseif($order_info['order_state'] == ORDER_STATE_HANDLING){
+                                            echo '平台处理中';
+                                        }else{
+                                            echo '异常状态';
+                                        }
+                                    ?>
+                                </td>
+                            <?php }
+                        } ?>
+
+                    <td><?php if($order_info['order_state']!=1){echo sprintf('%.2f',$goods['goods_num']*$goods['goods_pay_price']);}else{echo '定价中';} ?></td>
+                    <?php if($key == 0) { ?>
+                        <td rowspan="<?php echo sizeof($order_info['extend_order_goods']); ?>">
+                            <?php if(!empty($order_info['shipping_fee']) && $order_info['shipping_fee'] != '0.00'){
+                                echo $lang['currency'];?><?php echo $order_info['shipping_fee']; ?> <?php if ($order_info['shipping_name'] != ''){echo '('.$order_info['shipping_name'].')';};
+                            }else{
+                                echo $lang['nc_common_shipping_free'];?>
+                            <?php }?>
+                        </td>
+                    <?php }?>
+                </tr>
+            <?php } ?>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="6">
+                    <p class="pd10 fs18 tr">
+                        应收总价：<b class="cor-red"><?php echo $lang['currency'];?><?php if($order_info['order_state']!=1){echo $order_info['order_amount'];}else{echo '定价中';} ?></b>
+                    </p>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+    <?php if ($order_info['order_type'] == 2) {?>
+        <p class="mt10 fs14">
+            相关协议：
+            <a href="<?php echo U('/shop/contract');?>" class="cor-blue" target="_blank">《商品购销合同》</a>
+            <a href="<?php echo U('/shop/contract#1');?>" class="cor-blue" target="_blank">《链金所发标协议》</a>
+            <a href="<?php echo U('/shop/contract#2');?>" class="cor-blue" target="_blank">《链金所借款协议》</a>
+        </p>
+    <?php } ?>
+</div>

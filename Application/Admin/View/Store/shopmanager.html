@@ -1,0 +1,155 @@
+<include file="Application/Common/Layout/head.html" />
+<style>
+  th.table-id{width:240px;}
+  .am-selected{width:120px;}
+</style>
+<div class="am-cf admin-main">
+<include file="Application/Common/Layout/left.html" /> 
+  <!-- content start -->
+  <div class="admin-content">
+    <div class="admin-content-body">
+      <div class="am-cf am-padding am-padding-bottom-0">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">店铺2</strong> / <small>店铺管理</small></div>
+      </div>
+
+      <hr>
+
+      <div class="am-g">
+        <div class="am-u-sm-12 am-u-md-6">
+          <div class="am-btn-toolbar">
+            <div class="am-btn-group am-btn-group-xs">
+              <button type="button" class="am-btn am-btn-default" onClick="location.href='{:U('Store/shopmanager')}'"><span class="am-icon-plus"></span> 管理</button>
+              <button type="button" class="am-btn am-btn-default" onClick="location.href='{:U('Store/shopjoinin')}'"><span class="am-icon-archive"></span> 开店申请</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--筛选条件 start-->
+      <div class="j-shop-selectwrap clearfix am-padding am-padding-bottom-0">
+        <form method="get" name="formSearch" id="formSearch">
+          <div class="j-shop-inpbox">
+            <input type="text" name="store_name" class="am-form-field" style="width: 150px" placeholder="店铺">
+          </div>
+          <div class="j-shop-inpbox">
+            <input type="text" name="owner_and_name" class="am-form-field" style="width: 150px" placeholder="店主账号">
+          </div>
+          <div class="j-shop-inpbox">
+            <select data-am-selected="{btnSize: 'sm'}" name="store_type">
+              <option value="0" selected='selected'>店铺类型</option>
+              <volist  name="store_type" id="vo">
+              <option value="{$key}" <if condition="$key eq $_GET['store_type']">selected='selected'</if>>{$vo}</option>
+              </volist >
+            </select>
+          </div>
+          <div class="j-shop-inpbox">
+            <select data-am-selected="{btnSize: 'sm'}" name="com_type">
+            <option value="0" selected='selected'>公司类型</option>
+            <option value="1" <if condition="$_GET['com_type'] eq 1">selected='selected'</if>>经销商</option>
+            <option value="2" <if condition="$_GET['com_type'] eq 2">selected='selected'</if>>装修公司</option>
+            <option value="3" <if condition="$_GET['com_type'] eq 3">selected='selected'</if>>工厂</option>
+            </select>
+          </div>
+          <div class="j-shop-inpbox">
+            <select data-am-selected="{btnSize: 'sm'}" name="business_type">
+            <option value="0" selected='selected'>主体类型</option>
+            <option value="1" <if condition="$_GET['business_type'] eq 1">selected='selected'</if>>企业</option>
+            <option value="2" <if condition="$_GET['business_type'] eq 2">selected='selected'</if>>个体</option>
+            </select>
+          </div>
+          <!--  暂时没有存在的意义
+          <div class="j-shop-inpbox">
+            <select data-am-selected="{btnSize: 'sm'}" name="querySelect">
+            <option value="0" selected='selected'>有无终端</option>
+            <option value="1" <if condition="$_GET['has_terminal'] eq 1">selected='selected'</if>>有终端</option>
+            <option value="-1" <if condition="$_GET['has_terminal'] eq -1">selected='selected'</if>>无终端</option>
+            </select>
+          </div>
+          -->
+          <div class="j-shop-inpbox">
+            <button class="am-btn am-btn-primary" type="submit">搜索</button>
+          </div>
+        </form>
+      </div>
+      <!--筛选条件 end-->
+
+      <div class="am-g">
+        <div class="am-u-sm-12">
+            <table class="am-table am-table-striped am-table-hover table-main">
+              <thead>
+              <tr>
+                <th class="table-id">店铺名称</th>
+                <th class="table-id">公司类型</th>
+                <th class="table-id">主体类型</th>
+                <th class="table-title">店主账号</th>
+                <th class="table-type">店主卖家帐号</th>
+                <th class="table-author am-hide-sm-only">终端数量</th>
+                <th class="table-date am-hide-sm-only">状态</th>
+                <th class="table-date am-hide-sm-only">审核时间</th>
+                <th class="table-set">操作</th>
+              </tr>
+              </thead>
+              <tbody>
+              <volist name="store_list" id="vo">
+              <tr>
+                <td>
+                  <a href="#" target="_blank">
+                    {$vo['store_name']}
+                    <if condition="$vo.store_id eq 0">(平台)</if>
+                  </a>
+                </td>
+               <if condition="$vo.com_type eq '1'">
+                  <td>经销商</td>
+                <elseif condition="$vo.com_type eq '2'"/>
+                  <td>装修公司</td>
+                <elseif condition="$vo.com_type eq '3'"/>
+                  <td>工厂</td>
+                <else/>
+                  <td>其它</td>
+                </if>
+                <if condition="$vo.business_type eq '1'">
+                  <td>企业</td>
+                <elseif condition="$vo.business_type eq '2'"/>
+                  <td>个体</td>
+                <else/>
+                  <td>其它</td>
+                </if>
+                <td>{$vo.member_name}</td>
+                <td>{$vo.seller_name}</td>
+                <td>{$vo.terminal_count}</td>
+                <td class="am-hide-sm-only">{:$vo['store_state']?'开启':'关闭'}</td>
+                <td class="am-hide-sm-only">{$vo.store_time|date="Y-m-d H:i:s",###}</td>
+                <td>
+                  <div class="am-btn-toolbar">
+                    <div class="am-btn-group am-btn-group-xs">
+                      <button class="am-btn am-btn-default am-btn-xs am-hide-sm-only" onClick="location.href='{:U('Store/storejoinindetail?member_id='.$vo['member_id'])}'"><span class="am-icon-copy"> 查看</button>
+                      <button class="am-btn am-btn-default am-btn-xs am-text-secondary" onClick="location.href='{:U('Store/storeedit?store_id='.$vo['store_id'])}'"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                      <button class="am-btn am-btn-default am-btn-xs am-hide-sm-only"><span class="am-icon-copy"></span> 终端</button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              </volist>
+              </tbody>
+            </table>
+            <div class="am-cf">
+              <div class="am-fr">
+               {$page}
+              </div>
+            </div>
+        </div>
+
+      </div>
+    </div>
+
+    <footer class="admin-content-footer">
+      <hr>
+      <p class="am-padding-left">© 2014 AllMobilize, Inc. Licensed under MIT license.</p>
+    </footer>
+
+  </div>
+  <!-- content end -->
+
+</div>
+<include file="Application/Common/Layout/foot.html" /> 
+

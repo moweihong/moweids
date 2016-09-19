@@ -1,0 +1,39 @@
+<extend name="Layouts:seller" />
+<block name="title"><title>选择开店类型-{:C('site_name')}</title></block>
+<block name="head_css">
+<link href="__CSS__/startshop.css" rel="stylesheet" type="text/css">
+</block>
+
+<block name="content">
+<div class="order-step mb10">
+    <div class="easypay-step rel">
+        <p class="tx cf">
+            <span class="f">阅读协议</span>
+            <span>选择开店类型</span>
+            <span>提交入驻资料</span>
+            <span>资料审核</span>
+            <span>店铺上线</span>
+        </p>
+        <div class="bg-step">
+            <p class="n2"></p>
+        </div>
+    </div>
+</div>
+<div class="start-shop-box"> 
+    <h2 class="tit">请根据实际情况选择开店类型,必须和您提交的入驻资料一致，否则无法通过审核。</h2>
+    <p class="tc">
+        <span class="com-type com-type-checked js-comType" data-type="1">我是经销商</span>
+        <span class="com-type js-comType" data-type="2">我是装修公司</span>
+        <span class="com-type js-comType" data-type="3">我是品牌家具厂</span>
+    </p>
+</div>
+<div class="tc mt30">
+    <a href="__ROOT__/shop/StartBusiness/enterorindiv" class="btn btn-blue js-nextBtn">下一步</a>
+</div>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+	seajs.use("s/startshop");
+</script>
+</block>

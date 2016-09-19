@@ -1,0 +1,269 @@
+<extend name="Layouts:seller" />
+<block name="title"><title>发布商品-<?php if($_SESSION['com_type'] == 3){?>供货中心<?php } else{?>卖家中心<?php } ?>-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="wrap-in">
+    <h2 class="tit">发布商品</h2>
+	<div class="add-goods-box js-addGoodsStep2">
+        <form action="javascript:void(0);" id="form" method="post" autocomplete="off">
+            <p class="add-goods-t fs14">
+                您当前选择的类目是：<span class="js-gcategory">{$Think.get.ct_1}{$Think.get.ct_2}{$Think.get.ct_3}</span>
+                <a href="{:U('StoreCommon/goodsPub')}" class="cor-blue ml20">修改类目</a>
+            </p>
+            <h3 class="headline">基本信息</h3>
+            <ul class="list">
+                <li class="cf">
+                    <label class="handle" for="goodsname"><em class="cor-red">*</em>商品名称：</label>
+                    <div class="rel">
+                        <input type="text" id="goodsname" name="g_name" class="text" placeholder="请填写商品名称" maxlength="30" required />
+                        <span class="ml5"><em class="js-textCount">0</em>/30</span>
+                        <span show="g_name.check" class="error-msg">
+                            <em class="errow-arrow"></em>
+                            请填写商品名称
+                        </span>
+                    </div>
+                </li>
+                <li class="cf">
+                    <label class="handle" for="slogan">广告语：</label>
+                    <input type="text" id="slogan" name="g_jingle" class="text" placeholder="请填写广告语" maxlength="40" />
+                    <span class="ml5"><em class="js-textCount">0</em>/40</span>
+                </li>
+                <li class="cf">
+                    <label class="handle" for="goodscode">商品编码：</label>
+                    <input type="text" id="goodscode" name="g_serial" class="text js-numletter" placeholder="请填写商品编码" maxlength="15" />
+                    <span class="ml5"><em class="js-textCount">0</em>/15</span>
+                    <span class="cor-9 ml5">(请输入英文/数字)</span>
+                </li>
+                <li class="cf">
+                	<label class="handle" for="goodscode">商品图片：</label>
+                    <div class="h30 cf">
+                        <a href="javascript:void(0);" id="imgFileBtn" class="btn fl">上传图片</a>
+                        <span class="cor-9 ml10 fl">(最多可上传5张，建议图片为方形，尺寸：800*800像素)</span>
+                    </div>
+                    <div id="fileList" class="cf"></div>
+                </li>
+                <li class="cf">
+                    <label class="handle b-tit">商品属性</label>
+                    <div class="attr-k">
+                        <ul class="list cf o-h">
+                            <li class="cf">
+                                <label class="handle">品牌：</label>
+                                <select name="b_name">
+                                    <option data-id="0">不限</option>
+                                    <foreach name="brand_list" item="v" >
+                                        <option value="{$v.brand_name}" data-id="{$v.brand_id}">{$v.brand_name}</option>
+                                    </foreach>
+                                </select>
+                            </li>
+                            <foreach name="attr_list" item="v" key="k">
+                                <li class="cf">
+                                    <input type="hidden" name="attr[{$k}][name]" value="{$v.attr_name}" />
+                                    <label class="handle">{$v.attr_name}：</label>
+									<?php if (is_array($v) && !empty($v)) { ?>
+                                        <select data-name="attr[{$k}][__NC__]" class="js-attrSelect">
+                                            <option value="不限" data-id="0">不限</option>
+                                            <foreach name="v.value" item="val" key="key">
+                                                <option value="{$val.attr_value_name}" <?php if (isset($attr_checked) && in_array($val['attr_value_id'], $attr_checked)){ ?>selected="selected"<?php } ?> data-id="<?php echo $val['attr_value_id']; ?>"><?php echo $val['attr_value_name']; ?></option>
+                                            </foreach>
+                                        </select>
+                                    <?php } ?>
+                                </li>
+                            </foreach>
+                            <li class="cf">
+                                <label class="handle" for="gprice"><em class="cor-red">*</em><?php echo $_SESSION['com_type']==3?'出厂价':'商品价格';?>：</label>
+                                <div class="rel">
+                                    <input type="text" id="gprice" name="g_price" class="text js-money" placeholder="请填写价格" maxlength="15" required />
+                                    <span show="g_price.check" class="error-msg">
+                                        <em class="errow-arrow"></em>
+                                        请填写商品价格
+                                    </span>
+                                </div>
+                            </li>
+                            <?php if($_SESSION['com_type'] == 1):?>
+                            <li class="cf">
+                                <label class="handle" for="gmarketprice"><em class="cor-red">*</em>市场价：</label>
+                                <div class="rel">
+                                    <input type="text" id="gmarketprice" name="g_marketprice" class="text js-money" placeholder="请填写市场价" maxlength="15" required />
+                                    <span show="g_marketprice.check" class="error-msg">
+                                        <em class="errow-arrow"></em>
+                                        请填写市场价
+                                    </span>
+                                </div>
+                            </li>
+                            <?php endif;?>
+                            <li class="cf" style="display: none;">
+                                <label class="handle" for="gcostprice"><em class="cor-red">*</em>成本价：</label>
+                                <div class="rel">
+                                    <input type="text" id="gcostprice" name="g_costprice" class="text js-money" placeholder="请填写成本价" maxlength="15" required value="0.01"/>
+                                    <span show="g_costprice.check" class="error-msg">
+                                        <em class="errow-arrow"></em>
+                                        请填写成本价
+                                    </span>
+                                </div>
+                            </li>
+                            <li class="cf" style="display: none;">
+                                <label class="handle" for="weight"><em class="cor-red">*</em>重量（kg）：</label>
+                                <div class="rel">
+                                    <input type="text" id="weight" name="weight" value="0" class="text js-money" placeholder="请填写重量" maxlength="30" required />
+                                    <span show="weight.check" class="error-msg">
+                                        <em class="errow-arrow"></em>
+                                        请填写重量
+                                    </span>
+                                </div>
+                            </li>
+                            <li class="cf" style="display: none;">
+                                <label class="handle" for="volume"><em class="cor-red">*</em>体积（m³）：</label>
+                                <div class="rel">
+                                    <input type="text" id="volume" name="volume" value="0" class="text js-money" placeholder="请填写体积" maxlength="30" required />
+                                    <span show="volume.check" class="error-msg">
+                                        <em class="errow-arrow"></em>
+                                        请填写体积
+                                    </span>
+                                </div>
+                            </li>
+                            <li class="cf">
+                                <label class="handle" for="gstorage"><em class="cor-red">*</em>库存：</label>
+                                <div class="rel">
+                                    <input type="text" id="gstorage" name="g_storage" class="text js-money" placeholder="请填写库存" maxlength="10" required />
+                                    <span show="g_storage.check" class="error-msg">
+                                        <em class="errow-arrow"></em>
+                                        请填写库存
+                                    </span>
+                                </div>
+                            </li>
+                            <li class="cf">
+                                <label class="handle"><em class="cor-red">*</em>是否可定制：</label>
+                                <label>
+                                    <input type="radio" name="iscustom" class="v-2" value="1" /> 是
+                                </label>
+                                <label class="ml20">
+                                    <input type="radio" name="iscustom" class="v-2" value="0" checked="checked"/> 否
+                                </label>
+                            </li>
+                            <li class="cf">
+                                <label class="handle"><em class="cor-red">*</em>是否推荐：</label>
+                                <label>
+                                    <input type="radio" name="iscommend" class="v-2" value="1" checked="checked"/> 是
+                                </label>
+                                <label class="ml20">
+                                    <input type="radio" name="iscommend" class="v-2" value="0" /> 否
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <?php if (is_array($spec_list) && !empty($spec_list)) { ?>
+                    <li class="cf">
+                        <label class="handle b-tit">交易属性</label>
+                        <div class="attr-k js-specAttr">
+                            <div class="trade">
+                                <?php foreach ($spec_list as $k => $v) { ?>
+                                    <p class="t">
+                                    	<input type="hidden" name="<?php echo 'sp_name' . '[' . $k . ']' ?>" value="<?php echo $v['sp_name'] ?>" />
+                                        <?php echo $v['sp_name'] ?>
+                                    </p>
+                                    <p class="mt10 js-checkLine" data-spid="<?php echo $k ?>">
+                                        <?php foreach ($v['value'] as $k2 => $v2) { ?>
+                                            <span class="mr20">
+                                                <input type="checkbox" class="v-mid mr5 js-specCheck" typename="sp_val[<?php echo $k ?>][<?php echo $v2['sp_value_id'] ?>]" data-id="<?php echo $v2['sp_value_id'] ?>" data-val="<?php echo $v2['sp_value_name'] ?>" />
+                                                <input type="text" class="text js-specInp" data-id="<?php echo $v2['sp_value_id'] ?>" value="<?php echo $v2['sp_value_name'] ?>" placeholder="请填写规格名称" maxlength="30" />
+                                            </span>
+                                        <?php } ?>
+                                    </p>
+                                    <div class="h40 mt10 js-specAddLine">
+                                        <a href="javascript:void(0);" class="cor-blue fs14 js-specAdd">+添加规格</a>
+                                        <p class="js-specAdd2 dis-none" data-spid="<?php echo $k ?>">
+                                            <input type="text" class="text js-newspec" placeholder="请填写规格名称" />
+                                            <a href="javascript:void(0);" class="btn btn-blue ml5 js-specVerify" data-spid="<?php echo $k ?>">确认</a>
+                                            <a href="javascript:void(0);" class="btn ml5 js-specCancel">取消</a>
+                                        </p>
+                                    </div>
+                                <?php } ?>
+                                <div class="sep-table">
+                                    <table class="table mt10 js-specTable dis-none" width="100%">
+                                        <colgroup>
+                                            <col width="33.3%" />
+                                            <col width="33.3%" />
+                                            <col width="" />
+                                        </colgroup>
+                                        <thead>
+                                        <tr>
+                                            <th><em class="cor-red">*</em>属性</th>
+                                            <th><em class="cor-red">*</em>价格</th>
+                                            <th><em class="cor-red">*</em>库存数量</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                <?php } ?>
+                <li class="cf" style="display: none;">
+                    <label class="handle b-tit">物流设置</label>
+                    <div class="attr-k">
+                        <div class="logistics o-h cf js-addLogistics">
+                            <div class="cite">
+                                <p class="mb5"><em class="cor-red">*</em>请选择运费模板</p>
+                                <a href="{:U('StoreCommon/editTemplate',array('from_url'=>'goods'))}" class="add js-logistics" >新增运费模板</a>
+                            </div>
+                            <label>
+                                <input type="radio" name="freight" class="v-2" value="0" checked="checked" />
+                                免运费
+                            </label>
+                            <?php foreach ($transport as $k => $v) { ?>
+                                <label>
+                                    <input type="radio" name="freight" class="v-2" value="<?php echo $v['id'] ?>" data-name="<?php echo $v['title'] ?>" />
+                                    <?php echo $v['title'] ?>
+                                </label>
+                            <?php } ?>
+                        </div>
+                    </div>
+                </li>
+				<!--
+				<li class="cf">
+                    <label class="handle b-tit">体验店设置</label>
+                    <div class="attr-k">
+                        <div class="logistics o-h cf js-addBrickstore">
+                            <div class="cite">
+                                <p class="mb5">请选择体验店</p>
+                                <a href="{:U('seller_center/create_brickstore_01',array('from_url'=>'goods'))}" class="add js-logistics" >新增加体验店</a>
+                            </div>
+                            <?php foreach ($output['brickstore'] as $k => $v) { ?>
+                                <label>
+                                    <input type="radio" name="brickstore" class="v-2" value="<?php echo $v['brickstore_id']?>" />
+                                    <?php echo $v['brickstore_name'] ?>
+                                </label>
+                            <?php } ?>
+                        </div>
+                    </div>
+                </li>
+                -->
+                <li class="cf">
+                    <label class="handle b-tit">商品描述</label>
+                    <textarea id="g_body" style="width:780px;"></textarea>
+                    <p class="cor-red">【请确保以上发布的信息均符合国家法律法规规定，如有侵权或违规，均由商户承担相应的责任，全木行严格进行监督和管控，感谢配合。】</p>
+                </li>
+                <li class="cf">
+                    <label class="handle"></label>
+                    <button class="btn btn-red js-saveBtn" data-mold="0">保存到仓库</button>
+                    <a href="javascript:void(0);" class="btn btn-blue ml20 js-saveBtn" data-mold="1">保存并发布</a>
+                    <a href="javascript:void(0);" class="btn ml20 js-saveBtn" data-mold="2">预览</a>
+                </li>
+            </ul>
+        </form>
+    </div>
+</div>
+<input type="hidden" id="cur_action" value="<?php echo ACTION_NAME;?>" />
+<input type="hidden" id="apiUrl" value="{:U('StoreCommon/publishGoodsAjax')}" />
+<input type="hidden" id="apiUrlPreview" value="{:U('goods/preview')}" />
+</block>
+
+<block name="my_js">
+<script type="text/javascript" src="__JS__/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="__JS__/ueditor/ueditor.all.min.js"></script>
+<script type="text/javascript">
+	seajs.use("s/goodsadd")
+</script>
+</block>

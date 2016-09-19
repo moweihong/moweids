@@ -1,0 +1,13 @@
+<div style="height:276px;"></div>
+<div class="foot-faq">
+    <div class="wrapper o-h">
+    	<ul class="cf">
+    		<?php if(!empty($footlist)){foreach($footlist as $v){?>
+            <li><a href="/index.php?m=shop&c=article&ac_id=<?php echo $v['ac_id']; ?>"><?php echo $v['ac_name'];?></a> |</li>
+            <?php }}?>
+        
+        </ul>
+        <p class="pt15">Copyright 2015-2016 allwood.com.cn Inc.,All rights reserved.</p>
+        <p>{:C('icp_number')}</p>
+    </div>
+</div>

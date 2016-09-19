@@ -1,0 +1,14 @@
+<extend name="Layouts:home"/>
+<block name="title"><title>分期购介绍页-{:C('site_name')}</title></block>
+<block name="head_css">
+<link rel="stylesheet" type="text/css" href="__CSS__/apply.css">
+</block>
+
+<block name="content">
+<div class="activate-success wrapper mt50">
+    <h2>您已申请过乐装分期，可直接申请开通乐购分期。</h2>
+    <p class="mt30">
+        <a href="{:U('Shop/Easypay/submitSuccess')}" class="btn btn-info">申请开通</a>
+    </p>
+</div>
+</block>

@@ -1,0 +1,73 @@
+<extend name="Layouts:seller" />
+<block name="title"><title>首页-卖家中心-{:C('site_name')}</title></block>
+
+<block name="head_css">
+<style type="text/css">
+.sales-volume .n1{width:250px;}
+.sales-volume .n3{width:180px;}
+.sales-volume .sale-c .n2{width:420px;padding-left:70px;}
+.sales-volume .sale-c .n2 img{margin-left:-70px;}
+.sales-volume .sale-c .n2 span{display:block;max-width:400px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;}
+.sales-volume .sale-c li{padding-bottom:3px;}
+</style>
+</block>
+
+<block name="content">
+<div class="seller-top cf">
+	<div class="store-logo fl mt20">
+        <a href="{:U('THomedesign/storedetail',array('id' => $_SESSION['store_id'], type=>'1'))}" >
+            <?php if(!empty($storeinfo['store_label'])){?>
+            <img width="138" height="138" src="<?php echo $storeinfo['store_label'];?>"/>
+            <?php } ?>
+        	<h3>{$storeinfo['store_name']}</h3>
+        </a>
+      
+    </div>
+    <div class="trade fl">
+        <p class="cf">
+        	<cite>可提现金额：</cite>
+        	<span class="cor-red fs24" ><a class='cor-red fs24' href="<?php echo urlShop('storeCommon','incomeDetail');?>">¥<?php echo $storeinfo['deposit_avaiable'];?></a></span>
+        </p>
+        <p class="mt10 cf">
+        	<cite>家装专项资金：</cite>
+            <span class="cor-red fs24">¥<?php echo $storeinfo['decorate_fund'];?></span>
+        </p>
+    </div>
+    <a href="{:U('Decorate/decorateOperate')}" class="publish-btn fl" target="_black">发布方案</a>
+    <a href="{:U('THomedesign/storedetail',array('id' => $_SESSION['store_id'], type=>'1'))}" class="visit-btn" target="_black">访问店铺</a>
+</div>
+<div class="order-bar mt10 cf">
+	<a href="{:U('storeCommon/deOrderManage')}" class="nobor">
+    	<p class="cor-red fs24"><?php echo $order_start;?></p>
+        <p>进行中订单</p>
+    </a>
+    <a href="{:U('storeCommon/deOrderManage')}">
+    	<p class="cor-red fs24"><?php echo $order_over;?></p>
+        <p>已完成订单</p>
+    </a>
+</div>
+<div class="sales-volume mt10">
+	<h2>最新成交方案</h2>
+    <p class="sale-t fs16 cf">
+    	<span class="n1">日期</span>
+        <span class="n2">方案效果图</span>
+        <span class="n3">造价（元）</span>
+    </p>
+    <ul class="sale-c fs14">
+        <?php foreach ($succe_plan as $val):?>
+    	<li class="cf">
+        	<p class="n1"><?php echo date('Y-m-d H:i:s', $val['add_time']);?></p>
+            <p class="n2">
+                <a href="{:U('THomedesign/storedetail',array('id' => $_SESSION['store_id'], type=>'2'))}">
+                    <img  src="<?php echo unserialize($val['coverpage'])['s_pic'];?>" width="60px" height="60px" alt="" />
+            		<span>方案名称：<?php echo $val['title'];?></span>
+                    <span>户型：<?php echo $val['house_type'];?></span>
+                    <span>地址：<?php echo $val['house_address'];?></span>
+                </a>
+            </p>
+            <p class="n3 cor-red"><?php echo $val['cost'];?></p>
+        </li>
+        <?php endforeach;?>
+    </ul>
+</div>
+</block>

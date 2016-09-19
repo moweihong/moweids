@@ -1,0 +1,18 @@
+<extend name="Layouts:home" />
+<block name="title"><title>支付成功-{:C('site_name')}</title></block>
+
+<block name="content">
+<style>
+    .buy-ok {border: 2px solid #999999; text-align: center; padding: 30px;width: 1280px;margin: 120px auto; }
+    .buy-ok h1 {color: black;}
+    .buy-ok p {margin-top: 20px;}
+    .buy-ok p a {color: #3da3ea;}
+</style>
+<div class="buy-ok">
+    <h1>支付成功！</h1>
+    <p class="buy-text1">充值金额已存入您的可用余额，请进入"我的收入"查看。</p>
+    <p class="buy-btnbox">
+        <a href="{:U('/shop/StoreCommon/income')}" class="a-ts">我的收入</a>
+    </p>    
+</div>
+</block>

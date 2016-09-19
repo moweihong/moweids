@@ -1,0 +1,105 @@
+<extend name="Layouts:member" />
+<block name="title"><title>收藏的店铺-买家中心-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="tit-bar">
+	<h2>收藏的店铺</h2>
+	<?php if(!empty($output['favorites_list'])){?>
+		<p class="sort-filter mt10 cf">
+			<em>分类筛选：</em>
+			<a href="__ROOT__/index.php?m=shop&c=member&a=favStore"<?php if (!isset($_GET['sc_id'])){?>class="curr"<?php }?>>全部(<?php echo $output['sc_sum_count'];?>)</a>
+			<?php if(!empty($output['sc_list'])){?>
+				<?php foreach($output['sc_list'] as $k2 => $sc){
+					if (isset($output['sc_count'][$sc['sc_id']])) {?>
+						<a href="__ROOT__/index.php?m=shop&c=member&a=favStore&sc_id=<?php echo $sc['sc_id']; ?>" <?php if ($_GET['sc_id'] == $sc['sc_id']){?>class="curr"<?php }?>><?php echo $sc['sc_name'];?>(<?php echo $output['sc_count'][$sc['sc_id']];?>)</a>
+						<?php }?>
+				<?php }?>
+			<?php }?>
+		</p>
+    <?php }?>
+</div>
+<div class="favor-box mt20">
+	<?php if(!empty($output['favorites_list'])){?>
+		<p class="favor-h js-favorBar">
+			<?php if(!empty($output['favorites_list'])){?>
+				<label><input type="checkbox" class="v-2 js-allCheck" /> 全选</label>
+				<a href="javascript:void(0);" class="ml10 js-unfavorite">取消收藏</a>
+			<?php }?>
+		</p>
+		<ul class="favor-store-list js-favorList">
+			<?php foreach($output['favorites_list'] as $key => $favorites){?>
+				<li class="cf" data-favid="<?php echo $favorites['fav_id']; ?>">
+					<div class="info fl">
+						<div class="tc">
+							<input type="checkbox" class="v-mid js-check"/>
+							<a href="<?php echo urlShop('ShowStore', 'index', array('store_id' => $favorites['store_id']));?>" class="v-mid ml10" ><img src="<?php echo getStoreLogo($favorites['store_label']);?>" width="150px" height="60" alt="<?php echo $favorites['store_name'];?>" /></a>
+							<p class="mt5"><a href="<?php echo urlShop('ShowStore', 'index', array('store_id' => $favorites['store_id']));?>" ><?php echo $favorites['store_name'];?></a></p>
+						</div>
+						<p class="mt10">关注人气：<?php echo $favorites['store_collect'];?>人</p>
+                        <!--
+						<p class="mt5">
+							服务评价：
+							<span class="assess-progress ic"><em class="ic ic-heart" style="left:96.5%"></em></span>
+							<span class="ml5"><?php echo $favorites['praise_rate'];?></span>
+						</p>
+                        -->
+						<a href="<?php echo urlShop('ShowStore', 'index', array('store_id'=>$favorites['store_id']))?>" class="btn mt20 btn-small" >进入店铺</a>
+						<a href="javascript:void(0);" class="btn btn-small mt10 js-unfavorite">取消收藏</a>
+					</div>
+					<div class="goods fr">
+						<p class="fb cf js-tab">
+							<a href="javascript:void(0);" class="tag curr js-a">上新(<?php echo $favorites['store_new_total']?>)</a>
+							<a href="javascript:void(0);" class="tag js-a">热销(<?php echo $favorites['store_hot_total']?>)</a>
+							<a href="<?php echo urlShop('ShowStore', 'index', array('store_id'=>$favorites['store_id']))?>" class="more fr" >更多商品&raquo;</a>
+						</p>
+						<div class="bd cf js-goods">
+						<?php if(!empty($favorites['store_new'])){?>
+							<?php foreach($favorites['store_new'] as $k1 => $new){?>
+								<p>
+									<a href="index.php?m=shop&c=goods&a=index&goods_id=<?php echo $new['goods_id'];?>" >
+										<img src="<?php echo thumb($new, 150);?>" width="150px" height="150px" alt="<?php echo $new['goods_name'];?>" />
+									</a>
+                                    <!--
+									<span class="cor-red mt10">¥<?php echo $new['goods_price']?></span>
+                                    -->
+								</p>
+							<?php }?>
+						<?php }?>
+						</div>
+						<div class="bd cf js-goods dis-none">
+						<?php if(!empty($favorites['store_hot'])){?>
+							<?php foreach($favorites['store_hot'] as $k => $hot_goods){?>
+								<p>
+									<a href="index.php?m=shop&c=goods&a=index&goods_id=<?php echo $hot_goods['goods_id'];?>" >
+										<img src="<?php echo thumb($hot_goods, 150);?>" width="150px" height="150px" alt="<?php echo $hot_goods['goods_name'];?>" />
+									</a>
+                                    <!--
+									<span class="cor-red mt10">¥<?php echo $hot_goods['goods_price']?></span>
+                                    -->
+								</p>
+							<?php }?>
+						<?php }?>
+						</div>
+					</div>
+				</li>
+			<?php }?>
+		</ul>
+		<div class="favor-f mt20 cf">
+			<p class="mt25 fl js-favorBar">
+				<label><input type="checkbox" class="v-2 js-allCheck"/> 全选</label>
+				<a href="javascript:void(0);" class="ml10 js-unfavorite">取消收藏</a>
+			</p>
+			<?php echo $output['show_page']; ?>
+		</div>
+    <?php }else {?>
+		<p class="no-data">暂无收藏的店铺</p>
+	<?php }?>
+</div>
+<input type="hidden" id="favorType" value="store" />
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+	seajs.use(["m/favorites"]);
+</script>
+</block>

@@ -1,0 +1,28 @@
+<extend name="Layouts:seller" />
+<block name="title"><title>审核失败-{:C('site_name')}</title></block>
+<block name="head_css">
+<link href="__CSS__/startshop.css" rel="stylesheet" type="text/css">
+</block>
+
+<block name="content">
+<div class="order-step mb10">
+    <div class="easypay-step rel">
+        <p class="tx cf">
+            <span class="f">阅读协议</span>
+            <span>选择开店类型</span>
+            <span>提交入驻资料</span>
+            <span>资料审核</span>
+            <span>店铺上线</span>
+        </p>
+        <div class="bg-step">
+            <p class="n4"></p>
+        </div>
+    </div>
+</div>
+<div class="start-shop-box tc">
+    <p class="mt80"><img src="__IMG__/s_exclamation.png"></p>
+    <p class="fs22 mt30 cor-black">您的开店申请被拒绝！</p>
+    <p class="fs16 mt30 cor-9">拒绝原因:{$joinin_info.joinin_message}</p>
+    <p class="fs16 mt30 cor-9"><a href="{:U('StartBusiness/step3',array('com_type' => $joinin_info['com_type'],'business_type'=>$joinin_info['business_type']))}" class="btn btn-blue">申请修改</a></p>
+</div>
+</block>

@@ -1,0 +1,163 @@
+<include file="Application/Common/Layout/head.html" /> 
+<div class="am-cf admin-main">
+<include file="Application/Common/Layout/left.html" /> 
+  <!-- content start -->
+  <div class="admin-content">
+    <div class="admin-content-body">
+      <div class="am-cf am-padding am-padding-bottom-0">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">品牌编辑</strong> / <small>Brand Edit</small></div>
+      </div>
+
+      <hr/>
+
+      <div class="am-g">
+        <div class="am-u-sm-12 am-u-md-4 am-u-md-push-8">
+         
+        </div>
+
+        <div class="am-u-sm-12 am-u-md-8 am-u-md-pull-4">
+          <form class="am-form am-form-horizontal" action="" id="form1" method="post" enctype="multipart/form-data">
+            <div class="am-form-group">
+              <label for="user-name" class="am-u-sm-3 am-form-label">品牌名称</label>
+              <div class="am-u-sm-9">
+                <input type="text" id="brand_name" name="brand_name" value="{$brandInfo.brand_name}" placeholder="请输入品牌名称">
+                <input type="hidden" id="old_brand_name" name="old_brand_name" value="{$brandInfo.brand_name}" >
+              </div>
+            </div>
+			<div class="am-form-group">
+              <label for="user-name" class="am-u-sm-3 am-form-label">所属分类</label>
+              <div class="am-u-sm-9">
+				<select name="class_id">
+					<option value="0">选择分类</option>
+					<volist name="cate" id="c">
+						<option value="{$c.gc_id}"<?php if($brandInfo['class_id']==$c['gc_id']){echo 'selected';} ?>><?php echo str_repeat('+',$c['level']*6); ?>{$c.gc_name}</option>	
+					</volist>
+				</select>
+              </div>
+            </div>
+			<div class="am-form-group">
+              <label for="user-name" class="am-u-sm-3 am-form-label">品牌图片标识</label>
+              <div class="am-u-sm-9">
+                <input type="file" name="brand_pic" value="{$brandInfo.brand_pic}" >
+				<small>注：品牌LOGO尺寸最佳宽度为150像素，高度为50像素、比例为3:1的图片；支持格式gif,jpg,png</small>
+				<br/>
+				<if condition="$brandInfo.brand_pic neq ''">
+					<img src="/data/upload/shop/brand/{$brandInfo.brand_pic}" class="brandInfoPic">
+				</if>
+			 </div>
+            </div>
+			
+			<div class="am-form-group">
+              <label for="user-name" class="am-u-sm-3 am-form-label">品牌商品图</label>
+              <div class="am-u-sm-9">
+                <input type="file" name="brand_shoppic" value="{$brandInfo.brand_shoppic}" >
+				<small>注：品牌商品图尺寸要求宽度250像素，高度250像素，比例为1；1的图片，支持格式gif,jpg,png</small>
+				<br/>
+				<if condition="$brandInfo.brand_shoppic neq ''">
+					<img src="/data/upload/shop/brand/{$brandInfo.brand_shoppic}" class="brandInfoPic">
+				</if>
+			 </div>
+            </div>
+			
+			<div class="am-form-group">
+              <label for="user-name" class="am-u-sm-3 am-form-label">品牌首页招聘</label>
+              <div class="am-u-sm-9">
+                <input type="file" name="brand_zhaopinpic" value="{$brandInfo.brand_zhaopinpic}" >
+				<small>注：品牌招牌尺寸要求宽度1920像素，高度440像素，支持格式gif,jpg,png</small>
+				<br/>
+				<if condition="$brandInfo.brand_zhaopinpic neq ''">
+					<img src="/data/upload/shop/brand/{$brandInfo.brand_zhaopinpic}" class="brandInfoPic">
+				</if>
+			 </div>
+            </div>
+			
+			<div class="am-form-group">
+              <label for="user-name" class="am-u-sm-3 am-form-label">所属家具厂</label>
+              <div class="am-u-sm-9">
+				<select name="store_id">
+					<option value="0">选择家具厂</option>
+					<volist name="fact" id="f">
+						<option value="{$f.store_id}"<?php if($brandInfo['store_id']==$f['store_id']){echo 'selected';} ?>>{$f.store_name}</option>	
+					</volist>
+				</select>
+              </div>
+            </div>
+			
+			<div class="am-form-group">
+              <label for="user-name" class="am-u-sm-3 am-form-label">所属风格</label>
+              <div class="am-u-sm-9">
+				<select name="style_id">
+					<option value="0">选择风格</option>
+					<volist name="style" id="s">
+						<option value="{$s.id}"<?php if($brandInfo['style_id']==$s['id']){echo 'selected';} ?>>{$s.style_name}</option>	
+					</volist>
+				</select>
+              </div>
+            </div>
+			
+			<div class="am-form-group">
+              <label for="user-intro" class="am-u-sm-3 am-form-label">品牌介绍 </label>
+              <div class="am-u-sm-9">
+                <textarea class="" rows="5" name="brand_desc"  placeholder="">{$brandInfo.brand_desc}</textarea>
+              </div>
+            </div>
+			
+			<div class="am-form-group">
+              <label for="user-email" class="am-u-sm-3 am-form-label">是否推荐</label>
+              <div class="am-u-sm-9" style='height:45px;line-height:45px'>
+                <input type="radio" name="brand_recommend" value='1' <?php if($brandInfo['brand_recommend']==1 && $_GET['act']!='add'){echo 'checked';} ?> > 是 &nbsp;&nbsp;
+                <input type="radio" name="brand_recommend" value='0' <?php if($brandInfo['brand_recommend']==0 || $_GET['act']=='add' ){echo 'checked';} ?>> 否
+              </div>
+            </div>
+			
+			<input type='hidden' name="act" value="{$Think.get.act}">
+            <div class="am-form-group">
+              <div class="am-u-sm-9 am-u-sm-push-3">
+                <input type="submit" class="am-btn am-btn-primary">
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+ 
+
+  </div>
+  <!-- content end -->
+
+</div>
+
+<include file="Application/Common/Layout/foot.html" /> 
+
+<script>
+	$("#brand_name").blur(function(){
+		var cateName  = $(this).val(); 
+		var cateName2 = $('#old_brand_name').val(); 
+		if(cateName==cateName2) return;
+		$.ajax({
+			type: 'get',
+			cache:false,
+			url:'/Admin/Goods/ajax_check_duplicate',
+			data:{
+				type :'brand_name',
+				value:cateName
+			},
+			success: function(data){
+				if(data=='1'){
+					alert('品牌名已存在！');
+					$(this).focus();
+				} 
+			},
+			dataType:'json'
+		});
+	});
+	
+	
+	$('#form1').submit(function(){
+		var getnameval = $("#brand_name").val();
+		if(getnameval==''){
+			alert('品牌名不能为空！');
+			return false;
+		}
+	});
+</script>

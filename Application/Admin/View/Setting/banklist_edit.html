@@ -1,0 +1,84 @@
+<include file="Application/Common/Layout/head.html" /> 
+<div class="am-cf admin-main">
+<include file="Application/Common/Layout/left.html" /> 
+  <!-- content start -->
+  <div class="admin-content">
+    <div class="admin-content-body">
+      <div class="am-cf am-padding am-padding-bottom-0">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">银行配置</strong> / <small>Bank Edit</small></div>
+      </div>
+
+      <hr/>
+
+      <div class="am-g">
+        <div class="am-u-sm-12 am-u-md-4 am-u-md-push-8">
+         
+        </div>
+
+        <div class="am-u-sm-12 am-u-md-8 am-u-md-pull-4">
+          <form class="am-form am-form-horizontal" id="form1"  action="" method="post">
+            <div class="am-form-group">
+              <label for="user-name" class="am-u-sm-3 am-form-label">银行名称</label>
+              <div class="am-u-sm-9" style='height:45px;line-height:45px'>
+                <input type="text" id="bankname" name="bankname" value="{$bank.bankname}" placeholder="请输入银行名称">
+                <input type="hidden" name="bankname2" id="bankname2" value="{$bank.bankname}" >
+              </div>
+            </div>
+			
+			<div class="am-form-group">
+              <label for="user-email" class="am-u-sm-3 am-form-label">状态</label>
+              <div class="am-u-sm-9" style='height:45px;line-height:45px'>
+                <input type="radio" name="state" value='1' <?php if($bank['state']==1 || $_GET['act']=='add'){echo 'checked';} ?> > 开启 &nbsp;&nbsp;
+                <input type="radio" name="state" value='0' <?php if($bank['state']==0 && $_GET['act']!='add'){echo 'checked';} ?>> 关闭
+              </div>
+            </div>
+			
+	 
+		
+            <div class="am-form-group">
+              <div class="am-u-sm-9 am-u-sm-push-3">
+                <input type="submit" class="am-btn am-btn-primary">
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+ 
+
+  </div>
+  <!-- content end -->
+
+</div>
+<include file="Application/Common/Layout/foot.html" /> 
+<script>
+	$("#bankname").blur(function(){
+		var bankname  = $(this).val(); 
+		var bankname2 = $('#bankname2').val(); 
+		if(bankname==bankname2) return;
+		$.ajax({
+			type: 'get',
+			cache:false,
+			url:'/Admin/Setting/check_duplicate',
+			data:{
+				type :'bankname',
+				value:bankname
+			},
+			success: function(data){
+				if(data=='1'){
+					alert('该银行已存在！');
+					$(this).focus();
+				} 
+			},
+			dataType:'json'
+		});
+	});
+	
+	$('#form1').submit(function(){
+		var getnameval = $("#bankname").val();
+		if(getnameval==''){
+			alert('银行名称不能为空！');
+			return false;
+		}
+	});
+</script>

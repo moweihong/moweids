@@ -1,0 +1,164 @@
+<extend name="Layouts:pop" />
+<block name="head_css">
+<link href="__CSS__/member.css" rel="stylesheet" type="text/css">
+</block>
+
+<block name="content">
+<form action="javascript:void(0);" id="eidtForm" class="mt10" method="post" autocomplete="off">
+	<input type="hidden" id="addree_id" name="addree_id" value="<?php echo $output['address_info']['address_id']; ?>" />
+    <ul class="list">
+        <li class="cf">
+            <label class="handle"><em class="cor-red">*</em>所在地区：</label>
+            <select id="tplProvince" name="province_id" style="width:100px">
+                <option value="0">选择省份</option>
+            </select>
+            <select id="tplCity" name="city_id" class="ml10" style="width:100px">
+                <option value="0">选择城市</option>
+            </select>
+            <select id="tplArea" name="area_id" class="ml10" style="width:100px">
+                <option value="0">选择地区</option>
+            </select>
+        </li>
+        <li class="cf">
+            <label class="handle" for="tplAddress"><em class="cor-red">*</em>详细地址：</label>
+            <textarea id="tplAddress" name="address" placeholder="建议您如实填写详细收货地址，如街道名称，门牌号，楼层和房间号等信息" maxlength="80"><?php echo $output['address_info']['address']; ?></textarea>
+        </li>
+        <li class="cf">
+            <label class="handle" for="tplZipCode">邮政编码：</label>
+            <input type="text" id="tplZipCode" name="zip_code" class="text js-number" placeholder="请输入邮政编码" maxlength="10" value="<?php echo $output['address_info']['zip_code']; ?>" />
+        </li>
+        <li class="cf">
+            <label class="handle" for="tplConsignee"><em class="cor-red">*</em>收货人姓名：</label>
+            <div class="rel">
+                <input type="text" id="tplConsignee " name="true_name" class="text" placeholder="请输入收货人姓名" maxlength="30" value="<?php echo $output['address_info']['true_name']; ?>" required />
+                <span show="true_name.check" class="error-msg">
+                    <em class="errow-arrow"></em>
+                    请输入收货人姓名
+                </span>
+            </div>
+        </li>
+        <li class="cf">
+            <label class="handle" for="tplTel"><em class="cor-red">*</em>手机号码：</label>
+            <div class="rel">
+                <input type="text" id="tplTel" name="mob_phone" class="text js-number" value="<?php echo $output['address_info']['mob_phone']; ?>" placeholder="请输入手机号码" maxlength="11" required check-phone />
+                <span show="mob_phone.check" class="error-msg">
+                    <em class="errow-arrow"></em>
+                    请输入正确的手机号码
+                </span>
+            </div>
+        </li>
+        <li class="cf">
+            <label class="handle">电话号码：</label>
+            <input type="text" class="text js-codes js-number" style="width:60px;" maxlength="6"  value="<?php echo $output['address_info']['city_code']; ?>"/>
+            <span class="cor-gray mr5 ml5">——</span>
+            <input type="text" class="text js-phone js-number" value="<?php echo $output['address_info']['tel']; ?>" style="width:200px;" maxlength="10" />
+            <p class="mt10">
+                <label><input type="checkbox" class="v-2 js-isDefault" checked="checked" /> 设置为默认地址</label>
+            </p>
+            <p class="mt10">
+                <button class="btn btn-info js-modifyBtn">确认</button>
+            </p>
+        </li>
+    </ul>
+</form>
+<input type="hidden" id="infoProvince" value="<?php echo $output['address_info']['province_id']; ?>" />
+<input type="hidden" id="infoCity" value="<?php echo $output['address_info']['city_id']; ?>" />
+<input type="hidden" id="infoArea" value="<?php echo $output['address_info']['area_id']; ?>" />
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+(function($){
+	define("m/editAddress",function(require, exports, module){
+		require("jquery/layer");
+		require("jquery/form");
+		var Adr = require("m/address");
+		var manage = require("com/manage");
+		var param = manage.getParam();
+		var Module = {
+			init: function(){
+				var form = $("#eidtForm").form(),
+					infoProvince = $("#infoProvince").val() || "",
+					infoCity = $("#infoCity").val() || "",
+					infoArea = $("#infoArea").val() || "",
+                    frompage = param.frompage || "",
+					address_id = param.address_id || "",
+					index = parent.layer.getFrameIndex(window.name);
+				seajs.use("com/adarray", function() {
+					addressInit("tplProvince", "tplCity", "tplArea", infoProvince, infoCity, infoArea);
+				});
+				/*
+				 * 修改地址
+				 * */
+				$("#eidtForm").on("click", ".js-modifyBtn", function(){
+					if(!form.valid()) return false;
+					var me = $(this),
+						$form = me.closest("form"),
+                        $tbody = parent.$("#container tbody");
+                    if(frompage == "buy"){ //结算页
+                        if(address_id){ //编辑收货地址
+                            Adr.sendData($form, "/index.php?c=member&a=update_address", function(address_id, data){
+                                var $li = parent.$(".js-add-address li[data-id=" + address_id + "]");
+                                $(".js-name", $li).html(data.true_name);
+                                $(".js-address", $li).html(data.area_info + data.address);
+                                $(".js-phone", $li).html(data.mob_phone);
+                                if(data.is_default == 1){ //默认
+                                    $li.addClass('add-default-address').siblings('li').removeClass('add-default-address');
+                                    // $(".js-select-address", $li).html("收货地址");
+                                    // $li.siblings("li").find(".js-select-address").html("设为收货地址");
+                                    parent.$('.js-addr').html(data.area_info + data.address);
+                                    parent.$('.js-addr-name').html(data.true_name);
+                                    parent.$('.js-addr-phone').html(data.mob_phone);
+                                }
+                                parent.layer.close(index);
+                            });
+                        }else{ //新增收货地址
+                            $("#addree_id").remove();
+                             Adr.sendData($form, "/index.php?c=member&a=save_address", function(address_id, data){
+                                var add= "";
+                                add += '<li class="js-select-address" data-id=' + address_id + '>';
+                                add += '<p class="true-name"><em class="js-name">' + data.true_name + '</em></p>'; //<a href="javascript:void(0);" class="isdefault fr">设为收货地址</a>
+                                add += '<p class="mt5"><span class="address js-address">'+ data.area_info + data.address+'</span><span class="phone js-phone">' + data.mob_phone + '</span></p>';
+                                add += '<p class="mt5"><a href="javascript:void(0);" class="del mr10 js-delAttr"></a><a href="javascript:void(0);" class="mr10 bianji js-bianji"></a></p>';
+                                add += '<i class="add-select"></i>';
+                                add += '</li>';
+                                parent.$(".js-add-last-before").before(add);
+                                if(data.is_default == 1){ //默认
+                                    var $li = parent.$(".js-add-address li[data-id=" + address_id + "]");
+                                    $li.addClass('add-default-address').siblings('li').removeClass('add-default-address');
+                                    // $(".js-select-address", $li).html("收货地址");
+                                    // $li.siblings("li").find(".js-select-address").html("设为收货地址");
+                                    parent.$('.js-addr').html(data.area_info + data.address);
+                                    parent.$('.js-addr-name').html(data.true_name);
+                                    parent.$('.js-addr-phone').html(data.mob_phone);
+                                }
+                                parent.layer.close(index);
+                            });
+                        }
+                    }else{ //买家中心-收货地址
+                        Adr.sendData($form, "/index.php?c=member&a=update_address", function(address_id, data){
+                            $("tr[data-id=" + address_id + "] td:eq(0)", $tbody).html(data.true_name);
+                            $("tr[data-id=" + address_id + "] td:eq(1)", $tbody).html(data.area_info);
+                            $("tr[data-id=" + address_id + "] td:eq(2)", $tbody).html(data.address);
+                            $("tr[data-id=" + address_id + "] td:eq(3)", $tbody).html(data.zip_code);
+                            $("tr[data-id=" + address_id + "] td:eq(4)", $tbody).html(data.mob_phone);
+                            if(data.is_default == 1){ //默认
+                                Adr.addSetText();
+                                $("tr[data-id=" + data.address_id + "] td:eq(5)", $tbody).html('<a href="javascript:void(0);" class="cor-blue js-del">删除</a> - <a href="javascript:void(0);" class="cor-blue js-edit">修改</a> - <a href="javascript:void(0);" class="disable js-set">默认地址</a>');
+                            }else{
+                                $("tr[data-id=" + data.address_id + "] td:eq(5)", $tbody).html('<a href="javascript:void(0);" class="cor-blue js-del">删除</a> - <a href="javascript:void(0);" class="cor-blue js-edit">修改</a> - <a href="javascript:void(0);" class="cor-blue js-set">设为默认</a>');
+                            }
+                            parent.layer.close(index);
+                        });
+                    }
+				});
+			}
+		};
+		module.exports = Module;
+	});
+	seajs.use("m/editAddress", function(module){
+		module.init();
+	});
+})($);
+</script>
+</block>

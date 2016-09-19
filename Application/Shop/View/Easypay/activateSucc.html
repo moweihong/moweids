@@ -1,0 +1,31 @@
+<extend name="Layouts:home"/>
+<block name="title"><title>激活成功-{:C('site_name')}</title></block>
+<block name="head_css">
+<link rel="stylesheet" type="text/css" href="__CSS__/apply.css">
+</block>
+
+<block name="content">
+<div class="activate-success wrapper mt140">
+	<!--乐购-->
+    <if condition="$type eq 0">
+		<h2>
+		    <i class="ic-succeed-green mr5"></i>
+		    激活成功
+		    <span class="fs14 ml10">(当前可用额度：{$credit|ncPriceFormat}元)</span>
+		</h2>
+		<p>
+			<a href="{:U('/shop/TFurniture/index')}" class="btn btn-info">使用额度</a>
+		    <a href="{:U('/shop/TEasypay/index')}" class="cor-blue ml30">返回额度中心</a>
+		</p>
+		<else/>    
+		<!--乐装 -->
+		<h2>
+		    <i class="ic-succeed-green mr5"></i>
+		    激活成功
+		</h2>
+		<p>
+			<a href="{:U('/shop/THomedesign/index')}" class="btn btn-info">使用分期</a>
+		</p>
+    </if>
+</div>
+</block>

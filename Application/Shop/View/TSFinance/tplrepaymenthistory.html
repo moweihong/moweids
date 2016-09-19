@@ -1,0 +1,74 @@
+<include file="Layouts:member_top"/>
+<div class="repayment-histor-pop">
+    <p class="tit-name">还款记录</p>
+	<p class="tit-line">订单号：{$orderid}</p>
+    <div class="repayment-histor-table mt20">
+        <table class="table" width="500px">
+            <colgroup>
+                <col width="25%">
+                <col width="25%">
+                <col width="25%">
+                <col width="">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>期数</th>
+                    <th>还款金额</th>
+                    <th>还款时间</th>
+                    <th>还款状态</th>
+                </tr>
+            </thead>
+            <tbody>
+                <if condition="$list AND count($list['repayment_list'])">
+                    <volist name="list.repayment_list" id="vo">
+                    <tr>
+                        <td>{$vo.cur_period}</td>
+                        <td>{$vo.repay_money}</td>
+                        <td>{$vo.repay_time|date='Ymd',###}</td>
+                        <td>
+                            <if condition="$vo.repay_status eq 1">
+                               <i class="ic  mark-succ "></i>
+                               <else/>
+                               <i class="ic mark-fail"></i>
+                            </if>
+                        </td>
+                    </tr>
+                    </volist>
+                    <else/>
+                    <tr><td colspan="4">暂无还款记录</td></tr>
+                </if>
+            </tbody>
+        </table>
+    </div>
+    <p class="pop-btn-control tr mt10">
+    	<a href="javascript:void(0);" class="btn btn-info js-closeBtn">关闭</a>
+    </p>
+</div>
+<script type="text/javascript">
+(function($){
+	define("s/repaymentHistor",function(require, exports, module){
+		require("jquery/layer");
+		require("com/global");
+		var manage = require("com/manage");
+		var param = manage.getParam();
+		var Module = {
+			init: function(){
+				var index = parent.layer.getFrameIndex(window.name);
+				parent.layer.iframeAuto(index);
+				/*
+				 *关闭
+				 */
+				$(".repayment-histor-pop").on("click", ".js-closeBtn", function(){
+					parent.layer.close(index);
+				});
+			}
+		};
+		module.exports = Module;
+	});
+	seajs.use("s/repaymentHistor", function(module){
+		module.init();
+	});
+})($);
+</script>
+</body>
+</html>

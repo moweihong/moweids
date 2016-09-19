@@ -1,0 +1,42 @@
+<include file="Application/Common/Layout/head.html" /> 
+<div class="am-cf admin-main">
+<include file="Application/Common/Layout/left.html" />
+  <!-- content start -->
+  <div class="admin-content">
+    <div class="admin-content-body">
+      <div class="am-cf am-padding am-padding-bottom-0">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">系统文章管理</strong> / <small>Article  class add</small></div>
+      </div>
+
+      <hr/>
+
+      <div class="am-g">
+        <div class="am-u-sm-12 am-u-md-4 am-u-md-push-8">
+         
+        </div>
+		
+        <div class="am-u-sm-12 am-u-md-8 am-u-md-pull-4">
+        	<form action="" method="post">
+        	标题：<input type="text" name="doc_title" value="<?php echo $article_array['doc_title'];?>"><br />
+        
+        	<input type="hidden" name="act" value="<?php echo $act;?>">
+        	<?php if(isset($doc_id)){?>
+        	<input type="hidden" name="article_id" value="<?php echo $doc_id;?>">
+        	<?php } ?>
+        	<script id="editor" type="text/plain" name='doc_content'><?php echo $article_array['doc_content'];?></script>
+        	<input type="submit" value="提交">
+    			</form>
+        </div>
+      </div>
+    </div>
+ 
+
+  </div>
+  <!-- content end -->
+
+</div>
+<include file="Application/Admin/View/foot.html" /> 
+<script>
+var ue=UE.getEditor('editor')
+
+</script>

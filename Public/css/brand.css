@@ -1,0 +1,27 @@
+/*
+************ author: yanyali
+************ 品牌专区
+*/
+/*品牌首页*/
+.store-addr{padding:25px 0 25px 100px;}
+.store-addr li{float:left;width:235px;line-height:35px;font-size:14px;}
+.store-addr li a{color: #333;}
+
+/*品牌列表页*/
+.brand-style-list{width:105%;margin-left:-8px;margin-top: -8px;}
+.brand-style-list .item{display:inline;float:left;width:250px;margin:8px 0 0 8px;font-size:12px;background-color:#fff;}
+.brand-style-list .item .style-pic{height:250px;line-height:240px;text-align:center;}
+.brand-style-list .item .style-pic img{vertical-align:middle; max-width: 230px; max-height: 240px;}
+.brand-style-list .item .style-info{margin:0 20px 30px;padding-top:30px;border-top:1px solid #ccc;}
+.brand-style-list .item .style-info a{color: #323232;}
+
+/*实体门店 更多*/
+.brand-store dt{line-height:30px;font-size:18px;color:#333;}
+.brand-store dd{display:inline;float:right;margin-right:-100px;}
+
+/*品牌加盟*/
+.join-btn{z-index:200;position:fixed;right:100px;top:300px;padding:10px 15px;text-align:center;color:#fff;background-color:#5b5b5b;cursor:pointer;}
+.join-brand{margin-top:20px;text-align:center;}
+.join-brand p{padding:10px}
+.join-brand h2{    margin: 50px 0 20px 0; font-size: 22px;color: #323232;}
+.join-brand input{    border-radius: 0; line-height: 28px; height: 28px;}

@@ -1,0 +1,16 @@
+<extend name="Layouts:home" />
+<block name="title"><title>订单提交成功-家装设计-{:C('site_name')}</title></block>
+<block name="head_css">
+	<link href="__CSS__/homedesign.css" rel="stylesheet" type="text/css">
+</block>
+<block name="content">
+	<div class="h-buy-success">
+		<h2>订单提交成功！</h2>
+		<p>乐购分期订单提处理中，将在48小时内处理完成！</p>
+		<p class="cor-black">订单请在特速金融查看</p>
+		<p class="mt30">
+			<a href="{:U('/shop/TSFinance/tsFinance')}" class="btn btn-info btn-small">特速分期</a>
+			<a href="/" class="btn btn-red btn-small ml20">首页</a>
+		</p>	
+	</div>
+</block>

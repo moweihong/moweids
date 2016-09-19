@@ -1,0 +1,100 @@
+<extend name="Layouts:seller" />
+<block name="title"><title>在售中的商品-<?php if($_SESSION['com_type'] == 3){?>供货中心<?php } else{?>卖家中心<?php } ?>-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="content-wrap goodssale">
+	<h2 class="query-tit">商品管理</h2>
+	<div class="query-box mt10">
+        <form action="javascript:void(0);" class="query-bar ml20" id="queryform" autocomplete="off" method="get">
+            <p class="unit-line">
+                <span class="unit">
+                    <label class="label" for="goods_name">商品名称：</label>
+                    <input type="text" id="goods_name" name="goods_name" class="text" value="" placeholder="请填写商品名称" />
+                </span>
+                <span class="unit">
+                    <label class="label" for="goodscode">商品编号：</label>
+                    <input type="text" id="goodscode" name="goodscode" class="text" value="" placeholder="请填写商品编号" />
+                </span>
+                <span class="unit">
+                    <label class="label">商品分类：</label>
+                    <select name="stc_id">
+                    	<option value="0">请选择...</option>
+                        <?php if(!empty($store_goods_class)){
+                            foreach ($store_goods_class as $val) {?>
+                                <option value="<?php echo $val['stc_id']; ?>" <?php if ($_GET['stc_id'] == $val['stc_id']){ echo 'selected=selected';}?>><?php echo $val['stc_name']; ?></option>
+                                <?php if (is_array($val['child']) && count($val['child']) > 0){
+                                    foreach ($val['child'] as $child_val){?>
+                                        <option value="<?php echo $child_val['stc_id']; ?>" <?php if ($_GET['stc_id'] == $child_val['stc_id']){ echo 'selected=selected';}?>>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $child_val['stc_name']; ?></option>
+                                    <?php }
+                                }
+                            }
+                        }?>
+                    </select>
+                </span>
+                <span class="unit">
+                    <label class="label">价格：</label>
+                    <input type="text" name="f_price" class="text" value="" style="width:70px;" />
+                    <span class="mr5 ml5">到</span>
+                    <input type="text" name="l_price" class="text" value="" style="width:70px;" />
+                </span>
+                <span class="unit">
+                    <label class="label" for="sales">总销量：</label>
+                    <input type="text" name="s_salenum" class="text" value="" style="width:70px;" />
+                    <span class="mr5 ml5">到</span>
+                    <input type="text" name="e_salenum" class="text" value="" style="width:70px;" />
+                </span>
+                <span class="unit tr">
+                	<button href="javascript:void(0);" class="btn btn-blue mr5 js-queryBtn">搜索</button>
+                </span>
+            </p>
+        </form>
+    </div>
+    <p class="tab-hd cf">
+        <a href="javascript:void(0);" class="curr">出售中的商品</a>
+        <a href="/StoreCommon/getGoodsList?type=inventory<?php echo $_GET['is_offline']?'&is_offline=1':'';?>">仓库中的商品</a>
+        <?php if (!isset($_GET['is_offline'])){ ?>
+            <a href="/StoreCommon/getGoodsList?type=verify">审核中的商品</a>
+        <?php } ?>
+    </p>
+    <div class="tab-cont">
+    	<p class="table-top fs14 cf js-tableTop">
+        	<span style="width:335px;text-align:left;">
+            	<label class="ml10"><input type="checkbox" class="v-2 mr5 js-allCheck" />全选</label>
+                <a href="javascript:void(0);" class="cor-blue ml20 js-batchDel">下架</a>
+            </span>
+            <span style="width:12%">价格</span>
+            <span style="width:10%"><a href="javascript:void(0);" class="cor-blue js-storage">库存 <i class="ic ic-down-arrow"></i></a></span>
+            <span style="width:10%"><a href="javascript:void(0);" class="cor-blue js-salenum">销量 <i class="ic ic-down-arrow"></i></a></span>
+            <span style="width:10%"><a href="javascript:void(0);" class="cor-blue js-addtime">发布时间 <i class="ic ic-down-arrow"></i></a></span>
+            <span style="width:12%">商品编号</span>
+            <span style="width:110px">操作</span>
+        </p>
+        <table class="table" width="100%">
+            <colgroup>
+                <col width="35px" />
+                <col width="32%" />
+                <col width="12%" />
+                <col width="10%" />
+                <col width="10%" />
+                <col width="10%" />
+                <col width="12%" />
+                <col width="" />
+            </colgroup>
+        	<tbody></tbody>
+        </table>
+        <p class="loading-bar"><i class="loading-ic"></i> 加载中...</p>
+    	<div id="jspage" class="dis-none"></div>
+    </div>
+</div>
+<input type="hidden" id="pagemold" value="sale" />
+<input type="hidden" id="is_offline" value="<?php echo $_GET['is_offline']?>" />
+<input type="hidden" id="apiurl" value="/StoreCommon/getGoodsList" />
+<input type="hidden" id="deleteUrl" value="/StoreCommon/turnToOnOff?type=off" data-type="goodslist" data-msg="商品" data-isreload="no" />
+<input type="hidden" id="count" value="<?php echo $count;?>" />
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+    seajs.use("s/goodslist");
+</script>
+</block>

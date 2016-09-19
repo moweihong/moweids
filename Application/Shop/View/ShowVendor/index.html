@@ -1,0 +1,52 @@
+<extend name="Layouts:store" />
+<block name="title"><title>店铺页-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="store-banner">
+	<include file="Layouts:top_banner"/>
+</div>
+<div class="wrapper floor-template">
+    <h2 class="main-tit">
+    	<span>推荐商品</span>
+        <a href="{:U('ShowVendor/goodssearch',array('store_id'=>$_GET['store_id']))}">更多 &gt;</a>
+        
+    </h2>
+    <ul class="pro-list cf">
+        <foreach name="recommended_goods_list" item="val" >
+            <li>
+                <a href="/goods/index?goods_id={$val.goods_id}" title="<?php echo $val['goods_name'];?>">
+                    <div class="goods-pic">
+                        <img src="<?php echo thumb($val, 260)?>" alt="<?php echo $val['goods_name'];?>" />
+                    </div>
+                    <div class="goods-info">
+                        <p class="name"><?php echo $val['goods_name'];?></p>
+                        <p class="cor-9">免息分期</p>
+                    </div>
+                </a>
+            </li>
+        </foreach>
+    </ul>
+</div>
+
+<div class="wrapper floor-template">
+    <h2 class="main-tit">
+    	<span>新品</span>
+        <a href="{:U('ShowVendor/goodssearch',array('store_id'=>$_GET['store_id']))}">更多 &gt;</a>
+    </h2>
+    <ul class="pro-list cf">
+        <foreach name="new_goods_list" item="val" >
+            <li>
+                <a href="/goods/index?goods_id={$val.goods_id}" title="<?php echo $val['goods_name'];?>">
+                    <div class="goods-pic">
+                        <img src="<?php echo thumb($val, 260)?>" alt="<?php echo $val['goods_name'];?>" />
+                    </div>
+                    <div class="goods-info">
+                        <p class="name"><?php echo $val['goods_name'];?></p>
+                        <p class="cor-9">免息分期</p>
+                    </div>
+                </a>
+            </li>
+        </foreach>
+    </ul>
+</div>
+</block>

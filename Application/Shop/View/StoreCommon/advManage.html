@@ -1,0 +1,153 @@
+<extend name="Layouts:seller" />
+<block name="title"><title>广告管理-<?php if($_SESSION['com_type'] == 3){?>供货中心<?php } else{?>卖家中心<?php } ?>-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="content-wrap advsetup-box">
+    <?php if($_SESSION['com_type'] == 3){ ?>
+        <!--工厂-->
+    	<p class="tab-tit cf js-tabTit">
+           <a href="javascript:void(0);">店招设置</a>
+           <!--<a href="#1" class="curr" >横幅设置</a>-->
+        </p>
+    <?php }elseif($_SESSION['com_type'] == 2){ ?>
+    <?php }elseif($_SESSION['com_type'] == 1){ ?>
+        <p class="tab-tit cf js-tabTit">
+           <!--<a href="#0">店招设置</a>-->
+           <a href="javascript:void(0);" class="curr" >横幅设置</a>
+        </p>
+    <?php }else{ ?>
+    <?php } ?>
+    <div class="store-settimg h700">
+        <?php if($_SESSION['com_type'] == 3){ ?>
+        	<form action="javascript:void(0);" id="formSignage" class="form-signage js-tabCont" method="post" autocomplete="off">
+            	<div class="h30 cf">
+                    <a href="javascript:void(0);" id="signageFileBtn" class="btn fl">添加图片</a>
+                    <span class="cor-9 mt5 ml10 fl">(建议尺寸1280PX*240PX，大小不超过2M)</span>
+                </div>
+            	<div id="signageFileList" class="cf">
+                    <div class="file-item thumbnail upload-state-done">
+                    	<p class="file-panel" style="height:0px;"><a class="icon-view js-viewImg" title="预览"></a><a class="icon-cancel js-cancel" title="删除"></a></p>
+                        <img width="640" height="120" src="__UPLOAD__/shop/store/{$store_info['store_banner']}" data-rel="{$store_info['store_banner']}" />
+                    </div>
+            
+                </div>
+                <a href="javascript:void(0);" class="btn btn-blue mt30 js-saveSignage">保存</a>
+            </form>
+        <?php }elseif($_SESSION['com_type'] == 2){ ?>
+        <?php }elseif($_SESSION['com_type'] == 1){ ?>
+            <form action="javascript:void(0);" id="formBanner" class="form-banner js-tabCont" method="post" autocomplete="off">
+            	<div class="h30 cf">
+                    <a href="javascript:void(0);" id="bannerFileBtn" class="btn fl">上传图片</a>
+                    <span class="cor-9 mt5 ml10 fl">(最多上传5张，建议尺寸1920PX*640PX，大小不超过2M)</span>
+                </div>
+            	<div id="bannerFileList">
+    				<!--图片初始化-->
+    				<?php foreach ($store_info['store_slide'] as $key=>$val) {
+    					if(!empty($val)){?>
+    						<div class="file-item thumbnail upload-state-done">
+                                <p class="file-panel" style="height:0px;"><a class="icon-view js-viewImg" title="预览"></a><a class="icon-cancel js-cancel" title="删除"></a></p>
+                                <img width="640" height="213" src="__UPLOAD__/shop/store/slide/<?php echo $val; ?>" data-rel="__UPLOAD__/shop/store/slide/<?php echo $val; ?>"/>
+                                <p class="info"><label><input type="radio" name="cover" class="ver-2" value="1" /> 设为首页</label></p>
+                                <p class="chained">链接地址：<input type="text" class="text js-url" value="<?php echo $store_info['store_slide_url'][$key];?>" /></p>
+                            </div>
+                        <?php }
+                    }?>
+                </div>
+                <a href="javascript:void(0);" class="btn btn-blue mt30 js-saveBanner">保存</a>
+            </form>
+        <?php }else{ ?>
+        <?php } ?>
+    </div>
+</div>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+(function($){
+	define("s/advsetup",function(require, exports, module){
+		require("jquery/layer");
+		var upload = require("jquery/upload");
+		var manage = require("com/manage");
+		var Module = {
+			init: function(){
+				/*
+				 * 店招图片上传
+				 * */
+				upload.base({
+					pickID: "signageFileBtn",
+                    objID: "signageFileList",
+					storage: "store",
+					isSingle: true,
+					thumbnailWidth: 640,
+					thumbnailHeight: 120
+				});
+				/*
+				 * 横幅图片上传
+				 * */
+				upload.base({
+					pickID: "bannerFileBtn",
+                    objID: "bannerFileList",
+					storage: "slide",
+					isBanner: true,
+					thumbnailWidth: 640,
+					thumbnailHeight: 213
+				});
+				/*
+				 * tab切换
+				 * */
+				$(".js-tabTit").on("click", "a", function(){
+					layer.closeAll();
+					var me = $(this),
+						n = me.index();
+					me.addClass("curr").siblings("a").removeClass("curr");
+					$(".js-tabCont:eq(" + n + ")").show().siblings(".js-tabCont").hide();
+				});
+				var num = location.hash.replace(/^\s*#\s*/,"") || 0;
+				$(".js-tabTit a:eq(" + num + ")").trigger("click");
+				/*
+				 * 保存-店招设置
+				 * */
+				$("#container").on("click", ".js-saveSignage", function(){
+					var data = {
+						banner:	$("#signageFileList img").data("rel")
+					}
+					manage.getApi("/StoreCommon/saveSdvset", data);
+				});
+				/*
+				 * 保存-横幅设置
+				 * */
+				$("#container").on("click", ".js-saveBanner", function(){
+					var banner = [];
+					$("#bannerFileList .file-item").each(function(){
+						var s_pic = $("img", this).attr("src") || "",
+							m_pic = $("img", this).data("rel") || "",
+							url = $.trim($(".js-url", this).val()) || "",
+							$input = $(".info input", this);
+						if($input.is(":checked")){
+							var fengmian = 1;
+						}else{
+							var fengmian = 0;
+						}
+						var banner_obj = {
+							s_pic	: s_pic,
+							m_pic	: m_pic,
+							url		: url,
+							fengmian: fengmian
+						}
+						banner.push(banner_obj);
+					});
+					var data = {
+						banner: banner
+					};
+					manage.getApi("/StoreCommon/saveBanner", data);
+				});
+			}
+		}
+		module.exports = Module;
+	});
+	seajs.use("s/advsetup", function(module){
+		module.init();
+	});
+})($);
+</script>
+</block>

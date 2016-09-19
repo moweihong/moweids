@@ -1,0 +1,80 @@
+<include file="Application/Common/Layout/head.html" /> 
+<div class="am-cf admin-main">
+<include file="Application/Common/Layout/left.html" /> 
+
+  <!-- content start -->
+  <div class="admin-content">
+    <div class="admin-content-body">
+      <div class="am-cf am-padding am-padding-bottom-0">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">品牌风格</strong> / <small>Brand Sytle</small></div>
+      </div>
+
+      <hr>
+
+      <div class="am-g">
+        <div class="am-u-sm-12 am-u-md-6">
+          <div class="am-btn-toolbar">
+            <div class="am-btn-group am-btn-group-xs">
+              <button onclick="window.location='/Admin/Goods/brand_style?p={$Think.get.p}&act=add'" type="button" class="am-btn am-btn-default"><span class="am-icon-plus"></span>新增</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="am-g">
+        <div class="am-u-sm-12">
+ 
+            <table class="am-table am-table-striped am-table-hover table-main">
+              <thead>
+              <tr>
+                <!--<th class="table-check"><input type="checkbox" /></th>-->
+				<th class="table-id">ID</th>
+				<th class="table-title" width="15%">风格名称</th>
+				<th class="table-type" >添加时间</th>
+				<th class="table-author am-hide-sm-only">状态</th>
+				<th class="table-set">操作</th>
+              </tr>
+              </thead>
+              <tbody>
+			  <volist name="list" id="l">
+              <tr>
+                <!--<td><input type="checkbox" /></td>-->
+                <td>{$i}</td>
+                <td><a href="#">{$l.style_name}</a></td>
+				<td>{$l.addtime|date="Y-m-d H:i:s",###}</td>
+                <td class="am-hide-sm-only">
+					<eq name="l.status" value='1'>是<else/>否</eq>
+				</td>
+                <td>
+                  <div class="am-btn-toolbar">
+                    <div class="am-btn-group am-btn-group-xs">
+                      <button onclick="window.location='/Admin/Goods/brand_style?p={$Think.get.p}&act=edit&id={$l.id}'" class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                      <button onclick="window.location='/Admin/Goods/brand_style?p={$Think.get.p}&act=del&id={$l.id}'" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+			</volist>
+			  
+              
+              </tbody>
+            </table>
+			
+            <div class="am-cf">
+              共 <?php echo $count ?> 条记录，每页显示15条记录
+              <div class="am-fr">
+                {$page} 
+              </div>
+            </div>
+            <hr />
+     
+        </div>
+
+      </div>
+    </div>
+ 
+
+  </div>
+  <!-- content end -->
+</div>
+<include file="Application/Common/Layout/foot.html" /> 

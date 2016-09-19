@@ -1,0 +1,76 @@
+<include file="Application/Common/Layout/head.html" /> 
+<div class="am-cf admin-main">
+<include file="Application/Common/Layout/left.html" /> 
+  <!-- content start -->
+  <div class="admin-content">
+    <div class="admin-content-body">
+      <div class="am-cf am-padding am-padding-bottom-0">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">规格编辑</strong> / <small>Specification Edit</small></div>
+      </div>
+
+      <hr/>
+
+      <div class="am-g">
+        <div class="am-u-sm-12 am-u-md-4 am-u-md-push-8">
+         
+        </div>
+
+        <div class="am-u-sm-12 am-u-md-8 am-u-md-pull-4">
+          <form class="am-form am-form-horizontal" action="" id="form1" method="post">
+            <div class="am-form-group">
+              <label for="user-name" class="am-u-sm-3 am-form-label">规格名称</label>
+              <div class="am-u-sm-9">
+                <input type="text" id="sp_name" name="sp_name" value="{$sp.sp_name}" placeholder="请输入规格名称">
+                <input type="hidden" id="sp_name_old" name="sp_name_old" value="{$sp.sp_name}" >
+              </div>
+            </div>
+
+			<input type='hidden' name="act" value="{$Think.get.act}">
+            <div class="am-form-group">
+              <div class="am-u-sm-9 am-u-sm-push-3">
+                <input type="submit" class="am-btn am-btn-primary">
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+     
+
+  </div>
+  <!-- content end -->
+
+</div>
+<include file="Application/Common/Layout/foot.html" /> 
+<script>
+	$("#sp_name").blur(function(){
+		var sp_name  = $(this).val(); 
+		var sp_name2 = $('#sp_name_old').val();    
+		if(sp_name==sp_name2) return;
+		$.ajax({
+			type: 'get',
+			cache:false,
+			url:'/Admin/Goods/ajax_check_duplicate',
+			data:{
+				type :'spec_name',
+				value:sp_name
+			},
+			success: function(data){
+				if(data=='1'){
+					alert('规格名已存在！');
+					$(this).focus();
+				} 
+			},
+			dataType:'json'
+		});
+	});
+	
+	$('#form1').submit(function(){
+		var getnameval = $("#sp_name").val();
+		if(getnameval==''){
+			alert('规格名不能为空！');
+			return false;
+		}
+	});
+</script>

@@ -1,0 +1,157 @@
+<extend name="Layouts:pop" />
+<block name="head_css">
+<link href="__CSS__/seller.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+.layui-layer-tips .layui-layer-content{top:-10px;}
+</style>
+</block>
+
+<block name="content">
+<div class="send-pop modify-price-top">
+	<div class="send-table">
+        <table width="100%" class="table">
+            <colgroup>
+                <col width="32%">
+                <col width="18%">
+                <col width="12%">
+                <col width="18%">
+                <col width="">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>商品</th>
+                    <th>单价</th>
+                    <th>数量</th>
+                    <th>优惠</th>
+                    <th>改价</th>
+                    <!--
+                    <th>运费</th>
+                    -->
+                </tr>
+            </thead>
+            <tbody>
+				<?php foreach($order_info['extend_order_goods'] as $key => $goods) { ?>
+                    <tr data-id="<?php echo $goods['rec_id'];?>">
+                        <td class="n1"><?php echo $goods['goods_name']; ?></td>
+                        <td>¥<?php echo $goods['goods_price']; ?></td>
+                        <td class="js-num"><?php echo $goods['goods_num']; ?></td>
+                        <td>-</td>
+                        <td><input type="text" class="text js-money js-price" value="<?php echo $goods['goods_pay_price']; ?>" placehoder="请填写价格" style="width:60px" maxlength="20" /></td>
+                        <!--
+    					<?php if($key == 0) { ?>
+    					<td rowspan="<?php echo sizeof($order_info['extend_order_goods']); ?>">
+                         	<input type="text" class="text js-money js-freight" value="<?php echo $order_info['shipping_fee'];?>" placehoder="请填写运费" style="width:60px" maxlength="10" />
+                        </td>
+    					<?php }?>
+                        -->
+                    </tr>
+				<?php } ?>
+            </tbody>
+        </table>
+    </div>
+    <div class="shipping-address cf">
+        <cite>收货地址：</cite>
+        <span class="addr"><?php echo @$order_info['extend_order_common']['reciver_info']['address'];?></span>
+        <span class="pay fr">买家实付：<em class="cor-red">¥</em><em class="cor-red js-totalPrice"><?php echo $order_info['order_amount']; ?></em></span>
+    </div>
+    <p class="pop-btn-control tr mt10">
+		<a href="javascript:void(0);" class="btn btn-blue js-submitBtn">提交</a>
+	</p>
+</div>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+(function($){
+	define("s/modifyPrice",function(require, exports, module){
+		require("jquery/layer");
+		require("com/global");
+		var manage = require("com/manage");
+		var param = manage.getParam();
+		var Module = {
+			init: function(){
+				var index = parent.layer.getFrameIndex(window.name);
+				parent.layer.iframeAuto(index);
+				/*
+				 *直接免运费
+				$(".modify-price-top").on("click", ".js-free", function(){
+					var $td = $(this).closest("td");
+					$(".js-freight", $td).val("0");
+					count_price();
+				});
+                */
+				/*
+				 *修改运费
+				 */
+				$(".modify-price-top").on("keyup", ".js-price", function(){
+					if(!$(this).val()) $(this).val("0");
+					count_price();
+				});
+				/*
+				 *提交
+				 */
+				$(".modify-price-top").on("click", ".js-submitBtn", function(){
+					var isPass = true,
+						goods_obj = {};
+					$(".modify-price-top tbody tr").each(function(){
+						var good_id = $(this).data("id"),
+							price = $.trim($(".js-price", this).val());
+						if(!price){
+							$.wrongTip($(".js-submitBtn"), "请填写价格");
+							isPass = false;
+							return false;
+						}
+						goods_obj[good_id] =  price;
+					});
+					var data = {
+							state_type	: "modify_price",
+							order_id	: param.order_id || "",
+							shipping_fee: 0,
+							order_amount: goods_obj,
+							goods_amount: $(".js-totalPrice").text()
+						};
+					if(!isPass) return;
+					var pid = layer.load(360);
+					manage.ajax({
+						url: gConfig.apiurl + "/shop/storeCommon/modifyState",
+						data: data,
+						success: function(result){
+							layer.close(pid);
+							var resultText = result.resultText || {};
+							isClick = false;
+							if(result.code == 1){
+								$.wrongMsg(resultText.message || "操作成功", 1);
+								setTimeout(function(){
+									parent.location.reload();
+								},1000);
+							}else{
+								$.wrongTip($(".js-submitBtn"), resultText.message || "操作失败");
+							}
+						},
+						error: function(){
+							layer.close(pid);
+							isClick = false;
+						}
+					});
+				});
+				/*
+				 *价格计算
+				 */
+				function count_price(){
+					var price = 0;
+					$(".modify-price-top tbody tr").each(function(){
+						price += (parseFloat($(".js-price", this).val()) * parseFloat($(".js-num", this).text()));
+					});
+					if(price < 0) price = 0;
+					$(".js-totalPrice").text((Math.floor(price*100)/100).toFixed(2));
+				}
+			}
+		};
+		module.exports = Module;
+	});
+	seajs.use("s/modifyPrice", function(module){
+		module.init();
+	});
+})($);
+</script>
+</block>

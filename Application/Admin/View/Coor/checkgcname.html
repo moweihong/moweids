@@ -1,0 +1,30 @@
+<include file="Application/Common/Layout/head.html" /> 
+<div class="am-cf admin-main">
+<include file="Application/Common/Layout/left.html" /> 
+
+    <!-- content start -->
+    <div class="admin-content">
+      <table border="1">
+        <tr style="color:red;background:green">
+          <th style="width:20%">goods_common_id</th>
+          <th style="width:20%">gc_id</th>
+          <th style="width:20%">gc_name_c</th>
+          <th style="width:20%">gc_name_goods_class</th>
+        </tr>
+      <?php foreach ($list as $key => $value) { ?>
+        <tr>
+          <td><?php echo $value['goods_commonid']; ?></td>
+          <td><?php echo $value['gc_id']; ?></td>
+          <td><?php echo $value['gc_name']; ?></td>
+          <td><?php echo $value['gc_name_goods_class']; ?></td>
+        </tr>        
+      <?php } ?>
+      </table>
+      <form method="POST">
+        <input type="hidden" name='form_submit' value="ok">
+        <input type="submit" name='submit' value="change">
+      </form>
+    </div>
+  <!-- content end -->
+</div>
+<include file="Application/Common/Layout/foot.html" /> 

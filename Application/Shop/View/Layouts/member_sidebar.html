@@ -1,0 +1,24 @@
+<div class="info">
+	<p class="round"></p>
+	<p class="avatar">
+	
+	<?php if($output2['member_info']['member_avatar']){  ?>
+    	<img src="<?php echo $output2['member_info']['member_avatar']; ?>" width="82px" height="82px" class=" js-userava" />
+	 <?php }else{  ?>
+		<img src="/data/upload/shop/common/default_user_portrait.png" width="82px" height="82px" class=" js-userava"  />
+	 <?php }  ?>
+    </p>
+    <p class="username js-username"><?php echo empty($output['member_info']['member_name'])? $output['member_info']['mobile']:$output['member_info']['member_name'];?></p>
+</div>
+<p class="side-nav js-sideNav">
+	<a href="{:U('/shop/member/index')}" class="<if condition="ACTION_NAME eq 'index'">curr</if>">买家首页</a>
+    <a href="{:U('/shop/member/myshopcart')}" class="<if condition="ACTION_NAME eq 'myshopcart'">curr</if>">我的购物车</a>
+    <a href="/index.php?c=member&a=myorder" class="<if condition="ACTION_NAME eq 'myorder'">curr</if>">我的订单</a>
+    <a href="{:U('/shop/member/profile')}" class="<if condition="ACTION_NAME eq 'profile'">curr</if>">我的资料</a>
+    <a href="{:U('/shop/member/addresssetup')}" class="<if condition="ACTION_NAME eq 'addresssetup'">curr</if>">收货地址</a>
+    <a href="{:U('/shop/member/favgoods')}" class="<if condition="ACTION_NAME eq 'favgoods'">curr</if>">收藏的商品</a>
+    <a href="{:U('/shop/member/favstore')}" class="<if condition="ACTION_NAME eq 'favstore'">curr</if>">收藏的店铺</a>
+    <a href="{:U('/shop/member/browsehistory')}" class="<if condition="ACTION_NAME eq 'browsehistory'">curr</if>">浏览记录</a>
+    
+    <a href="{:U('/shop/TSFinance/tsFinance')}" class="<if condition="ACTION_NAME eq 'tsFinance'">curr</if>">特速分期</a>
+</p>

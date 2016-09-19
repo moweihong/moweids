@@ -1,0 +1,299 @@
+<extend name="Layouts:home" />
+<block name="title"><title>首页-全木行唯一官方网站</title></block>
+{//--添加头部引入css文件--}
+<block name="head_css">
+<style type="text/css">
+    /*免息分期*/
+    .easy-pay{overflow:hidden;}
+    .e-left{padding:14px 0 14px 14px;}
+    .e-left-ulbox{height:550px;overflow:hidden;}
+    .e-left ul{overflow:hidden;}
+    .e-left ul li{height:116px;margin-top:14px;border:solid 2px #323232;cursor:pointer;}
+    .e-left ul li img{width:116px;height:116px;}
+    .e-left span{display:block;width:120px;text-align:center;background-color:#323232;cursor:pointer;}
+	.e-right{line-height:618px;width:1132px;text-align:center;}
+    .e-right img{width:1132px;height:618px;vertical-align:middle;}
+    .e-left .eactive{background-color:#aaa;}
+    .e-left ul .ecurrent{border:solid 2px #fabe00;}
+
+    /*热门推荐*/
+    .hot-recomend{text-align:center;background-color: #fff;}
+
+    /*装修设计*/
+    .home-design{overflow:hidden;}
+    .home-design .renderings{overflow:hidden;margin-left:-8px;}
+    .home-design .renderings li{float:left;width:421px;height:421px;margin-left:8px;}
+    .home-design .renderings a{display:block;}
+    .home-design .renderings img{width:100%;}
+    .home-design-logobox{margin-top:8px;padding:14px;background-color:#fff;overflow:hidden;}
+	.home-design-logobox span{width:22px;height:112px;text-align: center;background-color:#323232;cursor:pointer;}
+    .home-design-logobox span img{margin-top:40px;transform:rotate(-90deg);-webkit-transform:rotate(-90deg);}
+    .home-design .home-design-logoul{width:1208px;height:112px;overflow:hidden;}
+	.home-design .home-design-logo{width:900%;height:112px;}
+	.home-design .home-design-logo li{float:left;width: 112px;margin-left:53px;}
+    .home-design .home-design-logo a{display:block;}
+    .home-design .home-design-logo img{width:112px;height:112px;}
+    .home-design-logobox .ecurrent{background-color:#aaa;}
+
+    /*装修材料*/
+    .material{overflow:hidden;}
+    .material ul{width:970px;margin-left:-8px;margin-top:-8px;overflow:hidden;}
+    .material li{float:left;margin-left:8px;margin-top:8px;overflow:hidden;}
+	.material li .n1{width:635px;height:314px;}
+	.material li .n2{width:314;height:314px;}
+	.material li .n3{width:635px;height:316px;}
+	.material li .n4{width:314px;height:316px;}
+    .material .fr-div{width:315px;height:638px;}
+</style>
+</block>
+<block name="content">
+<include file="Layouts:top_banner"/>
+<!--免息分期-->
+<div class="wrapper easy-pay">
+    <h2 class="main-tit"><span>免息分期</span><span class="letter">INSTALMENTS</span></h2> 
+    <div class="bg-white cf">
+        <div class="e-left fl">
+            <span class="a-pre eactive js-apre"><img src="__IMG__/index/shouye_11.png"></span>
+            <div class="e-left-ulbox">
+                <ul>
+					<volist name="freeInterest" id="v">  
+						<li data-src="{:advImg($v['adv_content']['adv_pic'])}">
+                            <img src="{:advImg($v['adv_content']['installment_thumb_img'])}" alt="" />
+                        </li>
+                   </volist>
+                </ul>
+            </div>
+            <span class="e-next js-anext"><img src="__IMG__/index/shouye_27.png"></span>
+        </div>
+        <div class="e-right fr">
+            <img src="" title="" alt="">
+        </div>
+    </div>
+</div>
+
+<!--热门推荐-->
+<div class="floor-template hot-recomend bg-white mt50">
+    <h2 class="main-tit"><span>热门推荐</span><span class="letter">RECOMEND</span></h2> 
+    <div class="wrapper">
+        <ul class="pro-list cf">
+			<volist name="hotRecommend" id="v">
+                <li>
+                    <a href="http://{$v.adv_content.adv_pic_url}" title="{$v.adv_title}">
+                        <div class="goods-pic">
+                            <img src="{:advImg($v['adv_content']['adv_pic'])}" alt="{$v.adv_title}" />
+                        </div>
+                        <div class="goods-info">
+                            <p class="name">{$v.adv_title}</p>
+                            <p class="cor-9">{$v.adv_content.adv_intro}</p>
+                        </div>
+                    </a>
+            	</li>
+			</volist> 
+        </ul>
+    </div>
+</div>
+
+<!--品牌专区-->
+<div class="wrapper floor-template">
+    <h2 class="main-tit"><span>品牌专区</span><span class="letter">BRAND ZONE</span></h2> 
+    <ul class="pro-list cf">
+        <volist name="brandAdv" id="v">
+            <li>
+                <a href="http://{$v.adv_content.adv_pic_url}" title="{$v.adv_title}">
+                    <div class="goods-pic">
+                        <img src="{:advImg($v['adv_content']['adv_pic'])}" alt="{$v.adv_title}" />
+                    </div>
+                    <div class="goods-info">
+                        <p class="name">{$v.adv_title}</p>
+                        <p class="cor-9">{$v.adv_content.adv_intro}</p>
+                    </div>
+                </a>
+            </li>
+        </volist>
+    </ul>
+</div>
+
+<!--精品家具-->
+<div class="wrapper floor-template">
+    <h2 class="main-tit"><span>精品家具</span><span class="letter">ACCENT FURNITURES</span></h2> 
+    <ul class="pro-list cf">
+        <volist name="furnitureAdv" id="v">
+            <li>
+                <a href="http://{$v.adv_content.adv_pic_url}" title="{$v.adv_title}">
+                    <div class="goods-pic">
+                        <img src="{:advImg($v['adv_content']['adv_pic'])}" alt="{$v.adv_title}" />
+                    </div>
+                    <div class="goods-info">
+                        <p class="name">{$v.adv_title}</p>
+                        <p class="cor-9">{$v.adv_content.adv_intro}</p>
+                    </div>
+                </a>
+            </li>
+        </volist>
+    </ul>
+</div>
+
+<!--装修设计-->
+<div class="wrapper home-design">
+    <h2 class="main-tit"><span>装修设计</span><span class="letter">DECORATION DESIGN</span></h2> 
+    <ul class="renderings cf">
+       <volist name="homeDesign" id="v"> 
+        <li>
+            <a href="http://{$v.adv_content.adv_pic_url}" title="{$v.adv_title}"><img src="{:advImg($v['adv_content']['adv_pic'])}" width="421" height="421" alt="{$v.adv_title}" /></a>
+        </li>
+       </volist> 
+    </ul>
+    <div class="home-design-logobox">
+        <span class="h-pre fl js-hpre ecurrent"><img src="__IMG__/index/shouye_11.png"></span>
+        <div class="home-design-logoul fl">
+            <ul class="home-design-logo">
+                <volist name="homedecoratio" id="v">
+                    <li>
+                        <a href="http://{$v.adv_content.adv_pic_url}" title="{$v.adv_title}"><img src="{:advImg($v['adv_content']['adv_pic'])}" alt="{$v.adv_title}" /></a>
+                    </li>
+                 </volist>
+            </ul>
+        </div>
+        <span class="h-next fr js-hnext"><img src="__IMG__/index/shouye_27.png"></span>
+    </div>
+</div>
+
+<!--装修材料-->
+<div class="wrapper material mt60 cf">
+    <ul class="fl">
+        <li class="n1">
+            <a href="http://{$material1.adv_content.adv_pic_url}" title="{$material1.adv_title}"><img style="width:635px;height:314px;" src="{:advImg($material1['adv_content']['adv_pic'])}" alt="{$material1['adv_title']}" /></a>
+		</li>
+        <li class="n2">
+            <a href="http://{$material2.adv_content.adv_pic_url}" title="{$material2.adv_title}"><img style="width:314px;height:314px;" src="{:advImg($material2['adv_content']['adv_pic'])}" alt="{$material2['adv_title']}" /></a>
+		</li>
+        <li class="n3">
+            <a href="http://{$material3.adv_content.adv_pic_url}" title="{$material3.adv_title}"><img style="width:635px;height:316px;" src="{:advImg($material3['adv_content']['adv_pic'])}" alt="{$material3['adv_title']}" /></a>
+		</li>
+        <li class="n4">
+            <a href="http://{$material4.adv_content.adv_pic_url}" title="{$material4.adv_title}"><img style="width:314px;height:316px;" src="{:advImg($material4['adv_content']['adv_pic'])}" alt="{$material4['adv_title']}" /></a>
+		</li>
+    </ul>
+    <div class="fr fr-div">
+        <a href="http://{$material5.adv_content.adv_pic_url}" title="{$material5.adv_title}"><img style="width:315px;height:638px;"  src="{:advImg($material5['adv_content']['adv_pic'])}" alt="{$material5['adv_title']}" /></a>
+	</div>
+</div>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+    (function ($) {
+        define("index/indexjs", function (require, exports, module) {
+            require("jquery/layer");
+            var manage = require("com/manage");
+            var Module = {
+                init: function () {
+                    /*
+                     **免息分期
+                     */
+                    $(".e-left ul li:eq(0)").addClass("ecurrent");
+                    $(".e-right img").attr("src", $(".e-left ul li:eq(0)").data("src"));
+                    var $e_len = $(".e-left ul li").length,
+                    	e_totle = $e_len - 4;
+                    if ($e_len <= 4) {
+                        $('.js-apre').addClass('eactive');
+                        $('.js-anext').addClass('eactive');
+                    }
+					var isAnimateing = false;
+					/*向上*/
+                    $(".e-left").on('click', '.js-apre', function (){
+                        if($(this).hasClass("eactive")) return;
+						if(isAnimateing) return;
+						isAnimateing = true;
+                        var cur_index = $(".e-left-ulbox .ecurrent").index();
+                        var ul_marginTop = parseInt($(".e-left ul").css("marginTop"));
+                        var cur_position = (cur_index-3) * (-134);
+						$('.js-anext').removeClass('eactive');
+						$(".e-left ul").stop(true,true).animate({
+							'margin-top': ul_marginTop + 134
+						}, function(){
+							isAnimateing = false;
+						});
+						if(cur_position == ul_marginTop){
+							cur_index--;
+							$('.e-right img').attr('src', $(".e-left ul li:eq(" + cur_index + ")").data("src"));
+							$(".e-left ul li:eq(" + cur_index + ")").addClass("ecurrent").siblings().removeClass("ecurrent");
+						}
+						if((ul_marginTop+134) >= 0) {
+							$('.js-anext').removeClass('eactive');
+							$('.js-apre').addClass('eactive');
+						}
+                    });
+					/*向下*/
+                    $(".e-left").on('click', '.js-anext', function () {
+						if($(this).hasClass("eactive")) return;
+						if(isAnimateing) return;
+						isAnimateing = true;
+                        var cur_index = $(".e-left-ulbox .ecurrent").index();
+                        var ul_marginTop = parseInt($(".e-left ul").css("marginTop"));
+                        var cur_position = cur_index * (-134);
+						$('.js-apre').removeClass('eactive');
+						$(".e-left ul").stop(true,true).animate({
+							'margin-top': (ul_marginTop-134)
+						}, function(){
+							isAnimateing = false;
+						});
+						if(cur_position == ul_marginTop){
+							cur_index++;
+							$(".e-left ul li:eq(" + cur_index + ")").addClass("ecurrent").siblings().removeClass("ecurrent");
+							$('.e-right img').attr('src', $(".e-left ul li:eq(" + cur_index + ")").data("src"));
+						}
+						if ((ul_marginTop-134) <= e_totle*(-134)){
+							$('.js-apre').removeClass('eactive');
+							$('.js-anext').addClass('eactive');
+						}
+                    })
+                    $(".e-left ul li").click(function () {
+                        //cur_index = $(this).index();
+                        $('.e-right img').attr('src', $(this).data('src'));
+                        $(this).addClass("ecurrent");
+                        $(this).siblings().removeClass("ecurrent");
+                    })
+
+                    /*
+                     **装修设计
+                     */
+                    var h_index = 0;
+                    var $len = $(".home-design-logobox ul li").length;
+                    var h_totle = $len - 7;
+                    if ($len <= 7) {
+                        $('.js-hpre').addClass('ecurrent');
+                        $('.js-hnext').addClass('ecurrent');
+                    }
+					/*向左*/
+                    $(".home-design-logobox").on('click', '.js-hpre', function () {
+						if($(this).hasClass("ecurrent")) return;
+						$('.js-hpre').removeClass('ecurrent');
+						$(".home-design-logobox ul").animate({'margin-left': -165 * (h_index - 1) + 'px'});
+						h_index--;
+						if(h_index == 0) {
+							$('.js-hpre').addClass('ecurrent');
+							$('.js-hnext').removeClass('ecurrent');
+						}
+                    });
+					/*向右*/
+                    $(".home-design-logobox").on('click', '.js-hnext', function () {
+						if($(this).hasClass("ecurrent")) return;
+						$('.js-hnext').removeClass('ecurrent');
+						$(".home-design-logobox ul").animate({'margin-left': -165 * (h_index + 1) + 'px'});
+						h_index++;
+						if(h_index == h_totle) {
+							$('.js-hnext').addClass('ecurrent');
+							$('.js-hpre').removeClass('ecurrent');
+						}
+                    })
+                }
+            }
+            module.exports = Module;
+        });
+        seajs.use("index/indexjs", function (module) {
+            module.init();
+        });
+    })($);
+</script>
+</block>

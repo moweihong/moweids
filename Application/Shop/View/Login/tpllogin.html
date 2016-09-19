@@ -1,0 +1,254 @@
+<extend name="Layouts:pop" />
+<block name="head_css">
+<link href="__CSS__/web.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+.login-title{height:45px;line-height:40px;padding-top:20px;text-align:center}
+.login-title span{width:130px;margin:0 20px;font-size:18px;cursor:pointer;}
+.login-title .cur{color:#ffaa00;border-bottom:solid 3px #ffaa00;}
+
+/* ---- 登录 ---- */
+.login-content{margin:-4px 20px 0;border-top:1px solid #dedede;}
+.login-content ul{margin:20px 10px 0;text-align:center;}
+.login-content li{padding:8px 0;}
+.login-content li .text{width:310px;padding:10px 20px;}
+.submit{width:100%;padding:10px 0;border-color:#fabe00;font-size:16px;color:#fff;cursor:pointer;background-color:#fabe00;}
+.submit:hover{background-color:#eea004;text-decoration: none;}
+	
+/*合作网站登陆*/
+.net-cooperation {width:346px;margin:10px auto 0;}
+.net-cooperation .titles{line-height:34px;font-size:12px;color:#666;}
+.account-list a{display:inline-block;width:100px;height:30px;margin: 0 10px 10px 0; background:#d1d1d1;color:#666;line-height:30px; text-align:center; text-decoration:none;}
+.account-list a:hover{background-color:#bfbfbf;color:#333;}
+
+.reg-succ{padding-top:60px;text-align:center;}
+.reg-succ h3{line-height:40px;font-size:18px;color:#333333;}
+</style>
+</block>
+
+<block name="content">
+<div class="login-pop">
+	<div class="login-title cf js-loginTitle">
+        <span class="cur">登陆</span>
+        <span>3秒注册</span>
+    </div>
+    <!-- 
+    ----------登陆
+    -->
+    <form id="loginForm" method="post" class="login-content js-loginCont" action="javascript:void(0);" autocomplete="off">
+        <input type="hidden" name="form_submit" value="ok" />
+        <input type="hidden" name="nchash" value="" />
+        <input type="hidden" name="login_type" id="login_type" value="password" />
+        <input type="hidden" name="ref_url" value="" />
+        <ul>
+            <li><input type="text" id="user_name" name="user_name" class="text js-number" placeholder="手机账号" maxlength="11" /></li>
+            <li><input type="password" id="password" name="password" class="text"  placeholder="密码" maxlength="16" /></li>
+            <li class="mt10"><input type="submit" name="Submit" class="submit js-loginBtn" value="登 录"  /></li>
+            <!--
+            <li>
+            	<h3 class="fs14 tl">第三方登录</h3>
+                <p class="mt10 tl">
+                    <a href="<?php echo SHOP_SITE_URL;?>/api.php?act=toqq" class="btn btn-gray btn-small" target="_parent">QQ登录</a>
+                    <a href="<?php echo SHOP_SITE_URL;?>/api.php?act=tosina" class="btn btn-gray btn-small ml10" target="_parent">微博登录</a>
+                </p>
+            </li>
+            -->
+        </ul>
+    </form>
+    <!-- 
+    ----------3秒注册
+    -->
+    <form id="registerForm" method="post" class="login-content js-loginCont dis-none" action="javascript:void(0);" autocomplete="off">
+        <ul class="js-register">
+            <li><input type="text" id="mobile" name="mobile" class="text js-number js-tpl-phone" placeholder="手机账号" maxlength="11" /></li>
+            <li class="cf">
+                <input type="text" id="code" name="code" class="text fl js-number" placeholder="短信验证码" maxlength="6" style="width:150px;" />
+                <a class="btn btn-gray fr js-sendCode">发送短信</a></li>
+            <li><input type="password" id="newpassword" name="member_passwd" class="text" placeholder="密码" maxlength="16" /></li>
+            <li><input type="password" id="repasswd" name="re_passwd" class="text" placeholder="确认密码" maxlength="16" /></li>
+            <li class="mt10"><input type="submit" class="submit js-registerBtn" value="免费注册" /></li>
+        </ul>
+        <div class="reg-succ dis-none js-regSucc">
+            <p><img src="__IMG__/large_ok.png" width="60" height="60" alt="成功图标" /></p>
+            <h3 class="mt10">恭喜您，<span class="cor-orange js-account"></span> 帐号注册成功！</span></h3>
+        </div>
+    </form>
+</div>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+	(function($){
+		define("web/loginPop",function(require, exports, module){
+			require("jquery/layer");
+			var countnum = 120, //时间 
+				timeInterval = null;
+			var manage = require("com/manage");
+			var Module = {
+				init: function(){
+					/*
+					**tab切换
+					*/
+					$(".js-loginTitle span").click(function(){
+						layer.closeAll("tips");
+						var me = $(this),
+							n = me.index();
+						me.addClass("cur").siblings("span").removeClass("cur");
+						$(".js-loginCont:eq(" + n + ")").show().siblings(".js-loginCont").hide();
+					});
+					/*
+					**登录
+					*/
+					$(".js-loginBtn").click(function(){
+						var me = $(this),
+							user_name = $.trim($("#user_name").val()),
+							password = $.trim($('#password').val());
+						if(!user_name){
+							$("#user_name").focus();
+							$.wrongTip(me, "请输入用户名");
+							return;
+						}
+						if(!password){
+							$("#password").focus();
+							$.wrongTip(me, "请输入密码");
+							return;
+						}
+						var data = $("#loginForm").serialize();
+						data = manage.serializeJson(data);
+						me.text("登录中")
+						manage.ajax({  
+							url		: gConfig.apiurl + "/index.php?c=login&a=index",
+							data	: data,  
+							success	: function(result) {
+								me.text("登 录")
+								var resultText = result.resultText || {};
+								if(result.code == 1){
+									parent.window.location.reload();
+								}else{
+									$.wrongTip(me, resultText.message || "登录失败");
+								}
+							},
+							error: function(){
+								me.text("登 录")
+							}
+						});
+					});
+					/*
+					 * 注册 -验证是否注册过
+					 **/
+					$('body').on('blur','.js-tpl-phone',function(){
+						if($(this).val().length != 11 ){
+							return;
+						}
+						var mobile = $('.js-tpl-phone').val();
+						$.get(gConfig.apiurl + '/index.php?c=login&a=check_member&column=ok&ajaxrequest=true',{
+							mobile:mobile
+						},function(result){
+							var message = result.resultText.message || "您的手机号码已经被注册"
+							$.wrongTip(".js-registerBtn",message);
+						})
+					})
+					/*
+					 * 注册 - 获取验证码
+					 * */
+					$("body").on("click", ".js-sendCode", function(){
+						var me = $(this),
+							mobile = $("#mobile").val();
+						if(!mobile || !$.isTelephone(mobile)){
+							$("#mobile").focus();
+							$.wrongTip(me, "请输入正确的手机号码");
+							return;
+						}
+						if(me.hasClass("btn-disable")) return;
+						me.addClass("btn-disable");
+						//账号校验通过,执行发送验证码操作
+						$.post(gConfig.apiurl + "/index.php?c=login&a=verify_code",{
+							mobile	: mobile,
+							tag		: "register"
+						}, function (result) {
+							Module.countdown();
+						},"json");
+					});
+					/*
+					*注册按钮
+					**/
+					$(".js-registerBtn").click(function(){
+						var me = $(this),
+							mobile = $.trim($("#mobile").val()),
+							code = $.trim($("#code").val()),
+							password = $.trim($("#newpassword").val()),
+								repasswd = $.trim($("#repasswd").val()),
+							data = $("#registerForm").serialize();
+						data = data.replace(/\+/g," ");
+						data = manage.serializeJson(data);
+						if(!mobile || !$.isTelephone(mobile)){
+							$("#mobile").focus();
+							$.wrongTip(me, "请输入正确的手机号码");
+							return;
+						}
+						if(code.length != 6){
+							$("#code").focus();
+							$.wrongTip(me, "请输入完整的验证码");
+							return;
+						}
+						if (data.member_passwd.indexOf(" ") > -1) {
+							$.wrongMsg("密码不能含有空格");
+							return;
+						}
+						if(!(/[a-zA-Z]/.test(password) && /[0-9]/.test(password)) || (password.length < 6 || password.length > 16)){
+							$("#newpassword").focus();
+							$.wrongTip(me, "密码应是6-16位的数字加字母组合");
+							return;
+						}
+						if(password != repasswd){
+							$("#repasswd").focus();
+							$.wrongTip(me, "两次输入的密码不一样");
+							return;
+						}
+						delete data.re_passwd;
+						var pid = parent.layer.load(360);
+						$.ajax({
+							type: "POST",
+							url: gConfig.apiurl + "/index.php?c=login&a=new_usersave",
+							data: data,
+							dataType: "json",
+							success: function(result){
+								parent.layer.close(pid);
+								var message = result.message || "注册失败"
+								if(result.code == 0){ //注册成功
+									$(".js-account").text($("#mobile").val());
+									$(".js-register").hide();
+									$(".js-regSucc").show();
+									setTimeout(function(){
+										parent.window.location.reload();
+									},3000);
+								}else{
+									$.wrongMsg(message);
+								}
+							}
+						});
+					});
+				},
+				countdown: function(){
+					clearInterval(timeInterval);
+					timedown();
+					timeInterval = setInterval(timedown, 1000);
+					function timedown(){
+						if(countnum == 0){
+							$(".js-sendCode").text("重新发送");
+							countnum = 120;
+							clearInterval(timeInterval);
+						}else{
+							$(".js-sendCode").text("重新发送(" + countnum + 's' + ")").addClass("btn-disable");
+							countnum--;
+						}
+					}
+				}
+			};
+			module.exports = Module;
+		});
+		seajs.use("web/loginPop", function(module){
+			module.init();
+		});
+	})($);
+</script> 
+</block>

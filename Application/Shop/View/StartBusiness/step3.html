@@ -1,0 +1,260 @@
+<extend name="Layouts:seller" />
+<block name="title"><title>提交入驻资料-{:C('site_name')}</title></block>
+<block name="head_css">
+<link href="__CSS__/startshop.css" rel="stylesheet" type="text/css">
+</block>
+
+<block name="content">
+<div class="order-step mb10">
+    <div class="easypay-step rel">
+        <p class="tx cf">
+            <span class="f">阅读协议</span>
+            <span>选择开店类型</span>
+            <span>提交入驻资料</span>
+            <span>资料审核</span>
+            <span>店铺上线</span>
+        </p>
+        <div class="bg-step">
+            <p class="n3"></p>
+        </div>
+    </div>
+</div>
+<form action="javascript:void(0);" id="form" class="start-shop-box" method="post" autocomplete="off">
+    <?php if($_GET['business_type'] == 1){?>
+    <h2 class="tit">填写企业信息</h2>
+    <?php }else{?>
+    <h2 class="tit">填写个人信息</h2>
+    <?php }?>
+    <div class="start-shop-info">
+        <ul class="list cf">
+            <li class="cf">
+                <label class="handle" for=""><em class="cor-red">*</em>店铺名称：</label>
+                <div class="rel">
+                    <input type="text" id="" name="store_name" class="text js-teshu" value="{$com_info.store_name}" placeholder="请设置店铺名称" maxlength="16" required="">
+                    <span show="store_name.check" class="error-msg" style="display: none;">
+                        <em class="errow-arrow"></em>
+                        请输入正确的店铺名称
+                    </span>
+                </div>
+            </li>
+            <if condition="$_GET['business_type'] eq 1 ">
+            <li class="cf">
+                <label class="handle" for=""><em class="cor-red">*</em>企业名称：</label>
+                <div class="rel">
+                    <input type="text" id="" name="company_name" class="text js-teshu" value="{$com_info.company_name}" placeholder="请按照证书上的内容逐字填写"  required="">
+                    <span show="company_name.check" class="error-msg" style="display: none;">
+                        <em class="errow-arrow"></em>
+                        请输入正确的企业名称
+                    </span>
+                </div>
+            </li>
+            <else />
+            <li class="cf">
+                <label class="handle" for=""><em class="cor-red">*</em>字号名称：</label>
+                <div class="rel">
+                    <input type="text" id="" name="company_name" class="text" value="{$com_info.company_name}" placeholder="请按照证书上的内容逐字填写"   required="">
+                    <span show="company_name.check" class="error-msg" style="display: none;">
+                        <em class="errow-arrow"></em>
+                        请输入正确的字号名称
+                    </span>
+                </div>
+            </li>
+            </if>
+            <li class="cf">
+                <label class="handle" for=""><em class="cor-red">*</em>所在地址：</label>
+                <div class="rel fl">
+                    <select id="cmbProvince" name="company_province_id" class="js-requiredSel" style="width:100px">
+                        <option value="0">选择省份</option>
+                    </select>
+                    <select id="cmbCity" name="company_city_id" class="js-requiredSel ml10" style="width:100px">
+                        <option value="0">选择城市</option>
+                    </select>
+                </div>
+                <div class="rel ml15 fl" style="width:120px">
+                    <select id="cmbArea" name="company_area_id" class="js-requiredSel" style="width:100px">
+                        <option value="0">选择地区</option>
+                    </select>
+                </div>
+            </li>
+            <li class="cf">
+                <label class="handle" for=""><em class="cor-red">*</em>详细地址：</label>
+                <div class="rel">
+                    <input type="text" id="" name="company_address_detail" class="text" value="{$com_info.company_address_detail}" placeholder="" required="">
+                    <span show="company_address_detail.check" class="error-msg" style="display: none;">
+                        <em class="errow-arrow"></em>
+                        请输入正确的详细地址
+                    </span>
+                </div>
+            </li>
+            <li class="cf">
+                <label class="handle" for=""><em class="cor-red">*</em>联系电话：</label>
+                <div class="rel">
+                    <input type="text" id="" name="company_phone" class="text js-homephone" value="{$com_info.company_phone}" placeholder=""    required="">
+                    <span show="company_phone.check" class="error-msg" style="display: none;">
+                        <em class="errow-arrow"></em>
+                        请输入正确的联系电话
+                    </span>
+                </div>
+            </li>
+            <if condition="$_GET['business_type'] eq 1 ">
+            <li class="cf">
+                <label class="handle" for=""><em class="cor-red">*</em>企业注册号：</label>
+                <div class="rel">
+                    <input type="text" id="" name="business_licence_number" class="text js-numletter" value="{$com_info.business_licence_number}" placeholder=""   required="">
+                    <span show="business_licence_number.check" class="error-msg" style="display: none;">
+                        <em class="errow-arrow"></em>
+                        请输入正确的企业注册号
+                    </span>
+                </div>
+            </li>
+            <else />
+            <li class="cf">
+                <label class="handle" for=""><em class="cor-red">*</em>注册号：</label>
+                <div class="rel">
+                    <input type="text" id="" name="business_licence_number" class="text js-numletter" value="{$com_info.business_licence_number}" placeholder=""   required="">
+                    <span show="business_licence_number.check" class="error-msg" style="display: none;">
+                        <em class="errow-arrow"></em>
+                        请输入正确的注册号
+                    </span>
+                </div>
+            </li>
+            </if>
+            <li class="cf">
+                <label class="handle" for=""><em class="cor-red">*</em>营业执照：</label>
+                <div class="rel">
+                    <a href="javascript:void(0);" id="businessLicense" class="add-upload mr10 fl"></a>
+                    <div id="businessLicenseList">
+                        <notempty name="com_info.business_licence_number_electronic">
+                        <div  class="file-item thumbnail upload-state-done">
+                            <p class="file-panel"><a class="icon-view js-viewImg" title="预览"></a></p>
+                            <img width="103" height="103" src="__UPLOAD__/shop/store_joinin/{$com_info.business_licence_number_electronic}" data-rel="{$com_info.business_licence_number_electronic}">
+                        </div>
+                        </notempty>
+                    </div>
+                </div>
+            </li>
+            <if condition="$_GET['business_type'] eq 1 ">	
+            <li class="cf">
+                <label class="handle" for=""><em class="cor-red">*</em>组织机构代码：</label>
+                <div class="rel">
+                    <input type="text" id="" name="organization_code" class="text js-numletter" value="{$com_info.organization_code}" placeholder=""   required="">
+                    <span show="organization_code.check" class="error-msg" style="display: none;">
+                        <em class="errow-arrow"></em>
+                        请输入正确的组织机构代码
+                    </span>
+                </div>
+            </li>
+            <li class="cf">
+                <label class="handle" for=""><em class="cor-red">*</em>组织机构代码证：</label>
+                <div class="rel">
+                    <a href="javascript:void(0);" id="OrganizationCode" class="add-upload mr10 fl"></a>
+                    <div id="OrganizationCodeList">
+                        <notempty name="com_info.organization_code_electronic">
+                        <div  class="file-item thumbnail upload-state-done">
+                            <p class="file-panel"><a class="icon-view js-viewImg" title="预览"></a></p>
+                            <img width="103" height="103" src="__UPLOAD__/shop/store_joinin/{$com_info.organization_code_electronic}" data-rel="{$com_info.organization_code_electronic}">
+                        </div>
+                        </notempty>
+                    </div>
+                </div>
+            </li>
+            <li class="cf">
+                <label class="handle" for=""><em class="cor-red">*</em>法定代表人姓名：</label>
+                <div class="rel">
+                    <input type="text" id="" name="representive" class="text js-teshu" value="{$com_info.representive}" placeholder=""   required="">
+                    <span show="representive.check" class="error-msg" style="display: none;">
+                        <em class="errow-arrow"></em>
+                        请输入正确的法定代表人姓名
+                    </span>
+                </div>
+            </li>
+            <else />
+            <li class="cf">
+                <label class="handle" for=""><em class="cor-red">*</em>经营者姓名：</label>
+                <div class="rel">
+                    <input type="text" id="" name="representive" class="text" value="{$com_info.representive}" placeholder=""   required="">
+                    <span show="representive.check" class="error-msg" style="display: none;">
+                        <em class="errow-arrow"></em>
+                        请输入正确的经营者姓名
+                    </span>
+                </div>
+            </li>
+            </if>
+            <li class="cf">
+                <label class="handle" for=""><em class="cor-red">*</em>身份证号：</label>
+                <div class="rel">
+                    <input type="text" id="idCard" name="representive_id" class="text js-numletter js-idcart" value="{$com_info.representive_id}" placeholder="" maxlength="18" />
+                    <span show="representive_id.check" class="error-msg" style="display: none;">
+                        <em class="errow-arrow"></em>
+                        请输入正确的身份证号
+                    </span>
+                </div>
+            </li>
+            <li class="cf">
+                <label class="handle" for=""><em class="cor-red">*</em>证件有效期：</label>
+                <div class="rel">
+                    <input type="text" id="startCID" name="representive_id_start" class="text laydate-icon" value="{$com_info.representive_id_start}" placeholder="" required style="width:131px">
+                    <input type="text" id="endCID" name="representive_id_end" class="text laydate-icon ml10" value="{$com_info.representive_id_end}" placeholder="" required style="width:131px">
+                    <span show=".check" class="error-msg" style="display: none;">
+                        <em class="errow-arrow"></em>
+                        请输入正确的有效期
+                    </span>
+                </div>
+            </li>
+            <?php if($_GET['business_type'] == 1){?>
+            <li class="cf">
+                <label class="handle" for=""><em class="cor-red">*</em>法定代表人证件照：</label>
+                <div></div>
+            </li>
+            <?php }else{?>
+            <li class="cf">
+                <label class="handle" for=""><em class="cor-red">*</em>经营者身份证件照：</label>
+                <div></div>
+            </li>
+            <?php }?>
+            <li class="cf">
+                <label class="handle" for=""><em class="cor-red">*</em>身份证正面照：</label>
+                <div class="rel">
+                     <a href="javascript:void(0);" id="cardFrontalBtn" class="add-upload mr10 fl"></a>
+                     <div id="cardFrontalList">
+                        <notempty name="com_info.representive_id_front_electronic">
+                            <div  class="file-item thumbnail upload-state-done">
+                                <p class="file-panel"><a class="icon-view js-viewImg" title="预览"></a></p>
+                                <img width="103" height="103" src="__UPLOAD__/shop/store_joinin/{$com_info.representive_id_front_electronic}" data-rel="{$com_info.representive_id_front_electronic}">
+                            </div>
+                        </notempty>
+                     </div>
+                </div>
+            </li>
+            <li class="cf">
+                <label class="handle" for=""><em class="cor-red">*</em>身份证反面照：</label>
+                <div class="rel">
+                    <a href="javascript:void(0);" id="cardReverseBtn" class="add-upload mr10 fl"></a>
+                    <div id="cardReverseList">
+                        <notempty name="com_info.representive_id_back_electronic">
+                        <div  class="file-item thumbnail upload-state-done">
+                            <p class="file-panel"><a class="icon-view js-viewImg" title="预览"></a></p>
+                            <img width="103" height="103" src="__UPLOAD__/shop/store_joinin/{$com_info.representive_id_back_electronic}" data-rel="{$com_info.representive_id_back_electronic}">
+                        </div>
+                       </notempty>
+                    </div>
+                </div>
+            </li>						
+        </ul>
+    </div>
+    <input type="hidden" name="com_type" value="<?php echo $_GET['com_type'];?>">
+    <input type="hidden" name="business_type" value="<?php echo $_GET['business_type'];?>">
+</form>
+<p class="tc mt30">
+    <button href="javascript:void(0)" class="btn btn-blue ml20 js-submitBtn">提交</button>
+</p>
+<input type="hidden" id="infoProvince" value="{$com_info.company_province_id}"/>
+<input type="hidden" id="infoCity" value="{$com_info.company_city_id}"/>
+<input type="hidden" id="infoArea" value="{$com_info.company_area_id}"/>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+	seajs.use("s/startshop");
+</script>
+</block>

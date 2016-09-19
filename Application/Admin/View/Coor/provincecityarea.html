@@ -1,0 +1,40 @@
+<include file="Application/Common/Layout/head.html" /> 
+<div class="am-cf admin-main">
+<include file="Application/Common/Layout/left.html" /> 
+<!-- content start -->
+<div class="admin-content">
+    <style>
+    .btn{
+    color:red;
+    }
+    </style>
+    <table border="1">
+        <tr style="color:red;background:green">
+            <th style="width:10%">member_id</th>
+            <th style="width:10%">s_province_id</th>
+            <th style="width:10%">s_city_id</th>
+            <th style="width:10%">s_area_id</th>
+            <th style="width:10%">j_province_id</th>
+            <th style="width:10%">j_city_id</th>
+            <th style="width:10%">j_area_id</th>
+        </tr>
+    <?php foreach ($list as $key => $value) { ?>
+        <tr>
+            <td><?php echo $value['member_id']; ?></td>
+            <td><?php echo $value['s_province_id']; ?></td>
+            <td><?php echo $value['s_city_id']; ?></td>
+            <td><?php echo $value['s_area_id']; ?></td>
+            <td><?php echo $value['j_province_id']; ?></td>
+            <td><?php echo $value['j_city_id']; ?></td>
+            <td><?php echo $value['j_area_id']; ?></td>
+        </tr>        
+    <?php } ?>
+    </table>
+    <form method="POST">
+    <input type="hidden" name='form_submit' value="ok">
+    <input type="submit" name='submit' class="btn" value="change">
+    </form>
+</div>
+<!-- content end -->
+</div>
+<include file="Application/Common/Layout/foot.html" /> 

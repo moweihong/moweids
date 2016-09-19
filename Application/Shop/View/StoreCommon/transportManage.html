@@ -1,0 +1,115 @@
+<extend name="Layouts:seller" />
+<block name="title"><title>运费模版-<?php if($_SESSION['com_type'] == 3){?>供货中心<?php } else{?>卖家中心<?php } ?>-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="content-wrap">
+    <a href="{:U('StoreCommon/editTemplate')}" class="btn btn-blue" target="_blank">新建运费模版</a>
+    <?php foreach ($transport as $k => $v) { ?>
+        <?php if ($v['freightage_type'] != '') { ?>
+            <table class="table mt20" width="100%">
+                <colgroup>
+                    <col width="10%"/>
+                    <col width="40%"/>
+                    <col width="12%"/>
+                    <col width="12%"/>
+                    <col width="12%"/>
+                    <col width=""/>
+                </colgroup>
+                <thead class="hd">
+                    <tr data-id="<?php echo $v['id'] ?>">
+                        <th colspan="5"><p class="fs16 tl ml10"><?php echo $v['title'] ?></p></th>
+                        <th>
+                            <a href="{:U('StoreCommon/editTemplate',array('transport_id'=>$v['id']))}" class="link" target="_blank">编辑</a>
+                            <span class="cor-9">|</span>
+                            <a href="javascript:void(0);" class="link js-del">删除</a>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+					<?php $show = true; foreach ($transport[$k]['extend'] as $k2 => $v2) { ?>
+                        <?php if ($v2['transport_type'] == '1') { ?>
+                            <?php if ($show) { ?>
+                                <?php if ($v['cash_type'] == 1) { ?>
+                                    <tr>
+                                        <th>方式</th>
+                                        <th>运送到</th>
+                                        <th>首体积(m<sup>3</sup>)</th>
+                                        <th>首费(元)
+                                        </td>
+                                        <th>续体积(m<sup>3</sup>)</th>
+                                        <th>续费(元)</th>
+                                    </tr>
+                                <?php } ?>
+                                <?php if ($v['cash_type'] == 2) { ?>
+                                    <tr>
+                                        <th>方式</th>
+                                        <th>运送到</th>
+                                        <th>首重量(KG)</th>
+                                        <th>首费(元)
+                                        </td>
+                                        <th>续重量(KG)</th>
+                                        <th>续费(元)</th>
+                                    </tr>
+                                <?php } ?>
+                                <?php $show = false;
+                            } ?>
+                            <tr>
+                                <td><span class="fs14">物流</span></td>
+                                <td><p class="cor-black"><?php echo $v2['area_name']; ?></p></td>
+                                <td><?php echo $v2['snum'] ?></td>
+                                <td><?php echo $v2['sprice'] ?></td>
+                                <td><?php echo $v2['xnum'] ?></td>
+                                <td><?php echo $v2['xprice'] ?></td>
+                            </tr>
+                        <?php } ?>
+                    <?php } ?>
+                    <?php $show = true; foreach ($transport[$k]['extend'] as $k3 => $v3) { ?>
+                        <?php if ($v3['transport_type'] == '2') { ?>
+                            <?php if ($show) { ?>
+                                <?php if ($v['cash_type'] == 1) { ?>
+                                    <tr>
+                                        <th>方式</th>
+                                        <th>运送到</th>
+                                        <th>首体积(m<sup>3</sup>)</th>
+                                        <th>首费(元)
+                                        </td>
+                                        <th>续体积(m<sup>3</sup>)</th>
+                                        <th>续费(元)</th>
+                                    </tr>
+                                <?php } ?>
+                                <?php if ($v['cash_type'] == 2) { ?>
+                                    <tr>
+                                        <th>方式</th>
+                                        <th>运送到</th>
+                                        <th>首重量(KG)</th>
+                                        <th>首费(元)
+                                        </td>
+                                        <th>续重量(KG)</th>
+                                        <th>续费(元)</th>
+                                    </tr>
+                                <?php } ?>
+                                <?php $show = false;
+                            } ?>
+                            <tr>
+                                <td><span class="fs14">快递</span></td>
+                                <td><p class="cor-black"><?php echo $v3['area_name']; ?></p></td>
+                                <td><?php echo $v3['snum'] ?></td>
+                                <td><?php echo $v3['sprice'] ?></td>
+                                <td><?php echo $v3['xnum'] ?></td>
+                                <td><?php echo $v3['xprice'] ?></td>
+                            </tr>
+                        <?php } ?>
+                    <?php } ?>
+                </tbody>
+            </table>
+        <?php } ?>
+    <?php } ?>
+</div>
+<input type="hidden" id="deleteUrl" value="{:U('StoreCommon/delTransport')}" data-type="shipping" data-isreload="no" data-msg="运费模板" />
+</block>
+
+<block name="my_js">
+<script>
+    seajs.use(["jquery/layer", "com/global"]);
+</script>
+</block>

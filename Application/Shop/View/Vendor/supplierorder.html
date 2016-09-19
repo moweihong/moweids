@@ -1,0 +1,162 @@
+<extend name="Layouts:seller" />
+<block name="title"><title>所有订单-<?php if($_SESSION['com_type'] == 3){?>供货中心<?php } else{?>卖家中心<?php } ?>-{:C('site_name')}</title></block>
+<block name="content">
+    <div class="content-wrap">
+        <h2 class="query-tit">所有订单</h2>
+        <div class="query-box mt10">
+            <form action="javascript:void(0);" class="search-bar mt10 cf" id="searchform" autocomplete="off" >
+                <input type="text" class="text ml10 fl js-searchText" name='kword' value="<?php echo $kword;?>" placeholder="商品名称 / 店铺名称" />
+                <button href="javascript:void(0);" class="btn btn-info btn-small js-searchBtn">订单搜索</button>
+            </form>
+        </div>
+        <p class="order-tab-t cf js-tabT">
+            <a href="{:U('Vendor/supplierorder')}" <?php if(!isset($_GET['order_state'])){ echo 'class="curr"';} ?>>全部</a>
+            <a href="{:U('Vendor/supplierorder', array('order_state' => ORDER_STATE_NEW))}" <?php if($_GET['order_state'] == ORDER_STATE_NEW){ echo 'class="curr"';} ?>>待付款</a>
+            <a href="{:U('Vendor/supplierorder', array('order_state' => ORDER_STATE_PAY))}" <?php if($_GET['order_state'] == ORDER_STATE_PAY){ echo 'class="curr"';} ?>>待发货</a>
+            <a href="{:U('Vendor/supplierorder', array('order_state' => ORDER_STATE_SUCCESS))}" <?php if($_GET['order_state'] == ORDER_STATE_SUCCESS){ echo 'class="curr"';} ?>>已完成</a>
+        </p>
+        <table class="order-table js-order" width="100%">
+            <colgroup>
+                <col width="30%">
+                <col width="10%">
+                <col width="7%">
+                <col width="10%">
+                <col width="12%">
+                <col width="10%">
+                <col width="">
+            </colgroup>
+            <thead>
+            <tr>
+                <th class="n1">商品</th>
+                <th>出厂价</th>
+                <th>数量</th>
+                <th><a href="javascript:void(0);" class="cor-blue" id="paytime">下单时间 <i class="ic <?php if ($sortby == 'desc'){echo 'ic-down-arrow';}else{echo 'ic-up-arrow';}?>"></i></a></th>
+                <th>订单状态</th>
+                <th>实付金额</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <?php foreach ($order_list as $key => $value) { ?>
+            <tbody data-id="<?php echo $value['order_id']; ?>">
+                <tr class="gap"><td colspan="8"></td></tr>
+                <tr class="hd">
+                    <td colspan="8">
+                        <span>订单号：<?php echo $value['order_sn'] ?></span>
+                        <span class="pay"><?php echo $value['payment_name']; ?></span>
+                        <p class="r">
+                            <a href="{:U('Vendor/order_detail', array('order_id' => $value['order_id']))}" class="cor-blue">查看详情</a>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="goods-td cf">
+                            <a href="<?php echo U('ShowFactory/goodsDetial',array('goods_id'=>$value['goods_id'],'store_id'=>$value['store_id']));?>" class="pic" ><img src="<?php echo thumb($value, 240);?>" width="80px" height="80px" alt="" /></a>
+                            <p class="name"><a href="<?php echo U('ShowFactory/goodsDetial',array('goods_id'=>$value['goods_id'],'store_id'=>$value['store_id']));?>" class="cor-blue" ><?php echo $value['goods_name']; ?></a></p>
+                            <p class="norms">规格：<?php echo  $value['goods_spec'];?></p>
+                        </div>
+                    </td>
+                    <td>¥ <?php echo $value['goods_price']; ?></td>
+                    <!-- 商品数量 -->
+                    <td>x <?php echo $value['goods_num'];?></td>
+                    <!-- 买家和时间 -->
+                    <?php if($key1 == 0) { ?>
+                    <!--  时间 -->
+                    <td class="word-nor"><?php echo date('Y-m-d H:i:s', $value['add_time']); ?></td>
+                    <!-- 订单状态 -->
+                    <td>
+                        <!-- 输出订单状态 -->
+                        <?php
+                            if($value['order_state'] == 0){
+                                echo '已关闭';
+                            }elseif($value['order_state'] == 1){
+                                echo '待定价';
+                            }elseif($value['order_state'] == 10){
+                                echo '待付款';
+                            }elseif($value['order_state'] == 20){
+                                echo '待发货';
+                            }elseif($value['order_state'] == 30){
+                                echo '已发货';
+                            }elseif($value['order_state'] == 40){
+                                echo '已完成';
+                            }elseif($value['order_state'] == 50){
+                                echo '平台处理中';
+                            }else{
+                                echo '异常状态';
+                            }
+                        ?>
+                    </td>
+
+                    <!-- 订单金额 -->
+                    <td>¥ <?php echo $value['order_amount']; ?></td>
+                    <!-- 买家 -->
+                    <td>
+                        <!-- 输出订单操作 -->
+                        <!--
+                        共5总状态
+                        已关闭  ORDER_STATE_CANCEL 0
+                        待付款  ORDER_STATE_NEW 10
+                        待发货  ORDER_STATE_PAY 20
+                        已完成  ORDER_STATE_HANDLING 50
+                        -->
+                        <?php
+                        if($value['order_state'] ==ORDER_STATE_NEW) {
+                            if($value['payment_code'] != 'predeposit'){?>
+                                <p class="mt10"><a href="<?php echo U('StoreCommon/go_to_pay', array('order_id' => $value['order_id']));?>" class="btn btn-blue js-pay">付款</a></p>
+                            <?php }?>
+                        <p class="mt10"><a href="javascript:void(0);" class="btn supplier js-closeBtn">取消订单</a></p>
+                        <?php }else if($value['order_state'] ==ORDER_STATE_CANCEL){  ?>
+                        <!--关闭订单操作-->
+                        <?php }else if($value['order_state'] ==ORDER_STATE_PAY){ ?>
+                        <!--代发货订单操作-->
+
+                        <?php }else if($value['order_state'] ==ORDER_STATE_SEND){ ?>
+                        <p class="shipping-right rel mt10"><a href="javascript:void(0);" class="btn js-shipping" data-id="<?php echo $value['order_id']; ?>" data-sn="<?php echo $value['order_sn']; ?>">查看物流</a></p>
+                        <?php }else if($value['order_state'] ==ORDER_STATE_SUCCESS){ ?>
+                        <!--已完成订单操作-->
+                        <?php } ?>
+                    </td>
+                    <?php } ?>
+                </tr>
+            </tbody>
+            <?php } ?>
+        </table>
+        <div id="jspage" class="jspage">
+            <?php echo $page; ?>
+        </div>
+    </div>
+</block>
+<block name="my_js">
+    <script type="text/javascript">
+        seajs.use("s/orderlist", function(Orderlist){
+            $(".js-near7").on("click", function(){
+                $("#start").val($("#7day").val());
+                $("#end").val($("#today").val());
+            });
+            $(".js-near30").on("click", function(){
+                $("#start").val($("#30day").val());
+                $("#end").val($("#today").val());
+            });
+            /*
+             **下单时间排序
+             */
+            $('#paytime').click(function(){
+                var sortby = "";
+                if($("i", this).hasClass("ic-down-arrow")){
+                    $("i", this).removeClass("ic-down-arrow").addClass("ic-up-arrow");
+                    sortby = "asc";
+                }else{
+                    $("i", this).removeClass("ic-up-arrow").addClass("ic-down-arrow");
+                    sortby = "desc";
+                }
+                var base_url = window.location.href + "&" + $("#searchform").serialize() + "&sortby=" + sortby;
+                window.location.href = base_url;
+            });
+            //提交订单查询
+            $(".js-searchBtn").on("click",function(){
+                var base_url = "{:U('Vendor/supplierorder')}?kword=" + $("input[name='kword']").val();
+                window.location.href = base_url;
+            });
+        });
+    </script>
+</block>

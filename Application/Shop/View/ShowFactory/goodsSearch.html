@@ -1,0 +1,82 @@
+<extend name="Layouts:store_factory" />
+<block name="title"><title>工厂商品搜索页-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="factory-banner mt15"><img src="<?php echo getStoreLogo($store_info['store_banner']);?>" alt="<?php echo $store_info['store_name']; ?>" title="<?php echo $store_info['store_name']; ?>" /></div>
+<div class="factory-list wrapper">
+    <table class="pro-info-table fs14 mt10" width="100%">
+    	<caption>所有家具</caption>
+    	<tbody>
+            <tr>
+                <th>适用空间</th>
+                <td>
+                    <?php foreach ($factory_class['class2'] as $val):?>
+                        <a href="{:U('ShowFactory/goodsSearch',array('store_id'=>$_GET['store_id'],'keyword'=>$_GET['keyword'],'gc_id'=>$val['gc_id']))}"><?php echo $val['gc_name'];?></a>
+                    <?php endforeach;?>
+                </td>
+            </tr>
+            <tr>
+                <th>商品类别</th>
+                <td>
+                    <?php foreach ($factory_class['class3'] as $val):?>
+                        <a href="{:U('ShowFactory/goodsSearch',array('store_id'=>$_GET['store_id'],'keyword'=>$_GET['keyword'],'gc_id'=>$val['gc_id']))}"><?php echo $val['gc_name'];?></a>
+                    <?php endforeach;?>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="bg-white mt20">
+        <div class="factory-sort-bar"> 
+            <!--排序方式：-->
+            <div class="nch-sortbar-array">
+                <ul class="cf">
+                    <li class="<?php echo isset($_GET['key']) ? '':'selected';?>"><a href="{:U('ShowFactory/goodsSearch',array('store_id'=>$_GET['store_id']))}" title="综合排序">综合</a></li>
+                    <?php if($_GET['key'] == 3):?>
+                    	<?php if(isset($_GET['order'])&&$_GET['order']==1):?>
+							<li class="up"><a href="{:U('ShowFactory/goodsSearch',array('store_id'=>$_GET['store_id'],'keyword'=>$_GET['keyword'],'gc_id'=>$_GET['gc_id'],'key'=>3))}" title="点击按销量从高到低排序">销量<i></i></a></li>
+                    	<?php else:?>
+                    		<li class="down"><a href="{:U('ShowFactory/goodsSearch',array('store_id'=>$_GET['store_id'],'order'=>1,'keyword'=>$_GET['keyword'],'gc_id'=>$_GET['gc_id'],'key'=>3))}" title="点击按销量从低到高排序">销量<i></i></a></li>
+                    	<?php endif;?>
+                    <?php else:?>
+                    	<li><a href="{:U('ShowFactory/goodsSearch',array('store_id'=>$_GET['store_id'],'order'=>1,'keyword'=>$_GET['keyword'],'gc_id'=>$_GET['gc_id'],'key'=>3))}" title="点击按销量从低到高排序">销量<i></i></a></li>
+                    <?php endif;?>
+                    <?php if($_GET['key'] == 5):?>
+                    	<?php if(isset($_GET['order'])&&$_GET['order']==1):?>
+                    		<li class="up"><a href="{:U('ShowFactory/goodsSearch',array('store_id'=>$_GET['store_id'],'keyword'=>$_GET['keyword'],'gc_id'=>$_GET['gc_id'],'key'=>5))}" title="点击按人气从高到低排序">人气<i></i></a></li>
+                    	<?php else:?>
+                    		<li class="down"><a href="{:U('ShowFactory/goodsSearch',array('store_id'=>$_GET['store_id'],'order'=>1,'keyword'=>$_GET['keyword'],'gc_id'=>$_GET['gc_id'],'key'=>5))}" title="点击按人气从低到高排序">人气<i></i></a></li>
+                    	<?php endif;?>
+                    <?php else:?>
+                    	<li><a href="{:U('ShowFactory/goodsSearch',array('store_id'=>$_GET['store_id'],'order'=>1,'keyword'=>$_GET['keyword'],'gc_id'=>$_GET['gc_id'],'key'=>5))}" title="点击按人气从低到高排序">人气<i></i></a></li>
+                    <?php endif;?>
+                    <?php if($_GET['key'] == 2):?>
+                    	<?php if(isset($_GET['order'])&&$_GET['order']==1):?>
+                    		<li class="up"><a href="{:U('ShowFactory/goodsSearch',array('store_id'=>$_GET['store_id'],'keyword'=>$_GET['keyword'],'gc_id'=>$_GET['gc_id'],'key'=>2))}" title="点击按价格从高到低排序">价格<i></i></a></li>
+                        <?php else:?>
+                        	<li class="down"><a href="{:U('ShowFactory/goodsSearch',array('store_id'=>$_GET['store_id'],'order'=>1,'keyword'=>$_GET['keyword'],'gc_id'=>$_GET['gc_id'],'key'=>2))}" title="点击按价格从低到高排序">价格<i></i></a></li>
+                        <?php endif;?>
+                    <?php else:?>
+                    	<li><a href="{:U('ShowFactory/goodsSearch',array('store_id'=>$_GET['store_id'],'order'=>1,'keyword'=>$_GET['keyword'],'gc_id'=>$_GET['gc_id'],'key'=>2))}" title="点击按价格从低到高排序">价格<i></i></a></li>
+                    <?php endif;?>
+                </ul>
+            </div>
+        </div>
+        
+        <!--商品列表循环-->
+        <ul class="factory-goods-list cf">
+            <?php foreach ($list as $val):?>
+                <li>
+                	<a href="{:U('ShowFactory/goodsDetial',array('goods_id'=>$val['goods_id'],'store_id'=>$val['store_id']))}" class="thumb"><img src="<?php echo thumb($val, 260)?>" title="<?php echo $val['goods_name'];?>" alt="<?php echo $val['goods_name'];?>" /></a>
+                    <p class="name"><a href="{:U('ShowFactory/goodsDetial',array('goods_id'=>$val['goods_id'],'store_id'=>$val['store_id']))}" target="_blank"><?php echo $val['goods_name'];?></a></p>
+                    <p class="price">
+                    	出厂价
+                        <span class="cor-red fs12 ml10">¥</span>
+                        <em class="cor-red fs18"><?php echo $val['goods_price'];?></em>
+                    </p>
+                </li>
+            <?php endforeach;?>
+        </ul>
+        <div id="jspage" class="jspage"><?php echo $page ?></div>
+    </div>
+</div>
+</block>

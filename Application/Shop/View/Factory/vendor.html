@@ -1,0 +1,196 @@
+<extend name="Layouts:seller" />
+<block name="title"><title>经销商管理-供货中心-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="content-wrap">
+	<p class="tab-tit cf js-tabTit">
+        <a href="{:U('Factory/vendor',array('type'=>1))}" class="<?php echo !isset($_GET['type'])||$_GET['type']==1 ? 'curr':'';?>">我的经销商</a>
+        <a href="{:U('Factory/vendor',array('type'=>2))}" class="<?php echo $_GET['type']==2 ? 'curr':'';?>">待审核</a>
+        <a href="{:U('Factory/vendor',array('type'=>3))}" class="<?php echo $_GET['type']==3 ? 'curr':'';?>">审核设置</a>
+    </p>
+    <div class="store-settimg h700">
+        <?php if(!isset($_GET['type'])||$_GET['type']==1):?>
+            <!--
+            ----------------我的经销商
+            -->
+            <div class="pr20 pl20 js-tabCont">
+                <table class="table mt10" width="100%">
+                    <colgroup>
+                        <col width="20%">
+                        <col width="25%">
+                        <col width="25%">
+                        <col width="15%">
+                        <col width="">
+                    </colgroup>
+                    <thead>
+                        <tr class="fs14">
+                            <th>账号</th>
+                            <th>经销商名称</th>
+                            <th>所在地区</th>
+                            <th>访问状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($list as $val):?>
+                        <tr>
+                            <td><?php echo $val['member_name'];?></td>
+                            <td><a href="{:U('ShowVendor/index',array('store_id'=>$val['store_id']))}"><?php echo $val['store_name'];?></a></td>
+                            <td><?php echo $val['area_info'];?></td>
+                            <td>
+                                <?php 
+                                switch ($val['is_look']) {
+                                    case 0: echo '开启';break;
+                                    case 1: echo '关闭';break;
+                                    default: 
+                                        echo '开启';
+                                        break;
+                                }?>
+                            </td>
+                            <td><a href=" {:U('Factory/vendoredit',array('id'=>$val['id']))}" class="cor-blue">编辑</a></td>
+                        </tr>
+                        <?php endforeach;?>
+                    </tbody>
+                </table>
+                <div id="jspage" class="jspage">
+                    <?php echo $page; ?>
+                </div>
+            </div>
+        <?php elseif($_GET['type']==2):?>
+            <!--
+            ----------------待审核
+            -->
+            <div class="pr20 pl20 js-tabCont">
+                <table class="table mt10" width="100%">
+                    <colgroup>
+                        <col width="15%">
+                        <col width="15%">
+                        <col width="20%">
+                        <col width="15%">
+                        <col width="15%">
+                        <col width="10%">
+                        <col width="">
+                    </colgroup>
+                    <thead>
+                        <tr class="fs14">
+                            <th>账号</th>
+                            <th>经销商名称</th>
+                            <th>所在地区</th>
+                            <th>联系电话</th>
+                            <th>申请时间</th>
+                            <th>审核状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($list as $v):?>
+                            <tr data-id="<?php echo $v['id'];?>">
+                                <td><?php echo $v['member_name'];?></td>
+                                <td><a href="<?php echo SHOP_SITE_URL;?>/index.php?act=show_store&op=factory&store_id=<?php echo $v['store_id'];?>"><?php echo $v['store_name'];?></a></td>
+                                <td><?php echo $v['area_info'];?></td>
+                                <td><?php echo $v['store_tel'];?></td>
+                                <td><?php echo date('Y-m-d H:i:s' ,$v['created_at']);?></td>
+                                <td class="js-state">
+                                    <?php                                
+                                        switch ($v['c_type']) {
+                                        case 0: echo '待审核'; break;
+                                        case 2: echo '未通过'; break;
+                                        default:
+                                            break;
+                                    }?>
+                                </td>
+                                <td>
+                                    <?php if($v['c_type'] != 2):?>
+                                    <a href="javascript:void(0);" class="cor-blue js-check">审核</a>
+                                    <?php endif;?>
+                                </td>
+                            </tr>
+                        <?php endforeach;?>
+                    </tbody>
+                </table>
+                <div id="jspage" class="jspage">
+                    <?php echo $output['page'] ?>
+                </div>
+            </div>
+        <?php else:?>
+            <!--
+            ----------------审核设置
+            -->
+            <div class="js-tabCont">
+                <form action="javascript:void(0);" id="formSet" method="post" autocomplete="off" class="vendor-check-set cf">
+                    <cite>审核设置：</cite>
+                    <p>
+                        <label>
+                            <input type="radio" name="check_setting" class="v-2" value="1" <?php echo $is_check==0?'checked':'';?> />
+                            所有经销商需通过审核之后才能成为本店经销商
+                        </label>
+                    </p>
+                    <p class="mt20">
+                        <label>
+                            <input type="radio" name="check_setting" class="v-2" value="2" <?php echo $is_check==1?'checked':'';?> />
+                            所有经销商无需通过审核之后才能成为本店经销商
+                        </label>
+                    </p>
+                    <p class="mt30">
+                        <a href="javascript:void(0);" class="btn btn-blue js-saveBtn">保存</a>
+                    </p>
+                </form>
+            </div>
+        <?php endif;?>
+    </div>
+</div>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+(function($){
+	define("f/vendorManagement",function(require, exports, module){
+		require("jquery/layer");
+		var manage = require("com/manage");
+		var Module = {
+			init: function(){
+				/*
+				 * 审核
+				 * */
+				$(".js-tabCont").on("click", ".js-check", function(){
+					var me = $(this),
+						$tr = me.closest("tr"),
+						id = $tr.data("id");
+					layer.confirm("是否通过审核？", {
+						btn: ['是','否'],
+					}, function(){
+						manage.getApi("/Factory/vendorCheck", {
+							id		: id,
+							state	: 1
+						}, function(){
+							setTimeout(function(){
+								location.reload();
+							},2000);
+						});
+					}, function(){
+						manage.getApi("/Factory/vendorCheck", {
+							id		: id,
+							state	: 0
+						}, function(){
+							$(".js-state", $tr).text("未通过");
+							me.remove();
+						});
+					});
+				});
+				/*
+				 * 保存 - 审核设置
+				 * */
+				$(".js-tabCont").on("click", ".js-saveBtn", function(){
+					var data = $("#formSet").serialize();
+					manage.getApi("/Factory/vendorSet", data);
+				});
+			}
+		}
+		module.exports = Module;
+	});
+	seajs.use("f/vendorManagement", function(module){
+		module.init();
+	});
+})($);
+</script>
+</block>

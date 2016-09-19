@@ -1,0 +1,32 @@
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {display: block;}
+blockquote, q {quotes: none;}
+blockquote:before, blockquote:after, q:before, q:after{content: '';content: none;}
+.webuploader-element-invisible{position:absolute !important;clip:rect(1px 1px 1px 1px); /* IE6, IE7 */clip:rect(1px,1px,1px,1px);}
+/* ------------ */
+.file-error{position:absolute;top:0px;left:0px;width:100%;background-color:#ff0000;color:white;text-align:center;height:22px;font-size:14px;line-height:20px;}
+.file-progress{z-index:15;position:absolute;left:0px;bottom:0px;width:100%;height:4px;margin:0;padding:0;border-radius:0;background:transparent;overflow:hidden;}
+.file-progress span{display:block;width:0;height:100%;background:#008000 url(progress.png) repeat-x;overflow:hidden;-webit-transition:width 200ms linear;-moz-transition: width 200ms linear;-o-transition: width 200ms linear;-ms-transition: width 200ms linear;transition:width 200ms linear;-webkit-animation:progressmove 2s linear infinite;-moz-animation: progressmove 2s linear infinite;-o-animation:progressmove 2s linear infinite;-ms-animation: progressmove 2s linear infinite;animation:progressmove 2s linear infinite;-webkit-transform: translateZ(0);}
+@-webkit-keyframes progressmove {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 17px 0;
+    }
+}
+@-moz-keyframes progressmove {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 17px 0;
+    }
+}
+@keyframes progressmove {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 17px 0;
+    }
+}

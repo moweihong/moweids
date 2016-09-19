@@ -1,0 +1,69 @@
+<extend name="Layouts:home" />
+<block name="title"><title>装修材料-{:C('site_name')}</title></block>
+<block name="content">
+	<include file="Layouts:top_banner"/>
+	<div class="wrapper floor-template">
+	    <h2 class="main-tit">
+        	<span>木门</span>
+            <span class="letter">DOORS</span>
+        </h2> 
+	    <ul class="pro-list cf">
+	        <volist name='wood_door' id='v'>
+			<li>
+            	<a href="http://{$v.adv_content.adv_pic_url}" title="">
+                    <div class="goods-pic">
+                    	<img src="{:advImg($v['adv_content']['adv_pic'])}" alt="" />
+                    </div>
+                    <div class="goods-info">
+                        <p class="name">{$v.adv_title}</p>
+                    	<p class="cor-9">{$v.adv_content.adv_intro}</p>
+                    </div>
+                </a> 
+            </li>
+                </volist>
+	    </ul>
+	</div>
+	<div class="wrapper floor-template">
+	    <h2 class="main-tit">
+        	<span>木地板</span>
+            <span class="letter">WOOD FLOOR</span>
+        </h2> 
+	    <ul class="pro-list cf">
+	        <volist name='wood_floor' id='v'>
+			<li>
+            	<a href="http://{$v.adv_content.adv_pic_url}" title="">
+                    <div class="goods-pic">
+                    	<img src="{:advImg($v['adv_content']['adv_pic'])}" alt="" />
+                    </div>
+                    <div class="goods-info">
+                        <p class="name">{$v.adv_title}</p>
+                    	<p class="cor-9">{$v.adv_content.adv_intro}</p>
+                    </div>
+                </a> 
+            </li>
+                </volist>
+	    </ul>
+	</div>
+    <div class="wrapper floor-template">
+	    <h2 class="main-tit">
+        	<span>板材</span>
+            <span class="letter">SHEET</span>
+        </h2> 
+	    <ul class="pro-list cf">
+	        <volist name='wood_panel' id='v'>
+			<li>
+            	<a href="http://{$v.adv_content.adv_pic_url}" title="">
+                    <div class="goods-pic">
+                    	<img src="{:advImg($v['adv_content']['adv_pic'])}" alt="" />
+                    </div>
+                    <div class="goods-info">
+                        <p class="name">{$v.adv_title}</p>
+                    	<p class="cor-9">{$v.adv_content.adv_intro}</p>
+                    </div>
+                </a> 
+            </li>
+                </volist>
+	    </ul>
+	</div>
+</block>
+

@@ -1,0 +1,395 @@
+<include file="Application/Common/Layout/head.html" />
+<style type="text/css">
+    label{font-weight: normal}
+    .am-form-group{ margin-bottom: 2rem;}
+    .am-form-horizontal .am-form-label{padding-top: 0.2rem}
+    #installmentList .file-item{width:118px;height:118px;}
+    #installmentList .file-item img{width:116px;height:116px;}
+
+    #advpicList .file-item{width:112px;height:112px;}
+    #advpicList .file-item img{width:110px; height: 110px;}
+
+</style>
+<div class="am-cf admin-main">
+<include file="Application/Common/Layout/left.html" /> 
+  <!-- content start -->
+  <div class="admin-content">
+    <div class="admin-content-body">
+      <div class="am-cf am-padding am-padding-bottom-0">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">广告2<?php echo $_GET['adv_id']?'编辑':'添加';?></strong> / <small>advertise <?php echo $_GET['adv_id']?'edit':'add';?></small></div>
+      </div>
+
+      <hr/>
+
+      <div class="am-g">
+        <div class="am-u-sm-12 am-u-md-4 am-u-md-push-8">
+         
+        </div>
+
+        <div class="am-u-sm-12 am-u-md-8 am-u-md-pull-4">
+          <form class="am-form am-form-horizontal" action="" method="post" enctype="multipart/form-data">
+
+              <!--广告名称 start-->
+              <div class="am-form-group">
+                  <label  class="am-u-sm-3 am-form-label">广告名称:</label>
+                  <div class="am-u-sm-9">
+                      <input type="text" id="adv_name" name="adv_title" value="{$info.adv_title}" placeholder="请输入广告名称">
+                      <input type="hidden" id="old_gc_name" name="adv_id" value="{$info.adv_id}" >
+                      <input type="hidden" id="old_gc_name" name="ap_id" value="{$ap_info.ap_id}" >
+                      <input type="hidden" id="old_gc_name" name="ap_class" value="{$ap_info.ap_class}" >
+                  </div>
+              </div>
+              <!--广告名称 end-->
+
+              <!--所属广告位 start-->
+              <div class="am-form-group">
+                  <label class="am-u-sm-3 am-form-label">所属广告位:</label>
+                  <div class="am-u-sm-9">
+                      {$ap_info.ap_name}
+                  </div>
+              </div>
+              <!--所属广告位 end-->
+
+              <!--类别 start-->
+              <div class="am-form-group">
+                  <label class="am-u-sm-3 am-form-label">类别:</label>
+                  <div class="am-u-sm-9">
+                      <?php echo $ap_info['ap_class']==0?'图片':($ap_info['ap_class']==1?'文字':'flash')?>
+                  </div>
+              </div>
+              <!--类别 end-->
+              <!--开始时间 start-->
+              <div class="am-form-group">
+                  <label  class="am-u-sm-3 am-form-label">开始时间:</label>
+                  <div class="am-u-sm-9" style="width:260px; float: left">
+                      <input type="text" name="adv_start_date" class="laydate-icon" id="adv_start_date" value="<?php echo date('Y-m-d h:i:s',$info['adv_start_date']); ?>" >
+                  </div>
+              </div>
+              <!--开始时间 end-->
+
+              <!--结束时间 start-->
+              <div class="am-form-group">
+                  <label class="am-u-sm-3 am-form-label">结束时间:</label>
+                  <div class="am-u-sm-9" style="width:260px; float: left">
+                      <input type="text" name="adv_end_date" class="laydate-icon" id="adv_end_date" value="<?php echo date('Y-m-d h:i:s',$info['adv_end_date']); ?>" >
+                      <!--<i class="am-icon-calendar"></i>-->
+                  </div>
+              </div>
+              <!--结束时间 end-->
+              <eq name='Think.get.ap_id' value='463'>
+              <!--免息分期缩略图片上传 start-->
+              <div class="am-form-group">
+                  <label class="am-u-sm-3 am-form-label">免息分期缩略图片上传:</label>
+                  <div class="am-u-sm-9">
+                      <!--上传控件 start-->
+                      <div class="cf">
+                          <a href="javascript:void(0);" id="installment"  class="am-btn am-btn-default mr30 fl">上传图片</a>
+                          <span >(注：116 × 116px，支持格式gif,jpg,png)</span>
+                      </div>
+                      <div id="installmentList" class="cf">
+                          <div  class="file-item thumbnail upload-state-done" >
+                              <p class="file-panel"><a class="icon-view js-viewImg" title="预览"></a></p>
+                              <img  src="{:advImg($info['adv_content']['installment_thumb_img'],true)}" data-rel="{:advImg($info['adv_content']['installment_thumb_img'])}" />
+                          </div>
+                      </div>
+                      <input type="hidden" name="installment_thumb_img" id="file_adv_pic" />
+                      <!--上传控件 end-->
+                  </div>
+              </div>
+              <!--免息分期缩略图片上传 end-->
+              </eq>
+              <!--图片上传 start-->
+              <div class="am-form-group">
+                  <label class="am-u-sm-3 am-form-label">图片上传:</label>
+                  <div class="am-u-sm-9">
+                      <!--上传控件 start-->
+                      <div class="cf">
+                          <a href="javascript:void(0);" id="advpicBtn"  class="am-btn am-btn-default mr30 fl">上传图片</a>
+                          <span >(注：{$size}px，支持格式gif,jpg,png)</span>
+                      </div>
+                      <div id="advpicList" class="cf">
+                          <div  class="file-item thumbnail upload-state-done" >
+                              <p class="file-panel"><a class="icon-view js-viewImg" title="预览"></a></p>
+                              <img  src="{:advImg($info['adv_content']['adv_pic'],true)}" data-rel="{:advImg($info['adv_content']['adv_pic'])}" />
+                          </div>
+                      </div>
+                      <input type="hidden" name="adv_pic" id="file_adv_pic" />
+                      <!--上传控件 end-->
+                  </div>
+              </div>
+              <!--图片上传 end-->
+
+              <!--链接地址 start-->
+              <div class="am-form-group">
+                  <label class="am-u-sm-3 am-form-label">链接地址:</label>
+                  <div class="am-u-sm-9" style="position: relative">
+                      <span class="ad-linkhref-tit">http://</span>
+                      <?php if($ap_info['ap_class']==0){?>
+                        <input type="text" class="ad-linkhref" id="adv_pic_url" name="adv_pic_url" value="<?php echo $info['adv_content']['adv_pic_url']; ?>" class="txt">
+                      <?php }else if($ap_info['ap_class']==1){?>
+                        <div><input class="ad-linkhref" type="text" name="adv_word" id="adv_word" class="txt" value=" <?php echo $info['adv_content']['adv_word']; ?>"></div>
+                        <input type="text" id="adv_word_url" name="adv_word_url" value=" <?php echo $info['adv_content']['adv_word_url']; ?>" class="txt">
+                      <?php }else{ ?>
+                        <input class="ad-linkhref" type="text" id="flash_url" name="flash_url" value=" <?php echo $info['adv_content']['flash_url']; ?>" class="txt">
+                      <?php }?>
+
+                  </div>
+              </div>
+              <!--链接地址 end-->
+
+              <!--广告说明 start-->
+              <div class="am-form-group">
+                  <label class="am-u-sm-3 am-form-label">广告说明:</label>
+                  <div class="am-u-sm-9">
+                      <textarea  name="adv_intro" class="txt" id="type_adv_intro"><?php echo $info['adv_content']['adv_intro']; ?></textarea>
+                  </div>
+              </div>
+              <!--广告说明 end-->
+
+              <!--提交 start-->
+              <div class="am-form-group">
+                  <label class="am-u-sm-3 am-form-label"></label>
+                  <div class="am-u-sm-9">
+                      <input type="button" class="am-btn am-btn-primary" id="subForm" value='提交'>
+                  </div>
+              </div>
+              <!--提交 end-->
+
+            <!--<div class="am-form-group">-->
+              <!--<label for="user-name" class="am-u-sm-3 am-form-label">广告名称:</label>-->
+              <!--<div class="am-u-sm-9">-->
+                <!--<input type="text" id="adv_name" name="adv_title" value="{$info.adv_title}" placeholder="请输入广告名称">-->
+                <!--<input type="hidden" id="old_gc_name" name="adv_id" value="{$info.adv_id}" >-->
+                <!--<input type="hidden" id="old_gc_name" name="ap_id" value="{$ap_info.ap_id}" >-->
+                <!--<input type="hidden" id="old_gc_name" name="ap_class" value="{$ap_info.ap_class}" >-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div class="am-form-group">-->
+              <!--<label for="user-name" class="am-u-sm-3 am-form-label">所属广告位:</label>-->
+              <!--<div class="am-u-sm-9">-->
+                  <!--{$ap_info.ap_name}-->
+              <!--</div>-->
+            <!--</div>-->
+             <!--<div class="am-form-group">-->
+              <!--<label for="user-name" class="am-u-sm-3 am-form-label">类别：</label>-->
+              <!--<div class="am-u-sm-9">-->
+                  <!--<?php echo $ap_info['ap_class']==0?'图片':($ap_info['ap_class']==1?'文字':'flash')?>-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div class="am-form-group">-->
+              <!--<label for="user-name" class="am-u-sm-3 am-form-label">开始时间:：</label>-->
+              <!--<div class="am-u-sm-9">{:$_GET['query_start_date']}-->
+                  <!--<input type="date" name="adv_start_date" id="adv_start_date" class="txt date" value="<?php echo date('Y-m-d',$info['adv_start_date']); ?>">-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div class="am-form-group">-->
+              <!--<label for="user-name" class="am-u-sm-3 am-form-label">结束时间：</label>-->
+              <!--<div class="am-u-sm-9">-->
+                  <!--<input type="date" name="adv_end_date" id="adv_end_date" class="txt date" value="<?php echo date('Y-m-d',$info['adv_end_date']); ?>">-->
+              <!--</div>-->
+            <!--</div>  -->
+            <!--<div class="am-form-group" style="margin-left: 200px">       -->
+                <!--<label for="file_adv_pic">图片上传:</label>-->
+                <!--<div class="am-u-sm-9">-->
+                  <!--<input type="file" class="type-file-file" id="file_adv_pic" name="adv_pic" size="30" />-->
+                <!--</div>-->
+            <!--</div> -->
+            <!--<div class="am-form-group">-->
+              <!--<label for="user-name" class="am-u-sm-3 am-form-label">链接地址：</label>-->
+              <!--<div class="am-u-sm-9">-->
+                  <!--<?php if($ap_info['ap_class']==0){?>-->
+                     <!--<input type="text" id="adv_pic_url" name="adv_pic_url" value="<?php echo $info['adv_content']['adv_pic_url']; ?>" class="txt">-->
+                 <!--<?php }else if($ap_info['ap_class']==1){?>-->
+                     <!--<div><input type="text" name="adv_word" id="adv_word" class="txt" value=" <?php echo $info['adv_content']['adv_word']; ?>"></div>-->
+                     <!--<input type="text" id="adv_word_url" name="adv_word_url" value=" <?php echo $info['adv_content']['adv_word_url']; ?>" class="txt">   -->
+                 <!--<?php }else{ ?>-->
+                     <!--<input type="text" id="flash_url" name="flash_url" value=" <?php echo $info['adv_content']['flash_url']; ?>" class="txt">-->
+                 <!--<?php }?>-->
+              <!--</div>-->
+            <!--</div>  -->
+            <!--<div class="am-form-group">-->
+              <!--<label for="user-name" class="am-u-sm-3 am-form-label">广告说明：</label>-->
+              <!--<div class="am-u-sm-9">-->
+                  <!--<textarea  name="adv_intro" class="txt" id="type_adv_intro"><?php echo $info['adv_content']['adv_intro']; ?></textarea>-->
+              <!--</div>-->
+            <!--</div>    -->
+            <!--<div class="am-form-group">-->
+              <!--<div class="am-u-sm-9 am-u-sm-push-3">-->
+                  <!--<input type="button" class="am-btn am-btn-primary" id="subForm" value='提交'>-->
+              <!--</div>-->
+            <!--</div>-->
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <footer class="admin-content-footer">
+      <hr>
+      <p class="am-padding-left">© 2014 AllMobilize, Inc. Licensed under MIT license.</p>
+    </footer>
+  </div>
+  <!-- content end -->
+
+</div>
+
+<include file="Application/Common/Layout/foot.html" />
+<script type="text/javascript">
+$(function(){
+    $("#ap_width_word").hide();
+    $("#default_word").hide();
+    $("#ap_class").change(function(){
+    if($("#ap_class").val() == '1'){
+        $("#ap_height").hide();
+        $("#ap_width_media").hide();
+        $("#default_pic").hide();
+        $("#default_word").show();
+        $("#ap_width_word").show();
+        $("#ap_display").show();
+    }else if($("#ap_class").val() == '0'||$("#ap_class").val() == '3'){
+        $("#ap_height").show();
+        $("#ap_width_media").show();
+        $("#default_pic").show();
+        $("#default_word").hide();
+        $("#ap_width_word").hide();
+        $("#ap_display").show();
+    }
+    });
+
+    //laydate 时间插件调用
+    var start = {
+        elem: '#adv_start_date',
+        format: 'YYYY-MM-DD hh:mm:ss',
+        min: laydate.now(), //设定最小日期为当前日期
+        max: '2099-06-16 23:59:59', //最大日期
+        istime: true,
+        istoday: false,
+        choose: function(datas){
+            end.min = datas; //开始日选好后，重置结束日的最小日期
+            end.start = datas //将结束日的初始值设定为开始日
+        }
+    };
+    var end = {
+        elem: '#adv_end_date',
+        format: 'YYYY-MM-DD hh:mm:ss',
+        min: laydate.now(),
+        max: '2099-06-16 23:59:59',
+        istime: true,
+        istoday: false,
+        choose: function(datas){
+            start.max = datas; //结束日选好后，重置开始日的最大日期
+        }
+    };
+    laydate(start);
+    laydate(end);
+
+    //提交表单
+    $("#subForm").click(function(){
+     var adv_name=$("#adv_name").val().trim();
+     var num = $("#advpicList .file-item").find('img').attr("src");                  //图片不能为空
+     var bb =  /^([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;                   //网址正则
+     if(adv_name==''){
+         AMUI.dialog.alert({
+             title: ' ',
+             content: '广告名称不能为空！'
+         });
+         return;
+     }
+
+    //判断是否有图片为空
+    else if(num ==""){
+        AMUI.dialog.alert({
+            title: ' ',
+            content: '图片不能为空！'
+        });
+        return;
+    }
+
+    else if($("#adv_start_date").val()==""){
+         AMUI.dialog.alert({
+             title: ' ',
+             content: '开始时间不能为空！'
+         });
+         return;
+     }
+
+     else if($("#adv_start_date").val()==""){
+         AMUI.dialog.alert({
+             title: ' ',
+             content: '开始时间不能为空！'
+         });
+         return;
+     }
+     else if($("#adv_end_date").val()==""){
+         AMUI.dialog.alert({
+             title: ' ',
+             content: '结束时间不能为空！'
+         });
+         return;
+     }
+//     else if($(".ad-linkhref").val()==""){
+//         AMUI.dialog.alert({
+//             title: ' ',
+//             content: '链接地址不能为空！'
+//         });
+//         return;
+//     }
+//     else if(!bb.test($(".ad-linkhref").val())){
+//         AMUI.dialog.alert({
+//             title: ' ',
+//             content: '链接地址不正确！'
+//         });
+//         return;
+//     }
+
+
+     $("input[name=adv_pic]").val($("#advpicList img").attr("src") + "," + $("#advpicList img").data("rel"));
+     $("input[name=installment_thumb_img]").val($("#installmentList img").attr("src") + "," + $("#installmentList img").data("rel"));
+
+     $("form").submit();
+
+    });
+});
+</script>
+
+<script type="text/javascript">
+    (function($){
+        define("admin/memberEdit",function(require, exports, module){
+            require("jquery/layer");
+            var upload = require("jquery/upload");
+            var manage = require("com/manage");
+            var Module = {
+                init: function(){
+                    /*
+                     * 广告位图片
+                     **/
+                    upload.base({
+                        pickID: "installment",
+                        objID: "installmentList",
+                        isSingle: true,
+                        thumbnailWidth: 120,
+                        thumbnailHeight: 120,
+                        storage: "adv_pic"
+                    });
+                    
+                    upload.base({
+                        pickID: "advpicBtn",
+                        objID: "advpicList",
+                        isSingle: true,
+                        thumbnailWidth: 314,
+                        thumbnailHeight: 314,
+                        storage: "adv_pic"
+                    });
+
+                }
+
+            };
+            module.exports = Module;
+        });
+        seajs.use("admin/memberEdit", function(module){
+            module.init();
+        });
+    })($);
+
+
+</script>
+

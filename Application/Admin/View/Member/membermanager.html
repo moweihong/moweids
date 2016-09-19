@@ -1,0 +1,135 @@
+<include file="Application/Common/Layout/head.html" /> 
+<div class="am-cf admin-main">
+<include file="Application/Common/Layout/left.html" /> 
+  <!-- content start -->
+  <div class="admin-content">
+    <div class="admin-content-body">
+      <div class="am-cf am-padding am-padding-bottom-0">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">会员</strong> / <small>会员管理</small></div>
+      </div>
+
+      <hr>
+      <!--筛选条件 start-->
+      <div class="j-shop-selectwrap clearfix am-padding am-padding-bottom-0">
+        <form method="get" name="formSearch" id="formSearch">
+          <div class="j-shop-inpbox">
+            <select data-am-selected="{btnSize: 'sm'}" name="search_field_name">
+            <option value="member_name" <if condition="$search_field_name eq 'member_name'">selected='selected'</if>>会员名</option>
+            <option value="member_mobile" <if condition="$search_field_name eq 'member_mobile'">selected='selected'</if>>手机号</option>
+            </select>
+          </div>
+          <div class="j-shop-inpbox">
+            <select data-am-selected="{btnSize: 'sm'}" name="search_sort">
+            <option value="0" selected='selected'>排序</option>
+            <option value="member_login_time desc" <if condition="$search_sort eq 'member_login_time desc'">selected='selected'</if>>最后登录</option>
+            <option value="member_login_num desc" <if condition="$search_sort eq 'member_login_num desc'">selected='selected'</if>>登录次数</option>
+            </select>
+          </div>
+          <div class="j-shop-inpbox">
+            <select data-am-selected="{btnSize: 'sm'}" name="search_state">
+            <option value="0" selected='selected'>会员状态</option>
+            <option value="no_informallow" <if condition="$search_state eq 'no_informallow'">selected='selected'</if>>禁止举报</option>
+            <option value="no_isbuy" <if condition="$search_state eq 'no_isbuy'">selected='selected'</if>>禁止购买</option>
+            <option value="no_isallowtalk" <if condition="$search_state eq 'no_isallowtalkc'">selected='selected'</if>>禁止发表言论</option>
+            <option value="no_memberstate" <if condition="$search_state eq 'no_memberstate'">selected='selected'</if>>禁止登录</option>
+            </select>
+          </div>
+          <div class="j-shop-inpbox">
+            <input type="text" name="search_field_value" class="am-form-field" placeholder="请输入搜索条件..." />
+          </div>
+          <div class="j-shop-inpbox"><button class="am-btn am-btn-primary" type="submit">搜索</button></div>
+        </form>
+      </div>
+      <!--筛选条件 end-->
+      <div class="am-g">
+        <div class="am-u-sm-12">
+            <table class="am-table am-table-striped am-table-hover table-main">
+              <thead>
+              <tr>
+                <th class="table-check"><input type="checkbox" /></th>
+                <th class="table-id" style="width:370px;" colspan="2">会员名称</th>
+                <th class="table-title">登录次数</th>
+                <th class="table-type">最后登陆</th>
+                <th class="table-author am-hide-sm-only">积分</th>
+                <th class="table-date am-hide-sm-only">经验</th>
+                <th class="table-date am-hide-sm-only">预存款</th>
+                <th class="table-date am-hide-sm-only">登录</th>
+                <th class="table-set">操作</th>
+              </tr>
+              </thead>
+              <tbody>
+              <volist name="member_list" id="vo">
+              <tr>
+                <td><input type="checkbox" /></td>
+                <td>
+                  <img src="{$vo.member_avatar}" width="60px"/>
+                </td>
+                <td>
+                  <p>{$vo.member_name}( 真实姓名：{$vo.member_truename})</p>
+                  <p>注册时间：{$vo.member_time}</p>
+                  <div>
+                    <if condition="$vo.member_email neq '' ">
+                      <a href="mailto:{$vo.member_email}" title="电子邮箱:{$vo.member_email}">有邮箱</a>
+                      <else/>
+                      <a href="JavaScript:void(0);" title="会员尚未填写此项信息">没邮箱</a>
+                    </if>
+                    <if condition="$vo.member_ww neq '' ">
+                      <a target="_blank" href="http://web.im.alisoft.com/msg.aw?v=2&uid={$vo.member_ww}&site=cnalichn&s=11" class="" title="WangWang: {$vo.member_ww}"><img border="0" src="http://web.im.alisoft.com/online.aw?v=2&uid={$vo.member_ww}&site=cntaobao&s=2&charset=UTF-8" /></a>
+                    </if>
+                    <if condition="$vo.member_qq neq '' ">
+                      <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin={$vo.member_qq}&site=qq&menu=yes" class=""  title="QQ: {$vo.member_qq}"><img border="0" src="http://wpa.qq.com/pa?p=2:{$vo.member_qq}:52"/></a>
+                    </if>
+                  </div>
+                </td>
+                <td>{$vo.member_login_num}</td>
+                <td>
+                  <p>{$vo.member_login_time}</p>
+                  <p>{$vo.member_login_ip}</p>
+                </td>
+                <td class="am-hide-sm-only">{$vo.member_points}</td>
+                <td class="am-hide-sm-only">{$vo.jingyan}</td>
+                <td class="am-hide-sm-only">
+                  <p>可用：<strong>{$vo.available_predeposit}</strong>元</p>
+                  <p>冻结：<strong>{$vo.freeze_predeposit}</strong>元</p>
+                </td>
+                <td class="am-hide-sm-only">
+                  <if condition="$vo.member_state eq 1">
+                    允许
+                    <else/>
+                    禁止
+                  </if>
+                </td>
+                <td>
+                  <div class="am-btn-toolbar">
+                    <div class="am-btn-group am-btn-group-xs">
+                      <button class="am-btn am-btn-default am-btn-xs am-text-secondary" onClick="location.href='__CONTROLLER__/memberEdit?member_id={$vo['member_id']}'"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                      <!-- <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
+                      <button class="am-btn am-btn-default am-btn-xs am-hide-sm-only"><span class="am-icon-copy"></span> 通知</button> -->
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              </volist>
+              </tbody>
+            </table>
+            <div class="am-cf">
+              <div class="am-fr">
+              {$page}
+              </div>
+            </div>
+        </div>
+
+      </div>
+    </div>
+
+    <footer class="admin-content-footer">
+      <hr>
+      <p class="am-padding-left">© 2014 AllMobilize, Inc. Licensed under MIT license.</p>
+    </footer>
+
+  </div>
+  <!-- content end -->
+
+</div>
+<include file="Application/Common/Layout/foot.html" /> 
+

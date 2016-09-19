@@ -1,0 +1,122 @@
+<extend name="Layouts:pop" />
+<block name="head_css">
+<link href="__CSS__/member.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+.layui-layer-tips .layui-layer-content{top:-30px;}
+</style>
+</block>
+
+<block name="content">
+<form action="javascript:void(0);" id="changePassword" autocomplete="off" method="post">
+    <ul class="list mt30">
+        <li class="cf">
+            <label class="handle" for="old">请输入旧密码</label>
+            <div class="rel">
+                <input type="password" id="old" name="orig_password" class="text" placeholder="请输入旧密码" maxlength="16" required />
+                <span show="orig_password.check" class="error-msg">
+                    <em class="errow-arrow"></em>
+                    旧密码不能为空
+                </span>
+            </div>
+        </li>
+        <li class="cf">
+            <label class="handle" for="password">请输入新密码</label>
+            <div class="rel">
+                <input type="password" id="password" name="new_password" class="text" placeholder="请输入新密码，6-16位数字加字母组合" maxlength="16" required />
+                <span show="new_password.check" class="error-msg">
+                    <em class="errow-arrow"></em>
+                    新密码不能为空，并且是6-16位数字加字母组合
+                </span>
+            </div>
+        </li>
+        <li class="cf">
+            <label class="handle" for="repassword">确认新密码</label>
+            <div class="rel">
+                <input type="password" id="repassword" name="confirm_password" class="text" placeholder="请再次输入新密码" maxlength="16" required />
+                <span show="confirm_password.check" class="error-msg">
+                    <em class="errow-arrow"></em>
+                    确认新密码不能为空
+                </span>
+            </div>
+        </li>
+        <li class="cf mt20">
+            <label class="handle">&nbsp;</label>
+            <button class="btn btn-info js-confirmBtn">确认修改</button>
+        </li>
+    </ul>
+</form>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+(function($){
+	define("m/changePassword",function(require, exports, module){
+		require("jquery/layer");
+		require("jquery/form");
+		var manage = require("com/manage");
+		var Module = {
+			init: function(){
+				var form = $("#changePassword").form(),
+					index = parent.layer.getFrameIndex(window.name);
+				/*
+				*提交按钮
+				*/
+				$("#changePassword").on("click", ".js-confirmBtn", function(){
+					if(!form.valid()) return false;
+					var me = $(this),
+						old = $.trim($("#old").val()),
+						password = $.trim($("#password").val()),
+						repassword = $.trim($("#repassword").val()),
+						reg = /^[A-Za-z0-9]*$/,
+						data = $("#changePassword").serialize();
+					data = data.replace(/\+/g," ");
+					data = manage.serializeJson(data);
+					if(!(/[a-zA-Z]/.test(password) && /[0-9]/.test(password)) || (password.length < 6 || password.length > 16)){
+						$("#password").focus();
+						$.wrongTip(me, "新密码应是6-16位的数字加字母组合");
+						return;
+					}
+					if(data.new_password.indexOf(" ") > -1) {
+						$("#password").focus();
+						$.wrongMsg("新密码不能含有空格");
+						return;
+					}
+					if(old == password){
+						$("#password").focus();
+						$.wrongTip(me, "新密码不能与旧密码一样，请重新输入");
+						return;
+					}
+					if(password != repassword){
+						$("#repassword").focus();
+						$.wrongTip(me, "两次输入的新密码不一样，请重新输入");
+						return;
+					}
+					var pid = parent.layer.load(360);
+					manage.ajax({
+						url: gConfig.apiurl + "/index.php?c=member&a=savePwd",
+						data: data,
+						success: function(result){
+							parent.layer.close(pid);
+							var resultText = result.resultText || {};
+							if(result.code == 1){
+								$.wrongMsg(resultText.message || "修改成功", 1);
+								parent.layer.close(index);
+							}else{
+								$.wrongTip(me, resultText.message || "修改失败");
+							}
+						},
+						error: function(){
+							parent.layer.close(pid);
+						}
+					});
+				});
+			}
+		};
+		module.exports = Module;
+	});
+	seajs.use("m/changePassword", function(module){
+		module.init();
+	});
+})($);
+</script>
+</block>

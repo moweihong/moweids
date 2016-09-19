@@ -1,0 +1,43 @@
+<extend name="Layouts:home" />
+<block name="title"><title>支付成功-{:C('site_name')}</title></block>
+<block name="head_css">
+<link href="__CSS__/buy.css" rel="stylesheet" type="text/css">
+</block>
+
+<block name="content">
+<div class="wrapper pay-easy-price mt120">
+    <h3 class="pay-main">您已选择分期支付，还需支付差额{$pay_amount_online}元</h3>
+    <ul class="js-add-pay pay-meth add-pay cf">
+        <?php
+        if (!empty($payment_list)){
+            foreach ($payment_list as $item) {
+                ?>
+                <li payment_code="<?php echo $item['payment_code']; ?>"><?php echo $item['payment_name'];?></li>
+        <?php }}?>
+    </ul>
+    <a href="javascript:void(0);" class="btn-submit" id="next_button">立即支付</a>
+</div>
+<form action="{:U('Shop/Payment')}" method="POST" id="buy_form">
+    <input type="hidden" name="pay_sn" value="{$pay_info['pay_sn']}">
+    <input type="hidden" id="payment_code" name="payment_code" value="">
+    <input type="hidden" name="order_type" value="product_buy">
+</form>
+</block>
+
+<block name="my_js">
+<script type="text/javascript">
+$(function(){
+    $('.js-add-pay li').on('click',function(){
+        $(this).addClass('add-default').siblings().removeClass('add-default');
+        $('#payment_code').val($(this).attr('payment_code'));
+    });
+    $('#next_button').on('click',function(){
+        if ($('#payment_code').val() == '') {
+            alert('请选择支付方式');
+            return;
+        }
+        $('#buy_form').submit();
+    });
+})
+</script>
+</block>
