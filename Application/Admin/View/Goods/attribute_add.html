@@ -1,0 +1,92 @@
+<include file="Application/Common/Layout/head.html" /> 
+<div class="am-cf admin-main">
+<include file="Application/Common/Layout/left.html" /> 
+  <!-- content start -->
+  <div class="admin-content">
+    <div class="admin-content-body">
+      <div class="am-cf am-padding am-padding-bottom-0">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">属性编辑</strong> / <small>Attribute Edit</small></div>
+      </div>
+
+      <hr/>
+
+      <div class="am-g">
+        <div class="am-u-sm-12 am-u-md-4 am-u-md-push-8">
+         
+        </div>
+
+        <div class="am-u-sm-12 am-u-md-8 am-u-md-pull-4">
+          <form class="am-form am-form-horizontal" id="form1" action="" method="post">
+            <div class="am-form-group">
+              <label for="user-name" class="am-u-sm-3 am-form-label">属性名称</label>
+              <div class="am-u-sm-9">
+                <input type="text" id="attrName" name="attrName" value="{$attr.attr_name}" placeholder="请输入属性名称">
+                <input type="hidden" id="attrName_old" name="attrName_old" value="{$attr.attr_name}" >
+              </div>
+            </div>
+
+            <div class="am-form-group">
+              <label for="user-email" class="am-u-sm-3 am-form-label">是否显示</label>
+              <div class="am-u-sm-9" style='height:45px;line-height:45px'>
+                <input type="radio" name="attr_show" value='1' <?php if($attr['attr_show']==1 || $_GET['act']=='add' ){echo 'checked';} ?> > 是 &nbsp;&nbsp;
+                <input type="radio" name="attr_show" value='0' <?php if($attr['attr_show']==0 && $_GET['act']!='add'){echo 'checked';} ?>> 否
+              </div>
+            </div>
+
+            
+            <div class="am-form-group">
+              <label for="user-intro" class="am-u-sm-3 am-form-label">属性可选值 </label>
+              <div class="am-u-sm-9">
+                <textarea class="" rows="5" name="attr_value"  placeholder="多个值用半角符号隔开，例如：清式,明式,唐宋风,秦汉风,新中式,民国式,海派式">{$attr_value}</textarea>
+                <small>注意：半角符号不是中文输入法状态下的逗号，是英文状态下的逗号</small>
+              </div>
+            </div>
+			<input type='hidden' name="act" value="{$Think.get.act}">
+            <div class="am-form-group">
+              <div class="am-u-sm-9 am-u-sm-push-3">
+                <input type="submit" class="am-btn am-btn-primary">
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  
+
+  </div>
+  <!-- content end -->
+
+</div>
+<include file="Application/Common/Layout/foot.html" /> 
+<script>
+	$("#attrName").blur(function(){
+		var attrName  = $(this).val(); 
+		var attrName2 = $('#attrName_old').val(); 
+		if(attrName==attrName2) return;
+		$.ajax({
+			type: 'get',
+			cache:false,
+			url:'/Admin/Goods/ajax_check_duplicate',
+			data:{
+				type :'attrName',
+				value:attrName
+			},
+			success: function(data){
+				if(data=='1'){
+					alert('属性名已存在！');
+					$(this).focus();
+				} 
+			},
+			dataType:'json'
+		});
+	});
+	
+	$('#form1').submit(function(){
+		var getnameval = $("#attrName").val();
+		if(getnameval==''){
+			alert('属性名不能为空！');
+			return false;
+		}
+	});
+</script>

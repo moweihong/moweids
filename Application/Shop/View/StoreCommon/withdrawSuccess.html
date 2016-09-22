@@ -1,0 +1,18 @@
+<extend name="Layouts:seller" />
+<block name="title"><title>申请提现-<?php if($_SESSION['com_type'] == 3){?>供货中心<?php } else{?>卖家中心<?php } ?>-{:C('site_name')}</title></block>
+
+<block name="content">
+<div class="content-wrap">
+	<h2 class="query-tit">申请提现</h2>
+	<div class="withdraw-bank fs14 tc mt10">
+    	<p class="mt50">
+            <img src="__IMG__/m_big_ok.png"><br>
+            <span class="cor-green mt10">提现申请已提交，请等待审核</span>
+        </p>
+        <p class="mt20">提现申请将在3个工作日内审核完成，实际到账时间以银行为准</p>
+        <p class="mt40">
+        	<a href="/StoreCommon/withdrawHistory" class="btn btn-blue btn-middle js-confirmBtn">提现记录</a>
+        </p>
+    </div>
+</div>
+</block>
